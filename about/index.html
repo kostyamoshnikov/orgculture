@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Об авторе — Организованная Культурность</title>
+<title>Автор — Организованная Культурность</title>
 <meta name="description" content="Константин Мошников — продюсер, SMM, артист цирка. Автор «Организованной Культурности».">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="canonical" href="https://orgculture.ru/about/">
-<meta property="og:title" content="Об авторе — Организованная Культурность">
+<meta property="og:title" content="Автор — Организованная Культурность">
 <meta property="og:description" content="Константин Мошников — продюсер, SMM, артист цирка. Автор «Организованной Культурности».">
 <meta property="og:type" content="website">
 <meta property="og:image" content="../images/og-default.jpg">
@@ -20,6 +20,7 @@
 <body>
 
 <header>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
   <div class="headbar">
     <a href="../" class="brandmark" aria-label="Организованная Культурность — на главную">
       <svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
@@ -30,17 +31,28 @@
     <nav class="mainnav">
       <a href="../manifesto/">Манифест</a>
       <a href="../texts/">Тексты</a>
+      <a href="../projects/">Проекты</a>
       <a href="../recommendations/">Рекомендации</a>
-      <a href="../about/" class="active">Об авторе</a>
+      <a href="../about/" class="active">Автор</a>
     </nav>
+    <label for="nav-toggle" class="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </label>
   </div>
+  <nav class="mobile-nav">
+    <a href="../manifesto/">Манифест</a>
+      <a href="../texts/">Тексты</a>
+      <a href="../projects/">Проекты</a>
+      <a href="../recommendations/">Рекомендации</a>
+      <a href="../about/" class="active">Автор</a>
+  </nav>
 </header>
 
 <section style="padding-top:64px;">
   <div class="wrap-wide about-grid">
     <div class="about-photo"><img src="../images/author.jpg" alt="Автор «Организованной Культурности»"></div>
     <div class="about-copy">
-      <div class="eyebrow">Об авторе</div>
+      <div class="eyebrow">Автор</div>
       <h1 style="font-size:30px;font-weight:300;margin:14px 0 24px;">Константин Мошников</h1>
       <p>Более 15 лет на сцене — в цирке, в театре. Знаю индустрию изнутри и понимаю её механику на каждом уровне.</p>
       <p>Продюсирую и веду SMM культурных и арт-проектов: от концепции до выпуска, от маркетинга до логистики. «Организованная Культурность» — личное пространство рядом с этой работой: тексты о том, что задело, без обязательства кого-то в чём-то убедить.</p>
@@ -58,12 +70,12 @@
         <div class="cv-role">
       <div class="row1"><h4>Сооснователь и продюсер</h4><span class="period">июнь 2025 — н.в.</span></div>
       <div class="org">AELITA PRODUCTION</div>
-      <ul><li>Запустил продюсерскую компанию с нуля; более 10 реализованных проектов за неполный год</li><li>Организатор БУФЕСТ 2026 — театральный фестиваль на площадке «Скороход» (10–15 августа)</li><li>Продюсер фестиваля «Точка Кюри» (Старый Оскол, октябрь 2026)</li><li>Разработал фирменный стиль, полный сайт, Telegram-бота; ведёт SMM на четырёх платформах</li></ul>
+      <ul><li>Запустил продюсерскую компанию с нуля; более 10 реализованных проектов за неполный год</li><li>Продюсер фестиваля «Точка Кюри» (Старый Оскол, октябрь 2026)</li><li>Разработал фирменный стиль, полный сайт, Telegram-бота; ведёт SMM на четырёх платформах</li></ul>
     </div>
     <div class="cv-role">
       <div class="row1"><h4>SMM</h4><span class="period">январь 2022 — н.в.</span></div>
       <div class="org">«Комната Света»</div>
-      <ul><li>SMM театральной компании «Комната Света» — спектакли мастерской Юрия Бутусова</li><li>Прокат «ZA VIST» (реж. София Никифорова) — sold-out, широкий интерес профессионального сообщества</li><li>Организация регулярных гастролей мастерской Бутусова в Петербурге: все показы с аншлагом</li></ul>
+      <ul><li>SMM театральной компании «Комната Света» — спектакли мастерской Юрия Бутусова</li><li>Организатор БУФЕСТ 2026 — театральный фестиваль на площадке «Скороход» (10–15 августа)</li><li>Прокат «ZA VIST» (реж. София Никифорова) — sold-out, широкий интерес профессионального сообщества</li><li>Организация регулярных гастролей мастерской Бутусова в Петербурге: все показы с аншлагом</li></ul>
     </div>
     <div class="cv-role">
       <div class="row1"><h4>SMM, менеджер проектов</h4><span class="period">май 2021 — н.в.</span></div>
@@ -101,6 +113,9 @@
       <a href="https://vk.ru/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">VK</a>
     </div>
     <div class="foot-slogan">* Без агрессии, но с экспрессией</div>
+  </div>
+  <div class="wrap-wide" style="margin-top:20px;">
+    <a href="../privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
   </div>
 </footer>
 </body>

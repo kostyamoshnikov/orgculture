@@ -751,18 +751,27 @@ def header(depth=0, active=""):
     def navlink(href, label, key):
         cls = " active" if active == key else ""
         return f'<a href="{root}{href}" class="{cls.strip()}">{label}</a>' if cls.strip() else f'<a href="{root}{href}">{label}</a>'
+    nav_links = f'''{navlink('manifesto/', 'Манифест', 'manifesto')}
+      {navlink('texts/', 'Тексты', 'texts')}
+      {navlink('projects/', 'Проекты', 'projects')}
+      {navlink('recommendations/', 'Рекомендации', 'recommendations')}
+      {navlink('about/', 'Автор', 'about')}'''
     return f'''<header>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
   <div class="headbar">
     <a href="{root}" class="brandmark" aria-label="Организованная Культурность — на главную">
       {LOGO_MARK_SVG}
     </a>
     <nav class="mainnav">
-      {navlink('manifesto/', 'Манифест', 'manifesto')}
-      {navlink('texts/', 'Тексты', 'texts')}
-      {navlink('recommendations/', 'Рекомендации', 'recommendations')}
-      {navlink('about/', 'Об авторе', 'about')}
+      {nav_links}
     </nav>
+    <label for="nav-toggle" class="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </label>
   </div>
+  <nav class="mobile-nav">
+    {nav_links}
+  </nav>
 </header>
 '''
 
@@ -785,6 +794,9 @@ def footer(depth=0):
       <a href="https://vk.ru/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">VK</a>
     </div>
     <div class="foot-slogan">* Без агрессии, но с экспрессией</div>
+  </div>
+  <div class="wrap-wide" style="margin-top:20px;">
+    <a href="{root}privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
   </div>
 </footer>
 </body>
@@ -1067,13 +1079,88 @@ print("recommendations/index.html written")
 # ABOUT
 # ---------------------------------------------------------------
 
+# ---------------------------------------------------------------
+# PROJECTS
+# ---------------------------------------------------------------
+
+PROJECTS = [
+  {
+    "slug": "aelita-production",
+    "role": "Сооснователь и продюсер",
+    "period": "июнь 2025 — н.в.",
+    "title": "AELITA PRODUCTION",
+    "kicker": "Продюсерская компания, запущенная с нуля — больше десяти реализованных проектов за неполный год.",
+    "facts": [("10+", "проектов за год"), ("2025", "год основания")],
+    "paragraphs": [
+      "AELITA PRODUCTION — продюсерская компания, которую я основал в июне 2025 года. За неполный год — больше десяти реализованных проектов: от фестивалей до фирменного стиля и сайтов для театральных команд.",
+      "Среди задач компании — продюсирование фестиваля «Точка Кюри» в Старом Осколе, разработка бренда и полного сайта, включая Telegram-ботов, и ведение SMM сразу на нескольких платформах для нескольких проектов одновременно.",
+      "AELITA PRODUCTION также выступает партнёром танцевальной компании «Короче» — организует показы, гастроли и продвижение спектаклей.",
+    ],
+    "link": "https://aelita-production.ru", "link_label": "aelita-production.ru",
+  },
+  {
+    "slug": "bufest",
+    "role": "Организатор фестиваля",
+    "period": "август 2026",
+    "title": "БуФест",
+    "kicker": "Петербургский театральный фестиваль имени Юрия Бутусова — три спектакля его учеников за шесть вечеров на площадке «Скороход».",
+    "facts": [("3", "спектакля"), ("6", "вечеров"), ("10–15.08", "даты")],
+    "paragraphs": [
+      "БуФест — петербургский театральный фестиваль имени Юрия Бутусова, режиссёра Театра им. Ленсовета и Театра им. Вахтангова. Организатор — театральная компания «Комната Света», площадка — «Скороход» (Московский пр., 107, корп. 5).",
+      "Основная программа — три спектакля, поставленные учениками Бутусова: «Вий. Домыслы» (режиссёр Александр Цереня), «Вишнёвый сад» (режиссёр Егор Ковалёв) и «Чайка» (режиссёр Илья Зайцев). Каждый спектакль показывают дважды подряд, без антракта, в 20:00.",
+      "Рядом с показами — специальная программа «БуФет»: фотовыставка Юлии Смелкиной о репетициях и закулисье Бутусова, променад с Дарьей Павленко по «Петербургу Бутусова», разговор с Ван Шенем и показ документального фильма Софии Никифоровой «Хроники моей любви».",
+      "Моя роль — организация фестиваля в команде «Комнаты Света», где веду SMM с января 2022 года.",
+    ],
+    "link": None, "link_label": None,
+  },
+  {
+    "slug": "tochka-kyuri",
+    "role": "Продюсер фестиваля",
+    "period": "октябрь 2026",
+    "title": "Точка Кюри",
+    "kicker": "Фестиваль в Старом Осколе, продюсируемый AELITA PRODUCTION.",
+    "facts": [("Старый Оскол", "город"), ("окт. 2026", "даты")],
+    "paragraphs": [
+      "«Точка Кюри» — фестиваль в Старом Осколе, который продюсирует AELITA PRODUCTION. Полное описание программы появится здесь ближе к событию — сейчас страница обновляется по мере готовности материалов.",
+    ],
+    "link": None, "link_label": None,
+  },
+  {
+    "slug": "komnata-sveta",
+    "role": "SMM",
+    "period": "январь 2022 — н.в.",
+    "title": "Комната Света",
+    "kicker": "Театральная компания из Петербурга — гастроли Мастерской Юрия Бутусова и фестиваль его памяти БуФест.",
+    "facts": [("2021", "первый проект"), ("2022", "начало работы")],
+    "paragraphs": [
+      "«Комната Света» — театральная компания из Петербурга. Первым проектом команды в 2021 году стал спектакль «ZAVIST'», полюбившийся зрителям задолго до БуФеста.",
+      "В 2024 и 2025 годах «Комната Света» привозила в Петербург гастроли Мастерской Юрия Бутусова — оба раза с тёплым приёмом публики. В 2026 году гастроли выросли в фестиваль его памяти — БуФест.",
+      "Веду SMM компании с января 2022 года, включая прокат спектакля «ZAVIST'» (реж. София Никифорова) — с полным аншлагом и широким интересом профессионального сообщества — и организацию регулярных гастролей Мастерской Бутусова в городе.",
+    ],
+    "link": "https://t.me/lightroom_theatre", "link_label": "Telegram «Комнаты Света»",
+  },
+  {
+    "slug": "robot-kostya-project",
+    "role": "SMM, менеджер проектов",
+    "period": "май 2021 — н.в.",
+    "title": "Робот Костя",
+    "kicker": "Первый в России роботический театр — номинант «Золотой Маски» в разделе «Эксперимент».",
+    "facts": [("2021", "начало"), ("Золотая Маска", "номинация")],
+    "paragraphs": [
+      "«Робот Костя» — проект Научно-технологического театра, первого в России театра с участием робота на сцене. Спектакль по мотивам чеховской «Чайки», где робот играет одну из ключевых ролей.",
+      "Номинант «Золотой Маски» в разделе «Эксперимент». Показы проходили на Новой сцене Александринского театра, в Севкабель Порту, Планетарии №1 и ММОМА, а также на фестивале «Точка доступа» в Петербургском Люмьер-Холле.",
+      "Веду SMM и менеджмент проекта с мая 2021 года — от анонсов показов до координации инновационных коллабораций с государственными и коммерческими площадками Москвы и Петербурга.",
+    ],
+    "link": "https://www.instagram.com/robot.kostya/", "link_label": "Instagram «Робота Кости»",
+  },
+]
+
 CV_ROLES = [
     {
         "role": "Сооснователь и продюсер", "org": "AELITA PRODUCTION",
         "period": "июнь 2025 — н.в.",
         "bullets": [
             "Запустил продюсерскую компанию с нуля; более 10 реализованных проектов за неполный год",
-            "Организатор БУФЕСТ 2026 — театральный фестиваль на площадке «Скороход» (10–15 августа)",
             "Продюсер фестиваля «Точка Кюри» (Старый Оскол, октябрь 2026)",
             "Разработал фирменный стиль, полный сайт, Telegram-бота; ведёт SMM на четырёх платформах",
         ],
@@ -1083,6 +1170,7 @@ CV_ROLES = [
         "period": "январь 2022 — н.в.",
         "bullets": [
             "SMM театральной компании «Комната Света» — спектакли мастерской Юрия Бутусова",
+            "Организатор БУФЕСТ 2026 — театральный фестиваль на площадке «Скороход» (10–15 августа)",
             "Прокат «ZA VIST» (реж. София Никифорова) — sold-out, широкий интерес профессионального сообщества",
             "Организация регулярных гастролей мастерской Бутусова в Петербурге: все показы с аншлагом",
         ],
@@ -1129,7 +1217,7 @@ def build_about():
   <div class="wrap-wide about-grid">
     <div class="about-photo"><img src="../images/author.jpg" alt="Автор «Организованной Культурности»"></div>
     <div class="about-copy">
-      <div class="eyebrow">Об авторе</div>
+      <div class="eyebrow">Автор</div>
       <h1 style="font-size:30px;font-weight:300;margin:14px 0 24px;">Константин Мошников</h1>
       <p>Более 15 лет на сцене — в цирке, в театре. Знаю индустрию изнутри и понимаю её механику на каждом уровне.</p>
       <p>Продюсирую и веду SMM культурных и арт-проектов: от концепции до выпуска, от маркетинга до логистики. «Организованная Культурность» — личное пространство рядом с этой работой: тексты о том, что задело, без обязательства кого-то в чём-то убедить.</p>
@@ -1154,9 +1242,174 @@ def build_about():
 </section>
 {footer(1)}
 '''
-    return page_head("Об авторе — Организованная Культурность", "Константин Мошников — продюсер, SMM, артист цирка. Автор «Организованной Культурности».", 1, path="about/") + body
+    return page_head("Автор — Организованная Культурность", "Константин Мошников — продюсер, SMM, артист цирка. Автор «Организованной Культурности».", 1, path="about/") + body
 
 os.makedirs(os.path.join(ROOT, "about"), exist_ok=True)
 with open(os.path.join(ROOT, "about", "index.html"), "w", encoding="utf-8") as f:
     f.write(build_about())
 print("about/index.html written")
+
+# ---------------------------------------------------------------
+# PROJECTS pages
+# ---------------------------------------------------------------
+
+def collab_box():
+    return '''<div class="collab-box">
+    <h2>Сотрудничество</h2>
+    <p>Продюсирую, продвигаю и делаю сайты для театральных и арт-проектов. Если есть идея, фестиваль или спектакль, которому нужна такая же внимательность к деталям — пишите, обсудим.</p>
+    <div class="collab-buttons">
+      <a class="btn-line" href="mailto:kostyamoshnikov@gmail.com">Написать на почту</a>
+      <a class="btn-line" href="https://t.me/orgculture" target="_blank" rel="noopener">Написать в Telegram</a>
+    </div>
+  </div>'''
+
+def proj_card(pr, depth):
+    root = "../" * depth if depth else "./"
+    href = f"{root}projects/{pr['slug']}/"
+    return f'''<a class="proj-card" href="{href}">
+      {tag_pill(pr['role'])}
+      <div class="proj-period">{html.escape(pr['period'])}</div>
+      <h3>{html.escape(pr['title'])}</h3>
+      <p>{html.escape(pr['kicker'])}</p>
+    </a>'''
+
+def build_projects_index():
+    body = f'''
+{header(1, "projects")}
+<section style="padding-top:64px;">
+  <div class="wrap-wide">
+    <div class="eyebrow">Раздел</div>
+    <h1 style="font-size:34px;font-weight:300;margin:14px 0 10px;">Проекты</h1>
+    <p style="color:var(--dim);max-width:620px;font-size:15.5px;line-height:1.8;margin-bottom:44px;">
+      Продюсирование, продвижение и сайты для театральных и арт-проектов — то, чем занимаюсь параллельно с текстами.
+    </p>
+    <div class="grid">
+      {''.join(proj_card(pr, 1) for pr in PROJECTS)}
+    </div>
+    <div style="height:60px;"></div>
+    {collab_box()}
+  </div>
+</section>
+{footer(1)}
+'''
+    return page_head("Проекты — Организованная Культурность", "Продюсирование, продвижение и сайты для театральных и арт-проектов: AELITA PRODUCTION, БуФест, Комната Света, Робот Костя.", 1, path="projects/") + body
+
+os.makedirs(os.path.join(ROOT, "projects"), exist_ok=True)
+with open(os.path.join(ROOT, "projects", "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_projects_index())
+print("projects/index.html written")
+
+def build_project_page(pr, idx):
+    depth = 2
+    root = "../" * depth
+    paras = "\n      ".join(f"<p>{html.escape(x)}</p>" for x in pr["paragraphs"])
+    facts_html = "".join(f'<div class="proj-fact"><div class="n">{html.escape(n)}</div><div class="l">{html.escape(l)}</div></div>' for n, l in pr["facts"])
+
+    link_html = ""
+    if pr["link"]:
+        link_html = f'<div style="margin-top:36px;"><a class="btn-line" href="{html.escape(pr["link"])}" target="_blank" rel="noopener">{html.escape(pr["link_label"])} →</a></div>'
+
+    prev_p = PROJECTS[idx-1] if idx > 0 else PROJECTS[-1]
+    next_p = PROJECTS[idx+1] if idx < len(PROJECTS)-1 else PROJECTS[0]
+    nav_html = f'''<div class="wrap"><div class="text-nav">
+      <a href="{root}projects/{prev_p['slug']}/">← {html.escape(prev_p['title'])}</a>
+      <a href="{root}projects/{next_p['slug']}/">{html.escape(next_p['title'])} →</a>
+    </div></div>'''
+
+    body = f'''
+{header(depth, "projects")}
+<div class="text-hero wrap-wide">
+  {tag_pill(pr['role'])}
+  <h1 style="margin-top:16px;">{html.escape(pr['title'])}</h1>
+  <p class="kicker">{html.escape(pr['kicker'])}</p>
+</div>
+<div class="wrap">
+  <div class="proj-fact-row">{facts_html}</div>
+</div>
+<div class="text-body wrap">
+  {paras}
+  {link_html}
+</div>
+{nav_html}
+<div class="wrap" style="padding:60px 0;">{collab_box()}</div>
+{footer(depth)}
+'''
+    return page_head(f"{pr['title']} — Организованная Культурность", pr['kicker'], depth, path=f"projects/{pr['slug']}/") + body
+
+for i, pr in enumerate(PROJECTS):
+    d = os.path.join(ROOT, "projects", pr["slug"])
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
+        f.write(build_project_page(pr, i))
+print(f"{len(PROJECTS)} project pages written")
+
+
+# ---------------------------------------------------------------
+# PRIVACY POLICY
+# ---------------------------------------------------------------
+
+def build_privacy():
+    sections = [
+      ("1. Общие положения", [
+        "1.1. Оператор персональных данных — Мошников Константин Алексеевич, самозанятый (плательщик налога на профессиональный доход), ИНН 471508674254, г. Санкт-Петербург.",
+        "1.2. Настоящая Политика разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных» и определяет порядок обработки персональных данных пользователей сайта orgculture.ru и связанных с ним каналов связи (Telegram, email).",
+        "1.3. Использование сайта, обращение через Telegram-бот или иные указанные на сайте каналы связи означает согласие с условиями настоящей Политики.",
+      ]),
+      ("2. Цели обработки", [
+        "Обратная связь с пользователями, включая ответы на обращения и запросы о сотрудничестве; заключение и исполнение договоров возмездного оказания услуг (продюсирование, продвижение, разработка сайтов и иные услуги, оказываемые Оператором вне сайта, по прямой договорённости); улучшение сайта; выполнение требований законодательства РФ.",
+      ]),
+      ("3. Категории обрабатываемых данных", [
+        "Имя; номер телефона; адрес электронной почты; Telegram ID и username; содержание сообщений — в том объёме, в котором пользователь добровольно предоставляет эти данные при обращении.",
+      ]),
+      ("4. Правовые основания обработки", [
+        "Согласие субъекта персональных данных; исполнение договора, стороной которого либо выгодоприобретателем по которому является субъект персональных данных; выполнение обязанностей, предусмотренных законодательством РФ.",
+      ]),
+      ("5. Порядок и условия обработки", [
+        "5.1. Оператор принимает необходимые организационные и технические меры для защиты персональных данных от неправомерного или случайного доступа, уничтожения, изменения, блокирования, копирования, распространения.",
+        "5.2. Передача данных третьим лицам не производится, за исключением случаев, прямо предусмотренных законодательством РФ, либо с отдельного согласия субъекта данных. По достижении целей обработки или по отзыву согласия данные уничтожаются либо обезличиваются.",
+      ]),
+      ("6. Права субъектов персональных данных", [
+        "Пользователь вправе: получать информацию, касающуюся обработки его персональных данных; требовать уточнения, блокирования или уничтожения данных в случае их неполноты, устаревания, неточности; отзывать согласие на обработку персональных данных. Запросы направляются на email: kostyamoshnikov@gmail.com",
+      ]),
+      ("7. Ответственность", [
+        "Оператор несёт ответственность за нарушение порядка обработки персональных данных в соответствии с законодательством РФ. Пользователь несёт ответственность за достоверность предоставленных им данных.",
+      ]),
+      ("8. Изменения Политики", [
+        "Оператор вправе вносить изменения в настоящую Политику. Новая редакция вступает в силу с момента размещения на сайте.",
+      ]),
+    ]
+
+    sections_html = ""
+    for title, paras in sections:
+        sections_html += f"<h2>{html.escape(title)}</h2>\n" + "\n".join(f"<p>{html.escape(p)}</p>" for p in paras) + "\n"
+
+    body = f'''
+{header(1)}
+<section style="padding-top:64px;">
+  <div class="wrap">
+    <div class="eyebrow">Документ</div>
+    <h1 style="font-size:30px;font-weight:300;margin:14px 0 4px;">Политика обработки персональных данных</h1>
+    <div class="doc-meta">orgculture.ru · редакция от 30.07.2026</div>
+    <div class="doc-body" style="margin-top:36px;">
+      {sections_html}
+      <div class="doc-requisites">
+        Мошников Константин Алексеевич<br>
+        Самозанятый (НПД) · ИНН 471508674254<br>
+        г. Санкт-Петербург<br>
+        Email: kostyamoshnikov@gmail.com
+      </div>
+    </div>
+    <div style="margin-top:36px;display:flex;gap:16px;flex-wrap:wrap;">
+      <a class="btn-line" href="../">← На главную</a>
+      <a class="btn-line" href="../documents/privacy-policy.pdf" download>Скачать PDF</a>
+    </div>
+  </div>
+</section>
+{footer(1)}
+'''
+    return page_head("Политика конфиденциальности — Организованная Культурность", "Политика обработки персональных данных сайта orgculture.ru.", 1, path="privacy/") + body
+
+os.makedirs(os.path.join(ROOT, "privacy"), exist_ok=True)
+with open(os.path.join(ROOT, "privacy", "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_privacy())
+print("privacy/index.html written")

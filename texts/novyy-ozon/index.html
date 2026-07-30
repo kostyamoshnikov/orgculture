@@ -20,6 +20,7 @@
 <body>
 
 <header>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
   <div class="headbar">
     <a href="../../" class="brandmark" aria-label="Организованная Культурность — на главную">
       <svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
@@ -30,10 +31,21 @@
     <nav class="mainnav">
       <a href="../../manifesto/">Манифест</a>
       <a href="../../texts/" class="active">Тексты</a>
+      <a href="../../projects/">Проекты</a>
       <a href="../../recommendations/">Рекомендации</a>
-      <a href="../../about/">Об авторе</a>
+      <a href="../../about/">Автор</a>
     </nav>
+    <label for="nav-toggle" class="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </label>
   </div>
+  <nav class="mobile-nav">
+    <a href="../../manifesto/">Манифест</a>
+      <a href="../../texts/" class="active">Тексты</a>
+      <a href="../../projects/">Проекты</a>
+      <a href="../../recommendations/">Рекомендации</a>
+      <a href="../../about/">Автор</a>
+  </nav>
 </header>
 
 <div class="text-hero wrap-wide">
@@ -60,6 +72,9 @@
       <a href="https://vk.ru/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">VK</a>
     </div>
     <div class="foot-slogan">* Без агрессии, но с экспрессией</div>
+  </div>
+  <div class="wrap-wide" style="margin-top:20px;">
+    <a href="../../privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
   </div>
 </footer>
 </body>
