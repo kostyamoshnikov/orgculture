@@ -504,9 +504,58 @@
     </div>
     <div class="foot-slogan">* Без агрессии, но с экспрессией</div>
   </div>
-  <div class="wrap-wide" style="margin-top:20px;">
+  <div class="wrap-wide" style="margin-top:20px;display:flex;gap:18px;">
     <a href="../privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
+    <a href="../cookies/" style="font-size:12px;color:var(--dim2);">Cookie</a>
+    <a href="../bot-rules/" style="font-size:12px;color:var(--dim2);">Правила использования бота</a>
   </div>
 </footer>
+
+<div class="tg-widget" id="tg-widget">
+  <div class="tg-bubble" id="tg-bubble">Напишите нам — бот ответит быстро</div>
+  <a class="tg-btn" href="https://t.me/orgculture_bot" target="_blank" rel="noopener" aria-label="Написать в Telegram">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.093 13.68l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.88h.219z"/></svg>
+    Написать боту
+  </a>
+</div>
+<script>
+  (function(){
+    var widget = document.getElementById('tg-widget');
+    var bubble = document.getElementById('tg-bubble');
+    function update(){
+      if (window.scrollY > 400) {
+        if (!widget.classList.contains('visible')) {
+          widget.classList.add('visible');
+          if (!bubble.dataset.shown) {
+            bubble.dataset.shown = '1';
+            setTimeout(function(){
+              bubble.classList.add('visible');
+              setTimeout(function(){ bubble.classList.remove('visible'); }, 4000);
+            }, 800);
+          }
+        }
+      } else {
+        widget.classList.remove('visible');
+      }
+    }
+    window.addEventListener('scroll', update);
+    update();
+  })();
+</script>
+<div id="cookie-banner">
+  <div class="cb-mark"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="364" cy="540" rx="200" ry="110"/>
+  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
+</svg></div>
+  <div class="cb-text">
+    <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="../cookies/">в соглашении об использовании cookie</a>.</p>
+  </div>
+  <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');">Хорошо</button>
+</div>
+<script>
+  if (!localStorage.getItem('ok_cookie_consent')) {
+    document.getElementById('cookie-banner').classList.add('show');
+  }
+</script>
 </body>
 </html>

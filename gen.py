@@ -721,6 +721,32 @@ print(f"{len(TEXTS)} texts loaded")
 
 SITE_DOMAIN = "https://orgculture.ru"
 
+# Ссылка на Telegram-бота.
+BOT_URL = "https://t.me/orgculture_bot"
+# нормально и без счётчика. Как получишь номер счётчика в метрике —
+# впиши его сюда числом (без кавычек) и пересобери сайт (python3 gen.py).
+# Пример: YANDEX_METRIKA_ID = 12345678
+YANDEX_METRIKA_ID = None
+
+def yandex_metrika_snippet():
+    if not YANDEX_METRIKA_ID:
+        return ""
+    mid = YANDEX_METRIKA_ID
+    return f'''<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){{
+        m[i]=m[i]||function(){{(m[i].a=m[i].a||[]).push(arguments)}};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {{if (document.scripts[j].src === r) {{ return; }}}}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    }})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id={mid}', 'ym');
+
+    ym({mid}, 'init', {{ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true}});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/{mid}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+'''
+
 def page_head(title, description, depth=0, og_image=None, path=""):
     root = "../" * depth if depth else "./"
     og = og_image or (root + "images/og-default.jpg")
@@ -742,7 +768,7 @@ def page_head(title, description, depth=0, og_image=None, path=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/style.css">
-</head>
+{yandex_metrika_snippet()}</head>
 <body>
 '''
 
@@ -795,10 +821,56 @@ def footer(depth=0):
     </div>
     <div class="foot-slogan">* Без агрессии, но с экспрессией</div>
   </div>
-  <div class="wrap-wide" style="margin-top:20px;">
+  <div class="wrap-wide" style="margin-top:20px;display:flex;gap:18px;">
     <a href="{root}privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
+    <a href="{root}cookies/" style="font-size:12px;color:var(--dim2);">Cookie</a>
+    <a href="{root}bot-rules/" style="font-size:12px;color:var(--dim2);">Правила использования бота</a>
   </div>
 </footer>
+
+<div class="tg-widget" id="tg-widget">
+  <div class="tg-bubble" id="tg-bubble">Напишите нам — бот ответит быстро</div>
+  <a class="tg-btn" href="{BOT_URL}" target="_blank" rel="noopener" aria-label="Написать в Telegram">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.093 13.68l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.88h.219z"/></svg>
+    Написать боту
+  </a>
+</div>
+<script>
+  (function(){{
+    var widget = document.getElementById('tg-widget');
+    var bubble = document.getElementById('tg-bubble');
+    function update(){{
+      if (window.scrollY > 400) {{
+        if (!widget.classList.contains('visible')) {{
+          widget.classList.add('visible');
+          if (!bubble.dataset.shown) {{
+            bubble.dataset.shown = '1';
+            setTimeout(function(){{
+              bubble.classList.add('visible');
+              setTimeout(function(){{ bubble.classList.remove('visible'); }}, 4000);
+            }}, 800);
+          }}
+        }}
+      }} else {{
+        widget.classList.remove('visible');
+      }}
+    }}
+    window.addEventListener('scroll', update);
+    update();
+  }})();
+</script>
+<div id="cookie-banner">
+  <div class="cb-mark">{LOGO_MARK_SVG}</div>
+  <div class="cb-text">
+    <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="{root}cookies/">в соглашении об использовании cookie</a>.</p>
+  </div>
+  <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');">Хорошо</button>
+</div>
+<script>
+  if (!localStorage.getItem('ok_cookie_consent')) {{
+    document.getElementById('cookie-banner').classList.add('show');
+  }}
+</script>
 </body>
 </html>'''
 
@@ -1360,13 +1432,14 @@ def build_privacy():
       ]),
       ("3. Категории обрабатываемых данных", [
         "Имя; номер телефона; адрес электронной почты; Telegram ID и username; содержание сообщений — в том объёме, в котором пользователь добровольно предоставляет эти данные при обращении.",
+        "Также автоматически обрабатываются обезличенные технические данные о посещениях сайта (файлы cookie, статистика переходов и действий на странице) через сервис Яндекс.Метрика — подробнее в Соглашении об использовании cookie.",
       ]),
       ("4. Правовые основания обработки", [
         "Согласие субъекта персональных данных; исполнение договора, стороной которого либо выгодоприобретателем по которому является субъект персональных данных; выполнение обязанностей, предусмотренных законодательством РФ.",
       ]),
       ("5. Порядок и условия обработки", [
         "5.1. Оператор принимает необходимые организационные и технические меры для защиты персональных данных от неправомерного или случайного доступа, уничтожения, изменения, блокирования, копирования, распространения.",
-        "5.2. Передача данных третьим лицам не производится, за исключением случаев, прямо предусмотренных законодательством РФ, либо с отдельного согласия субъекта данных. По достижении целей обработки или по отзыву согласия данные уничтожаются либо обезличиваются.",
+        "5.2. Передача данных третьим лицам не производится, за исключением случаев, прямо предусмотренных законодательством РФ, обработки обезличенной статистики сервисом Яндекс.Метрика (ООО «Яндекс»), либо с отдельного согласия субъекта данных. По достижении целей обработки или по отзыву согласия данные уничтожаются либо обезличиваются.",
       ]),
       ("6. Права субъектов персональных данных", [
         "Пользователь вправе: получать информацию, касающуюся обработки его персональных данных; требовать уточнения, блокирования или уничтожения данных в случае их неполноты, устаревания, неточности; отзывать согласие на обработку персональных данных. Запросы направляются на email: kostyamoshnikov@gmail.com",
@@ -1413,3 +1486,122 @@ os.makedirs(os.path.join(ROOT, "privacy"), exist_ok=True)
 with open(os.path.join(ROOT, "privacy", "index.html"), "w", encoding="utf-8") as f:
     f.write(build_privacy())
 print("privacy/index.html written")
+
+# ---------------------------------------------------------------
+# BOT RULES
+# ---------------------------------------------------------------
+
+def build_bot_rules():
+    sections = [
+      ("1. Общие положения", [
+        "1.1. Настоящие Правила регулируют отношения между Мошниковым Константином Алексеевичем, самозанятым (ИНН 471508674254), и пользователями Telegram-бота «Организованная Культурность».",
+        "1.2. Используя бота — в том числе отправив /start — пользователь принимает настоящие Правила и Политику обработки персональных данных.",
+        "1.3. Правила являются неотъемлемой частью документов, размещённых на сайте orgculture.ru.",
+      ]),
+      ("2. Назначение бота", [
+        "Бот предоставляет доступ к информационным материалам сайта (манифест, тексты, проекты, рекомендации) и позволяет отправить сообщение напрямую — с пересылкой оператору сайта и возможностью получить ответ.",
+      ]),
+      ("3. Обработка данных", [
+        "При обращении через бота обрабатываются: Telegram ID и username, а также содержание добровольно отправленных сообщений (текст, фото, документы, голосовые сообщения). Подробности — в Политике обработки персональных данных.",
+      ]),
+      ("4. Ответственность", [
+        "Оператор не гарантирует мгновенный ответ на обращения через бота. Оператор вправе не отвечать на сообщения, содержащие оскорбления, спам или незаконный контент.",
+      ]),
+      ("5. Изменения Правил", [
+        "Оператор вправе вносить изменения в настоящие Правила. Новая редакция вступает в силу с момента размещения на сайте.",
+      ]),
+    ]
+
+    sections_html = ""
+    for title, paras in sections:
+        sections_html += f"<h2>{html.escape(title)}</h2>\n" + "\n".join(f"<p>{html.escape(p)}</p>" for p in paras) + "\n"
+
+    body = f'''
+{header(1)}
+<section style="padding-top:64px;">
+  <div class="wrap">
+    <div class="eyebrow">Документ</div>
+    <h1 style="font-size:30px;font-weight:300;margin:14px 0 4px;">Правила использования Telegram-бота</h1>
+    <div class="doc-meta">@orgculture · редакция от 30.07.2026</div>
+    <div class="doc-body" style="margin-top:36px;">
+      {sections_html}
+      <div class="doc-requisites">
+        Мошников Константин Алексеевич<br>
+        Самозанятый (НПД) · ИНН 471508674254<br>
+        г. Санкт-Петербург<br>
+        Email: kostyamoshnikov@gmail.com
+      </div>
+    </div>
+    <div style="margin-top:36px;display:flex;gap:16px;flex-wrap:wrap;">
+      <a class="btn-line" href="../">← На главную</a>
+      <a class="btn-line" href="../privacy/">Политика конфиденциальности</a>
+    </div>
+  </div>
+</section>
+{footer(1)}
+'''
+    return page_head("Правила использования бота — Организованная Культурность", "Правила использования Telegram-бота «Организованной Культурности».", 1, path="bot-rules/") + body
+
+os.makedirs(os.path.join(ROOT, "bot-rules"), exist_ok=True)
+with open(os.path.join(ROOT, "bot-rules", "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_bot_rules())
+print("bot-rules/index.html written")
+
+# ---------------------------------------------------------------
+# COOKIES POLICY
+# ---------------------------------------------------------------
+
+def build_cookies():
+    sections = [
+      ("1. Что такое файлы cookie", [
+        "Cookie — небольшие текстовые файлы, которые сайт сохраняет в браузере пользователя для распознавания при повторных посещениях и сбора статистики использования сайта.",
+      ]),
+      ("2. Какие cookie используются", [
+        "Сайт orgculture.ru использует сервис веб-аналитики Яндекс.Метрика, который устанавливает собственные cookie для сбора обезличенной статистики посещаемости (просмотры страниц, переходы, время на сайте) и, при включённой функции Вебвизор, записи действий пользователя на странице (клики, движения курсора, скролл, ввод в поля форм) в обезличенном виде.",
+        "Оператор сайта не устанавливает собственных cookie сверх тех, что необходимы для базовой работы сайта.",
+      ]),
+      ("3. Управление cookie", [
+        "Пользователь может отключить cookie в настройках своего браузера. Это может ограничить работу отдельных функций сайта, но не запрещает доступ к его основному содержимому.",
+      ]),
+      ("4. Передача данных третьим лицам", [
+        "Статистика, собираемая Яндекс.Метрикой, обрабатывается ООО «Яндекс» в соответствии с его собственной политикой конфиденциальности: yandex.ru/legal/confidential",
+      ]),
+      ("5. Изменения", [
+        "Оператор вправе вносить изменения в настоящее Соглашение. Новая редакция вступает в силу с момента размещения на сайте.",
+      ]),
+    ]
+
+    sections_html = ""
+    for title, paras in sections:
+        sections_html += f"<h2>{html.escape(title)}</h2>\n" + "\n".join(f"<p>{html.escape(p)}</p>" for p in paras) + "\n"
+
+    body = f'''
+{header(1)}
+<section style="padding-top:64px;">
+  <div class="wrap">
+    <div class="eyebrow">Документ</div>
+    <h1 style="font-size:30px;font-weight:300;margin:14px 0 4px;">Соглашение об использовании cookie</h1>
+    <div class="doc-meta">orgculture.ru · редакция от 30.07.2026</div>
+    <div class="doc-body" style="margin-top:36px;">
+      {sections_html}
+      <div class="doc-requisites">
+        Мошников Константин Алексеевич<br>
+        Самозанятый (НПД) · ИНН 471508674254<br>
+        г. Санкт-Петербург<br>
+        Email: kostyamoshnikov@gmail.com
+      </div>
+    </div>
+    <div style="margin-top:36px;display:flex;gap:16px;flex-wrap:wrap;">
+      <a class="btn-line" href="../">← На главную</a>
+      <a class="btn-line" href="../privacy/">Политика конфиденциальности</a>
+    </div>
+  </div>
+</section>
+{footer(1)}
+'''
+    return page_head("Cookie — Организованная Культурность", "Соглашение об использовании файлов cookie на сайте orgculture.ru.", 1, path="cookies/") + body
+
+os.makedirs(os.path.join(ROOT, "cookies"), exist_ok=True)
+with open(os.path.join(ROOT, "cookies", "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_cookies())
+print("cookies/index.html written")
