@@ -6,18 +6,46 @@
 <title>Рекомендации — Организованная Культурность</title>
 <meta name="description" content="Что посмотреть, послушать и куда сходить — фильмы, спектакли, концерты, альбомы.">
 <meta name="theme-color" content="#0A0A0A">
+<link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-180.png">
+<link rel="icon" href="../assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="alternate" type="application/rss+xml" title="Организованная Культурность — Тексты" href="https://orgculture.ru/feed.xml">
 <link rel="canonical" href="https://orgculture.ru/recommendations/">
 <meta property="og:title" content="Рекомендации — Организованная Культурность">
 <meta property="og:description" content="Что посмотреть, послушать и куда сходить — фильмы, спектакли, концерты, альбомы.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="../images/og-default.jpg">
+<meta property="og:url" content="https://orgculture.ru/recommendations/">
+<meta property="og:site_name" content="Организованная Культурность">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/style.css?v=18">
+<link rel="manifest" href="../manifest.json">
+<!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
+<script type="text/javascript">
+  window.__loadYandexMetrika = function() {
+    if (window.__ymLoaded) return;
+    window.__ymLoaded = true;
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111176053', 'ym');
+    ym(111176053, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+  };
+  if (localStorage.getItem('ok_cookie_consent') === '1') {
+    window.__loadYandexMetrika();
+  }
+</script>
+<!-- /Yandex.Metrika counter -->
 </head>
 <body>
+<a href="#main" class="skip-link">Перейти к содержимому</a>
 
 <header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
@@ -35,11 +63,11 @@
       <a href="../recommendations/" class="active">Рекомендации</a>
       <a href="../about/">Автор</a>
     </nav>
-    <label for="nav-toggle" class="burger" aria-label="Меню">
+    <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
     </label>
   </div>
-  <nav class="mobile-nav">
+  <nav class="mobile-nav" id="mobile-nav-panel">
     <a href="../manifesto/">Манифест</a>
       <a href="../texts/">Тексты</a>
       <a href="../projects/">Проекты</a>
@@ -47,6 +75,18 @@
       <a href="../about/">Автор</a>
   </nav>
 </header>
+<div id="main"></div>
+<script>
+  (function(){
+    var cb = document.getElementById('nav-toggle');
+    var btn = document.querySelector('.burger');
+    if (cb && btn) {
+      cb.addEventListener('change', function(){
+        btn.setAttribute('aria-expanded', cb.checked ? 'true' : 'false');
+      });
+    }
+  })();
+</script>
 
 <section style="padding-top:64px;">
   <div class="wrap-wide">
@@ -69,7 +109,7 @@
       <a class="go" href="https://vk.cc/bWvaOl" target="_blank" rel="noopener">смотреть на Beat Film Festival →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/kacheli.jpg" alt="" loading="lazy"></div>
+      <div class="recimg"><img src="../images/kacheli.jpg" alt="" width="1600" height="1066" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">Двое на качелях. Где здесь я и нужен ли я</h3>
@@ -78,13 +118,13 @@
       <a class="go" href="https://lensov-theatre.spb.ru/repertoire" target="_blank" rel="noopener">билеты и репертуар театра →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/robot-kostya-1.jpg" alt="" loading="lazy"></div>
+      <div class="recimg"><img src="../images/robot-kostya-1.jpg" alt="" width="790" height="527" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">В поисках вдохновения, или Как жить среди роботов и не сойти с ума</h3>
         <p>О рождении спектакля «Робот Костя» — первого в России роботического театра, где Чеховские страсти оказались подвластны и роботам.</p>
       </div>
-      <a class="go" href="https://www.instagram.com/robot.kostya/" target="_blank" rel="noopener">аккаунт «Робота Кости» →</a>
+      <a class="go" href="https://www.instagram.com/robot.kostya/" target="_blank" rel="noopener">аккаунт «Робота Кости»* →</a> <span class="meta-note">* Meta признана экстремистской организацией, деятельность запрещена в РФ.</span>
     </div>
     <div class="recrow">
       <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
@@ -111,7 +151,7 @@
       <a class="go" href="../texts/hod-korolevy/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/dom-radio.jpg" alt="" loading="lazy"></div>
+      <div class="recimg"><img src="../images/dom-radio.jpg" alt="" width="938" height="1332" loading="lazy"></div>
       <div>
         <span class="tag">пространство</span>
         <h3 style="margin-top:8px;">Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный</h3>
@@ -120,16 +160,16 @@
       <a class="go" href="https://musicaeterna.org/ru/" target="_blank" rel="noopener">афиша musicAeterna →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/kurentzis-poster.jpg" alt="" loading="lazy"></div>
+      <div class="recimg"><img src="../images/kurentzis-poster.jpg" alt="" width="600" height="480" loading="lazy"></div>
       <div>
         <span class="tag">концерт</span>
         <h3 style="margin-top:8px;">Курентзис. Знал, видел, чувствовал</h3>
         <p>Дебюсси, Равель, Стравинский и Эрик Сати в один вечер в Петербургской филармонии — и зал, переродившийся вместе с музыкой.</p>
       </div>
-      <a class="go" href="https://events.musicaeterna.org/schedule" target="_blank" rel="noopener">афиша ближайших концертов →</a>
+      <a class="go" href="https://musicaeterna.org/ru/visit/" target="_blank" rel="noopener">афиша ближайших концертов →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/annette-poster.jpg" alt="" loading="lazy"></div>
+      <div class="recimg"><img src="../images/annette-poster.jpg" alt="" width="1600" height="1106" loading="lazy"></div>
       <div>
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Смотрящий из бездны, или «Аннетт» — серьёзный разговор, который состоялся вовремя</h3>
@@ -162,7 +202,7 @@
       <a class="go" href="../texts/gerda/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/medeya-poster.jpg" alt="" loading="lazy"></div>
+      <div class="recimg"><img src="../images/medeya-poster.jpg" alt="" width="599" height="831" loading="lazy"></div>
       <div>
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Вообще всех жалко, а по отдельности никого, или «Медея» — за нас, про нас, против нас?</h3>
@@ -171,7 +211,7 @@
       <a class="go" href="../texts/medeya/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/interview-v.jpg" alt="" loading="lazy"></div>
+      <div class="recimg"><img src="../images/interview-v.jpg" alt="" width="1440" height="1920" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">Интервью В, или Времена не выбирают — в них живут</h3>
@@ -508,6 +548,7 @@
     <a href="../privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
     <a href="../cookies/" style="font-size:12px;color:var(--dim2);">Cookie</a>
     <a href="../bot-rules/" style="font-size:12px;color:var(--dim2);">Правила использования бота</a>
+    <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;" style="font-size:12px;color:var(--dim2);">Настройки cookie</a>
   </div>
 </footer>
 
@@ -550,11 +591,23 @@
   <div class="cb-text">
     <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="../cookies/">в соглашении об использовании cookie</a>.</p>
   </div>
-  <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');">Хорошо</button>
+  <div class="cb-buttons">
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Отклонить</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
+  </div>
 </div>
 <script>
   if (!localStorage.getItem('ok_cookie_consent')) {
     document.getElementById('cookie-banner').classList.add('show');
+  }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('../sw.js').catch(function(e) {
+        console.error('SW registration failed:', e);
+      });
+    });
   }
 </script>
 </body>

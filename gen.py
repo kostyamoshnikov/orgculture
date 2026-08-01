@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import os, re, html
+import os, re, html, json
+from datetime import datetime
 
-ROOT = "/home/claude/site"
+ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # ---------------------------------------------------------------
 # Brand SVG assets (clean, baked coordinates, no runtime distortion)
@@ -198,7 +199,7 @@ TEXTS = [
       "И я уверен: это зазвучит снова, когда мы соберёмся в очередной раз. Будет ли это правдой?",
     ],
     "meta": "Концерт Теодора Курентзиса и оркестра musicAeterna состоялся 1 марта 2021 года в большом зале Петербургской филармонии. В программе — Дебюсси, Равель, Стравинский, Эрик Сати.",
-    "link": "https://events.musicaeterna.org/schedule", "link_label": "афиша ближайших концертов",
+    "link": "https://musicaeterna.org/ru/visit/", "link_label": "афиша ближайших концертов",
   },
   {
     "slug": "annette",
@@ -721,35 +722,94 @@ print(f"{len(TEXTS)} texts loaded")
 
 SITE_DOMAIN = "https://orgculture.ru"
 
+# Номер версии сайта для кэш-бастинга статики (style.css) и service worker.
+# ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
+# вернувшиеся пользователи будут сколько угодно долго видеть старые стили
+# из-за cache-first стратегии service worker'а (см. sw.js).
+SITE_VERSION = 18
+
+# Дата последней пересборки — используется как lastmod в sitemap.xml и
+# lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
+# заводили (см. README, раздел «Незакрытые задачи»), поэтому это дата
+# сборки сайта, а не дата конкретного текста — честнее, чем не иметь
+# lastmod вообще, но не путать одно с другим. Бампать вручную вместе с
+# SITE_VERSION при каждой пересборке.
+BUILD_DATE = "2026-08-01"
+
+# Натуральные размеры картинок из images/ — только для атрибутов width/height
+# у <img> (чтобы браузер резервировал место и не прыгала вёрстка при
+# загрузке). Реальный показанный размер всё равно управляется CSS, эти
+# числа лишь задают правильное соотношение сторон. Обновлять вручную,
+# если заменяешь файл в images/ на картинку с другими пропорциями.
+IMAGE_DIMS = {
+    "annette-poster.jpg": (1600, 1106),
+    "author.jpg": (1600, 2400),
+    "dom-radio.jpg": (938, 1332),
+    "interview-v.jpg": (1440, 1920),
+    "kacheli.jpg": (1600, 1066),
+    "kurentzis-poster.jpg": (600, 480),
+    "medeya-poster.jpg": (599, 831),
+    "og-default.jpg": (1200, 630),
+    "robot-kostya-1.jpg": (790, 527),
+    "robot-kostya-2.jpg": (1600, 1068),
+}
+
+def img_dims_attr(filename):
+    if filename in IMAGE_DIMS:
+        w, h = IMAGE_DIMS[filename]
+        return f' width="{w}" height="{h}"'
+    return ""
+
+def link_label_with_meta_note(label, url):
+    # Instagram и Facebook принадлежат компании Meta, признанной
+    # экстремистской организацией и запрещённой в РФ — по закону такие
+    # ссылки принято сопровождать пометкой. Возвращает (текст_ссылки,
+    # html_пометки_после_ссылки) — пометка пустая для остальных ссылок.
+    esc = html.escape(label)
+    if url and ("instagram.com" in url or "facebook.com" in url):
+        note = ' <span class="meta-note">* Meta признана экстремистской организацией, деятельность запрещена в РФ.</span>'
+        return esc + "*", note
+    return esc, ""
+
 # Ссылка на Telegram-бота.
 BOT_URL = "https://t.me/orgculture_bot"
 # нормально и без счётчика. Как получишь номер счётчика в метрике —
 # впиши его сюда числом (без кавычек) и пересобери сайт (python3 gen.py).
 # Пример: YANDEX_METRIKA_ID = 12345678
-YANDEX_METRIKA_ID = None
+YANDEX_METRIKA_ID = 111176053
 
 def yandex_metrika_snippet():
     if not YANDEX_METRIKA_ID:
         return ""
     mid = YANDEX_METRIKA_ID
-    return f'''<!-- Yandex.Metrika counter -->
+    # Счётчик не запускается автоматически — только после согласия на cookie
+    # (клик "Хорошо" в баннере, см. footer()), либо сразу, если согласие уже
+    # было дано в прошлый визит (localStorage). Без этого счётчик работал бы
+    # до того, как пользователь на него согласился — это и есть тот самый
+    # декоративный cookie-баннер, который мы чинили.
+    return f'''<!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
+  window.__loadYandexMetrika = function() {{
+    if (window.__ymLoaded) return;
+    window.__ymLoaded = true;
     (function(m,e,t,r,i,k,a){{
         m[i]=m[i]||function(){{(m[i].a=m[i].a||[]).push(arguments)}};
         m[i].l=1*new Date();
         for (var j = 0; j < document.scripts.length; j++) {{if (document.scripts[j].src === r) {{ return; }}}}
         k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
     }})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id={mid}', 'ym');
-
-    ym({mid}, 'init', {{ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true}});
+    ym({mid}, 'init', {{ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true}});
+  }};
+  if (localStorage.getItem('ok_cookie_consent') === '1') {{
+    window.__loadYandexMetrika();
+  }}
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/{mid}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 '''
 
 def page_head(title, description, depth=0, og_image=None, path=""):
     root = "../" * depth if depth else "./"
-    og = og_image or (root + "images/og-default.jpg")
+    og = og_image or f"{SITE_DOMAIN}/images/og-default.jpg"
     return f'''<!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -758,18 +818,28 @@ def page_head(title, description, depth=0, og_image=None, path=""):
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description)}">
 <meta name="theme-color" content="#0A0A0A">
+<link rel="icon" href="{root}assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="{root}assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="{root}assets/icons/favicon-180.png">
+<link rel="icon" href="{root}assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="alternate" type="application/rss+xml" title="Организованная Культурность — Тексты" href="{SITE_DOMAIN}/feed.xml">
 <link rel="canonical" href="{SITE_DOMAIN}/{path}">
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(description)}">
 <meta property="og:type" content="website">
+<meta property="og:url" content="{SITE_DOMAIN}/{path}">
+<meta property="og:site_name" content="Организованная Культурность">
+<meta property="og:locale" content="ru_RU">
 <meta property="og:image" content="{og}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/style.css">
+<link rel="stylesheet" href="{root}assets/style.css?v={SITE_VERSION}">
+<link rel="manifest" href="{root}manifest.json">
 {yandex_metrika_snippet()}</head>
 <body>
+<a href="#main" class="skip-link">Перейти к содержимому</a>
 '''
 
 def header(depth=0, active=""):
@@ -791,14 +861,26 @@ def header(depth=0, active=""):
     <nav class="mainnav">
       {nav_links}
     </nav>
-    <label for="nav-toggle" class="burger" aria-label="Меню">
+    <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
     </label>
   </div>
-  <nav class="mobile-nav">
+  <nav class="mobile-nav" id="mobile-nav-panel">
     {nav_links}
   </nav>
 </header>
+<div id="main"></div>
+<script>
+  (function(){{
+    var cb = document.getElementById('nav-toggle');
+    var btn = document.querySelector('.burger');
+    if (cb && btn) {{
+      cb.addEventListener('change', function(){{
+        btn.setAttribute('aria-expanded', cb.checked ? 'true' : 'false');
+      }});
+    }}
+  }})();
+</script>
 '''
 
 def marquee(text="БЕЗ АГРЕССИИ, НО С ЭКСПРЕССИЕЙ", repeat=8):
@@ -825,6 +907,7 @@ def footer(depth=0):
     <a href="{root}privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
     <a href="{root}cookies/" style="font-size:12px;color:var(--dim2);">Cookie</a>
     <a href="{root}bot-rules/" style="font-size:12px;color:var(--dim2);">Правила использования бота</a>
+    <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;" style="font-size:12px;color:var(--dim2);">Настройки cookie</a>
   </div>
 </footer>
 
@@ -864,11 +947,23 @@ def footer(depth=0):
   <div class="cb-text">
     <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="{root}cookies/">в соглашении об использовании cookie</a>.</p>
   </div>
-  <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');">Хорошо</button>
+  <div class="cb-buttons">
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Отклонить</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
+  </div>
 </div>
 <script>
   if (!localStorage.getItem('ok_cookie_consent')) {{
     document.getElementById('cookie-banner').classList.add('show');
+  }}
+</script>
+<script>
+  if ('serviceWorker' in navigator) {{
+    window.addEventListener('load', function() {{
+      navigator.serviceWorker.register('{root}sw.js').catch(function(e) {{
+        console.error('SW registration failed:', e);
+      }});
+    }});
   }}
 </script>
 </body>
@@ -881,11 +976,11 @@ def card(t, depth):
     root = "../" * depth if depth else "./"
     href = f"{root}texts/{t['slug']}/"
     if t["image"]:
-        thumb = f'<div class="thumb"><img src="{root}images/{t["image"]}" alt="{html.escape(t["title"])}" loading="lazy"></div>'
+        thumb = f'<div class="thumb"><img src="{root}images/{t["image"]}" alt="{html.escape(t["title"])}"{img_dims_attr(t["image"])} loading="lazy"></div>'
     else:
         thumb = f'<div class="thumb noimg">{NOIMG_MARK_SVG}</div>'
     excerpt = t["kicker"]
-    return f'''<a class="card" href="{href}">
+    return f'''<a class="card" href="{href}" data-tag="{html.escape(t['tag'])}">
       {thumb}
       <div class="body">
         {tag_pill(t['tag'])}
@@ -907,7 +1002,7 @@ def build_index():
     rec_html = ""
     for t in rec_with_link:
         if t["image"]:
-            img = f'<div class="recimg"><img src="images/{t["image"]}" alt="" loading="lazy"></div>'
+            img = f'<div class="recimg"><img src="images/{t["image"]}" alt=""{img_dims_attr(t["image"])} loading="lazy"></div>'
         else:
             img = f'<div class="recimg noimg">{NOIMG_MARK_SVG}</div>'
         rec_html += f'''<a class="recrow" href="texts/{t['slug']}/" style="text-decoration:none;">
@@ -979,21 +1074,51 @@ print("index.html written")
 # ---------------------------------------------------------------
 
 def build_texts_index():
+    tags = sorted(set(t["tag"] for t in TEXTS))
+    filter_html = '<button class="filter-pill active" data-filter="all">Все</button>' + \
+        "".join(f'<button class="filter-pill" data-filter="{html.escape(tg)}">{html.escape(tg)}</button>' for tg in tags)
+
     body = f'''
 {header(1, "texts")}
 <section style="padding-top:64px;">
   <div class="wrap-wide">
     <div class="eyebrow">Раздел</div>
     <h1 style="font-size:34px;font-weight:300;margin:14px 0 10px;">Тексты</h1>
-    <p style="color:var(--dim);max-width:620px;font-size:15.5px;line-height:1.8;margin-bottom:44px;">
+    <p style="color:var(--dim);max-width:620px;font-size:15.5px;line-height:1.8;margin-bottom:32px;">
       Отзывы и рефлексии о фильмах, спектаклях, музыке и концертах — публикуются не по графику, а по мере того, как что-то требует высказывания.
     </p>
-    <div class="grid">
+    <div class="filter-row" id="filter-row">
+      {filter_html}
+    </div>
+    <div style="margin:-16px 0 32px;"><a href="../feed.xml" style="font-size:12px;color:var(--dim2);">RSS →</a></div>
+    <div class="grid" id="texts-grid">
       {''.join(card(t, 1) for t in TEXTS)}
     </div>
+    <p id="filter-empty" style="display:none;color:var(--dim);font-size:15px;margin-top:20px;">Пока нет текстов с этим тегом.</p>
   </div>
 </section>
 {footer(1)}
+<script>
+  (function(){{
+    var row = document.getElementById('filter-row');
+    var cards = document.querySelectorAll('#texts-grid .card');
+    var empty = document.getElementById('filter-empty');
+    row.addEventListener('click', function(e){{
+      var btn = e.target.closest('.filter-pill');
+      if (!btn) return;
+      row.querySelectorAll('.filter-pill').forEach(function(b){{ b.classList.remove('active'); }});
+      btn.classList.add('active');
+      var f = btn.dataset.filter;
+      var shown = 0;
+      cards.forEach(function(c){{
+        var match = (f === 'all' || c.dataset.tag === f);
+        c.style.display = match ? '' : 'none';
+        if (match) shown++;
+      }});
+      empty.style.display = shown === 0 ? 'block' : 'none';
+    }});
+  }})();
+</script>
 '''
     return page_head("Тексты — Организованная Культурность", "Все тексты: отзывы и рефлексии о фильмах, спектаклях, музыке и концертах.", 1, path="texts/") + body
 
@@ -1013,13 +1138,14 @@ def build_text_page(t, idx):
 
     heroimg = ""
     if t["image"]:
-        heroimg = f'''<div class="wrap-wide"><div class="text-heroimg"><img src="{root}images/{t['image']}" alt="{html.escape(t['title'])}"></div></div>'''
+        heroimg = f'''<div class="wrap-wide"><div class="text-heroimg"><img src="{root}images/{t['image']}" alt="{html.escape(t['title'])}"{img_dims_attr(t['image'])}></div></div>'''
 
     meta_html = ""
     if t["meta"]:
         link_html = ""
         if t["link"]:
-            link_html = f'<br><a class="btn" href="{html.escape(t["link"])}" target="_blank" rel="noopener">{html.escape(t["link_label"])} →</a>'
+            label, note = link_label_with_meta_note(t["link_label"], t["link"])
+            link_html = f'<br><a class="btn" href="{html.escape(t["link"])}" target="_blank" rel="noopener">{label} →</a>{note}'
         meta_html = f'<div class="text-meta">{html.escape(t["meta"])}{link_html}</div>'
 
     prev_t = TEXTS[idx-1] if idx > 0 else TEXTS[-1]
@@ -1029,7 +1155,39 @@ def build_text_page(t, idx):
       <a href="{root}texts/{next_t['slug']}/">{html.escape(next_t['title'][:40])}{'…' if len(next_t['title'])>40 else ''} →</a>
     </div></div>'''
 
+    # Похожие тексты — по тегу, максимум 3, сам текст исключается
+    same_tag = [x for x in TEXTS if x["tag"] == t["tag"] and x["slug"] != t["slug"]]
+    related = same_tag[:3] if same_tag else [x for x in TEXTS if x["slug"] != t["slug"]][:3]
+    related_html = "".join(card(x, depth) for x in related)
+    related_block = f'''<div class="wrap-wide" style="padding:56px 0 0;">
+  <div class="sec-head"><h2 style="font-size:20px;">Похожие тексты</h2></div>
+  <div class="grid">{related_html}</div>
+</div>'''
+
+    channel_cta = f'''<div class="wrap" style="padding:56px 0 0;">
+  <div class="collab-box" style="text-align:center;">
+    <p style="margin-bottom:22px;">Новые тексты — в Telegram-канале, без алгоритмов и без ленты.</p>
+    <div class="collab-buttons">
+      <a class="btn-line" href="https://t.me/orgculture" target="_blank" rel="noopener">Подписаться в Telegram</a>
+    </div>
+  </div>
+</div>'''
+
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": t["title"],
+        "description": t["kicker"],
+        "author": {"@type": "Person", "name": "Константин Мошников"},
+        "publisher": {"@type": "Organization", "name": "Организованная Культурность"},
+        "mainEntityOfPage": f"{SITE_DOMAIN}/texts/{t['slug']}/",
+    }
+    if t["image"]:
+        schema["image"] = f"{SITE_DOMAIN}/images/{t['image']}"
+    schema_html = f'<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>'
+
     body = f'''
+{schema_html}
 {header(depth, "texts")}
 <div class="text-hero wrap-wide">
   {tag_pill(t['tag'])}
@@ -1041,10 +1199,12 @@ def build_text_page(t, idx):
   {paras}
   {meta_html}
 </div>
+{related_block}
+{channel_cta}
 {nav_html}
 {footer(depth)}
 '''
-    return page_head(f"{t['title']} — Организованная Культурность", t['kicker'], depth, path=f"texts/{t['slug']}/") + body
+    return page_head(f"{t['title']} — Организованная Культурность", t['kicker'], depth, og_image=(f"{SITE_DOMAIN}/images/{t['image']}" if t['image'] else None), path=f"texts/{t['slug']}/") + body
 
 for i, t in enumerate(TEXTS):
     d = os.path.join(ROOT, "texts", t["slug"])
@@ -1106,11 +1266,12 @@ def build_recommendations():
     rows = ""
     for t in TEXTS:
         if t["image"]:
-            img = f'<div class="recimg"><img src="../images/{t["image"]}" alt="" loading="lazy"></div>'
+            img = f'<div class="recimg"><img src="../images/{t["image"]}" alt=""{img_dims_attr(t["image"])} loading="lazy"></div>'
         else:
             img = f'<div class="recimg noimg">{NOIMG_MARK_SVG}</div>'
         if t["link"]:
-            go = f'<a class="go" href="{html.escape(t["link"])}" target="_blank" rel="noopener">{html.escape(t["link_label"])} →</a>'
+            label, note = link_label_with_meta_note(t["link_label"], t["link"])
+            go = f'<a class="go" href="{html.escape(t["link"])}" target="_blank" rel="noopener">{label} →</a>{note}'
         else:
             go = f'<a class="go" href="../texts/{t["slug"]}/">читать →</a>'
         rows += f'''<div class="recrow">
@@ -1243,7 +1404,7 @@ CV_ROLES = [
         "bullets": [
             "SMM театральной компании «Комната Света» — спектакли мастерской Юрия Бутусова",
             "Организатор БУФЕСТ 2026 — театральный фестиваль на площадке «Скороход» (10–15 августа)",
-            "Прокат «ZA VIST» (реж. София Никифорова) — sold-out, широкий интерес профессионального сообщества",
+            "Прокат «ZAVIST'» (реж. София Никифорова) — sold-out, широкий интерес профессионального сообщества",
             "Организация регулярных гастролей мастерской Бутусова в Петербурге: все показы с аншлагом",
         ],
     },
@@ -1287,7 +1448,7 @@ def build_about():
 {header(1, "about")}
 <section style="padding-top:64px;">
   <div class="wrap-wide about-grid">
-    <div class="about-photo"><img src="../images/author.jpg" alt="Автор «Организованной Культурности»"></div>
+    <div class="about-photo"><img src="../images/author.jpg" alt="Автор «Организованной Культурности»"{img_dims_attr("author.jpg")}></div>
     <div class="about-copy">
       <div class="eyebrow">Автор</div>
       <h1 style="font-size:30px;font-weight:300;margin:14px 0 24px;">Константин Мошников</h1>
@@ -1300,6 +1461,7 @@ def build_about():
         <a href="https://t.me/orgculture" target="_blank" rel="noopener" style="color:var(--accent);">Telegram «Организованной Культурности»</a> ·
         <a href="https://vk.ru/orgculture" target="_blank" rel="noopener" style="color:var(--accent);">VK</a>
       </p>
+      <div style="margin-top:22px;"><a class="btn-line" href="../documents/CV-Konstantin-Moshnikov.pdf" download>Скачать CV</a></div>
 
       <div class="oval-divider" style="justify-content:flex-start;margin:40px 0 8px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
       <div class="eyebrow" style="margin-bottom:8px;">Опыт</div>
@@ -1379,7 +1541,8 @@ def build_project_page(pr, idx):
 
     link_html = ""
     if pr["link"]:
-        link_html = f'<div style="margin-top:36px;"><a class="btn-line" href="{html.escape(pr["link"])}" target="_blank" rel="noopener">{html.escape(pr["link_label"])} →</a></div>'
+        label, note = link_label_with_meta_note(pr["link_label"], pr["link"])
+        link_html = f'<div style="margin-top:36px;"><a class="btn-line" href="{html.escape(pr["link"])}" target="_blank" rel="noopener">{label} →</a>{note}</div>'
 
     prev_p = PROJECTS[idx-1] if idx > 0 else PROJECTS[-1]
     next_p = PROJECTS[idx+1] if idx < len(PROJECTS)-1 else PROJECTS[0]
@@ -1559,6 +1722,7 @@ def build_cookies():
       ("2. Какие cookie используются", [
         "Сайт orgculture.ru использует сервис веб-аналитики Яндекс.Метрика, который устанавливает собственные cookie для сбора обезличенной статистики посещаемости (просмотры страниц, переходы, время на сайте) и, при включённой функции Вебвизор, записи действий пользователя на странице (клики, движения курсора, скролл, ввод в поля форм) в обезличенном виде.",
         "Оператор сайта не устанавливает собственных cookie сверх тех, что необходимы для базовой работы сайта.",
+        "Яндекс.Метрика запускается только после согласия, данного через баннер на сайте — до этого момента счётчик не активен и cookie не устанавливаются.",
       ]),
       ("3. Управление cookie", [
         "Пользователь может отключить cookie в настройках своего браузера. Это может ограничить работу отдельных функций сайта, но не запрещает доступ к его основному содержимому.",
@@ -1594,6 +1758,7 @@ def build_cookies():
     <div style="margin-top:36px;display:flex;gap:16px;flex-wrap:wrap;">
       <a class="btn-line" href="../">← На главную</a>
       <a class="btn-line" href="../privacy/">Политика конфиденциальности</a>
+      <a class="btn-line" href="../documents/cookies-policy.pdf" download>Скачать PDF</a>
     </div>
   </div>
 </section>
@@ -1605,3 +1770,252 @@ os.makedirs(os.path.join(ROOT, "cookies"), exist_ok=True)
 with open(os.path.join(ROOT, "cookies", "index.html"), "w", encoding="utf-8") as f:
     f.write(build_cookies())
 print("cookies/index.html written")
+
+# ---------------------------------------------------------------
+# RSS FEED
+# ---------------------------------------------------------------
+
+def xml_escape(s):
+    return (s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+             .replace('"', "&quot;").replace("'", "&apos;"))
+
+def build_rss():
+    items = ""
+    for t in TEXTS:
+        link = f"{SITE_DOMAIN}/texts/{t['slug']}/"
+        items += f'''  <item>
+    <title>{xml_escape(t['title'])}</title>
+    <link>{link}</link>
+    <guid>{link}</guid>
+    <description>{xml_escape(t['kicker'])}</description>
+    <category>{xml_escape(t['tag'])}</category>
+  </item>
+'''
+    # RFC 822 для lastBuildDate — конкретное время суток не имеет значения
+    # (реальных дат публикации у текстов нет, см. BUILD_DATE выше), поэтому
+    # фиксируем полдень UTC даты сборки.
+    build_dt = datetime.strptime(BUILD_DATE, "%Y-%m-%d")
+    last_build_date = build_dt.strftime("%a, %d %b %Y 12:00:00 +0000")
+    rss = f'''<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Организованная Культурность — Тексты</title>
+  <link>{SITE_DOMAIN}/texts/</link>
+  <atom:link href="{SITE_DOMAIN}/feed.xml" rel="self" type="application/rss+xml"/>
+  <description>Отзывы и рефлексии о фильмах, спектаклях, музыке и концертах.</description>
+  <language>ru</language>
+  <lastBuildDate>{last_build_date}</lastBuildDate>
+{items}</channel>
+</rss>
+'''
+    with open(os.path.join(ROOT, "feed.xml"), "w", encoding="utf-8") as f:
+        f.write(rss)
+    print("feed.xml written")
+
+build_rss()
+
+def build_texts_manifest():
+    # Единственный источник правды о списке текстов (slug + title) для всего,
+    # что живёт вне gen.py — сейчас только для бота (см. 04-bot/sync_texts.py).
+    # Раньше список текстов дублировался руками прямо в worker.js и мог
+    # молча разойтись с сайтом при добавлении нового текста.
+    manifest = [{"slug": t["slug"], "title": t["title"]} for t in TEXTS]
+    with open(os.path.join(ROOT, "texts-manifest.json"), "w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+    print("texts-manifest.json written")
+
+build_texts_manifest()
+
+def build_sitemap():
+    # Раньше sitemap.xml собирался вручную один раз и с тех пор не
+    # обновлялся при добавлении текстов — при следующем тексте список
+    # снова придётся дописывать руками. Теперь пересобирается на каждый
+    # запуск gen.py из тех же списков, что и сам сайт, плюс lastmod.
+    core_paths = ["", "manifesto/", "texts/", "projects/", "recommendations/",
+                  "about/", "privacy/", "bot-rules/", "cookies/"]
+    paths = list(core_paths)
+    paths += [f"texts/{t['slug']}/" for t in TEXTS]
+    paths += [f"projects/{p['slug']}/" for p in PROJECTS]
+    urls = "\n".join(
+        f'  <url><loc>{SITE_DOMAIN}/{p}</loc><lastmod>{BUILD_DATE}</lastmod></url>'
+        for p in paths
+    )
+    sitemap = f'''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{urls}
+</urlset>
+'''
+    with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as f:
+        f.write(sitemap)
+    print("sitemap.xml written")
+
+build_sitemap()
+
+# ---------------------------------------------------------------
+# PWA — manifest.json, service worker, offline page
+# ---------------------------------------------------------------
+
+def build_manifest():
+    manifest = {
+        "name": "Организованная Культурность",
+        "short_name": "ОК",
+        "description": "Пространство для рождения смыслов и новых значений — тексты, манифест, проекты.",
+        "start_url": "/",
+        "scope": "/",
+        "display": "standalone",
+        "background_color": "#0A0A0A",
+        "theme_color": "#0A0A0A",
+        "lang": "ru",
+        "icons": [
+            {"src": "/assets/icons/favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+            {"src": "/assets/icons/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+        ],
+    }
+    with open(os.path.join(ROOT, "manifest.json"), "w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+    print("manifest.json written")
+
+def build_offline_page():
+    doc = f'''<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Нет подключения — Организованная Культурность</title>
+<style>
+  *{{margin:0;padding:0;box-sizing:border-box;}}
+  body{{
+    background:#0A0A0A;color:#F5F2ED;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;
+  }}
+  svg{{width:100px;height:auto;margin-bottom:28px;}}
+  h1{{font-weight:300;font-size:20px;margin-bottom:10px;}}
+  p{{color:#9A968E;font-size:14px;}}
+</style>
+</head>
+<body>
+  {LOGO_MARK_SVG}
+  <h1>Нет подключения к интернету</h1>
+  <p>Эта страница ещё не была загружена — откройте её ещё раз, когда будете онлайн.</p>
+</body>
+</html>'''
+    with open(os.path.join(ROOT, "offline.html"), "w", encoding="utf-8") as f:
+        f.write(doc)
+    print("offline.html written")
+
+def build_service_worker():
+    core_pages = ["/", "/manifesto/", "/texts/", "/projects/", "/recommendations/", "/about/",
+                  "/privacy/", "/cookies/", "/bot-rules/"]
+    precache = core_pages + [
+        "/offline.html", "/manifest.json",
+        "/assets/icons/favicon.svg", "/assets/icons/favicon-192.png", "/assets/icons/favicon-512.png",
+        f"/assets/style.css?v={SITE_VERSION}",
+    ]
+    precache_js = ",\n  ".join(f"'{p}'" for p in precache)
+    sw = f'''// ── Организованная Культурность · Service Worker ─────────────────
+// Стратегия: Cache First для статики, Network First для HTML страниц
+// (тот же проверенный подход, что и на aelita-production.ru)
+//
+// ⚠️ При каждой правке сайта (новый orgculture-vN) — бампать SITE_VERSION
+// в gen.py на тот же N и пересобирать сайт: это одновременно поднимает
+// ?v=N у style.css и версию кэша здесь. Без этого вернувшиеся пользователи
+// могут долго видеть старые стили из-за cache-first стратегии.
+
+const SITE_VERSION = {SITE_VERSION};
+const CACHE_NAME = `orgculture-v${{SITE_VERSION}}`;
+const STATIC_CACHE = `orgculture-static-v${{SITE_VERSION}}`;
+
+const PRECACHE_URLS = [
+  {precache_js}
+];
+
+self.addEventListener('install', event => {{
+  event.waitUntil(
+    caches.open(STATIC_CACHE)
+      .then(cache => cache.addAll(PRECACHE_URLS))
+      .then(() => self.skipWaiting())
+  );
+}});
+
+self.addEventListener('activate', event => {{
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME && key !== STATIC_CACHE)
+          .map(key => caches.delete(key))
+      )
+    ).then(() => self.clients.claim())
+  );
+}});
+
+self.addEventListener('fetch', event => {{
+  const {{ request }} = event;
+  const url = new URL(request.url);
+
+  if (url.origin !== location.origin) return;
+
+  if (request.headers.get('accept')?.includes('text/html')) {{
+    event.respondWith(networkFirst(request));
+    return;
+  }}
+
+  if (
+    url.pathname.startsWith('/assets/') ||
+    url.pathname.startsWith('/images/') ||
+    url.pathname.endsWith('.css') ||
+    url.pathname.endsWith('.js') ||
+    url.pathname.endsWith('.png') ||
+    url.pathname.endsWith('.svg') ||
+    url.pathname.endsWith('.ico')
+  ) {{
+    event.respondWith(cacheFirst(request));
+    return;
+  }}
+
+  event.respondWith(networkFirst(request));
+}});
+
+async function networkFirst(request) {{
+  const cache = await caches.open(CACHE_NAME);
+  try {{
+    const response = await fetch(request);
+    if (response.ok) {{
+      cache.put(request, response.clone());
+    }}
+    return response;
+  }} catch {{
+    const cached = await cache.match(request);
+    if (cached) return cached;
+    if (request.headers.get('accept')?.includes('text/html')) {{
+      return cache.match('/offline.html') || new Response(
+        '<html><body style="background:#0A0A0A;color:#F5F2ED;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center"><div><h1 style="font-weight:300;">Организованная Культурность</h1><p style="color:#9A968E;">Нет подключения к интернету</p></div></body></html>',
+        {{ headers: {{ 'Content-Type': 'text/html; charset=utf-8' }} }}
+      );
+    }}
+    return new Response('', {{ status: 503 }});
+  }}
+}}
+
+async function cacheFirst(request) {{
+  const cache = await caches.open(STATIC_CACHE);
+  const cached = await cache.match(request);
+  if (cached) return cached;
+  try {{
+    const response = await fetch(request);
+    if (response.ok) {{
+      cache.put(request, response.clone());
+    }}
+    return response;
+  }} catch {{
+    return new Response('', {{ status: 503 }});
+  }}
+}}
+'''
+    with open(os.path.join(ROOT, "sw.js"), "w", encoding="utf-8") as f:
+        f.write(sw)
+    print("sw.js written")
+
+build_manifest()
+build_offline_page()
+build_service_worker()

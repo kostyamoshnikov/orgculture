@@ -6,18 +6,46 @@
 <title>Организованная Культурность</title>
 <meta name="description" content="Пространство для рождения смыслов и новых значений. Тексты о фильмах, спектаклях, музыке и людях.">
 <meta name="theme-color" content="#0A0A0A">
+<link rel="icon" href="./assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="./assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="./assets/icons/favicon-180.png">
+<link rel="icon" href="./assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="alternate" type="application/rss+xml" title="Организованная Культурность — Тексты" href="https://orgculture.ru/feed.xml">
 <link rel="canonical" href="https://orgculture.ru/">
 <meta property="og:title" content="Организованная Культурность">
 <meta property="og:description" content="Пространство для рождения смыслов и новых значений. Тексты о фильмах, спектаклях, музыке и людях.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="./images/og-default.jpg">
+<meta property="og:url" content="https://orgculture.ru/">
+<meta property="og:site_name" content="Организованная Культурность">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./assets/style.css">
+<link rel="stylesheet" href="./assets/style.css?v=18">
+<link rel="manifest" href="./manifest.json">
+<!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
+<script type="text/javascript">
+  window.__loadYandexMetrika = function() {
+    if (window.__ymLoaded) return;
+    window.__ymLoaded = true;
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111176053', 'ym');
+    ym(111176053, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+  };
+  if (localStorage.getItem('ok_cookie_consent') === '1') {
+    window.__loadYandexMetrika();
+  }
+</script>
+<!-- /Yandex.Metrika counter -->
 </head>
 <body>
+<a href="#main" class="skip-link">Перейти к содержимому</a>
 
 <header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
@@ -35,11 +63,11 @@
       <a href="./recommendations/">Рекомендации</a>
       <a href="./about/">Автор</a>
     </nav>
-    <label for="nav-toggle" class="burger" aria-label="Меню">
+    <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
     </label>
   </div>
-  <nav class="mobile-nav">
+  <nav class="mobile-nav" id="mobile-nav-panel">
     <a href="./manifesto/">Манифест</a>
       <a href="./texts/">Тексты</a>
       <a href="./projects/">Проекты</a>
@@ -47,6 +75,18 @@
       <a href="./about/">Автор</a>
   </nav>
 </header>
+<div id="main"></div>
+<script>
+  (function(){
+    var cb = document.getElementById('nav-toggle');
+    var btn = document.querySelector('.burger');
+    if (cb && btn) {
+      cb.addEventListener('change', function(){
+        btn.setAttribute('aria-expanded', cb.checked ? 'true' : 'false');
+      });
+    }
+  })();
+</script>
 
 <div class="hero wrap">
   <div class="mark"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
@@ -115,7 +155,7 @@
       <a class="more" href="texts/">все тексты →</a>
     </div>
     <div class="grid">
-      <a class="card" href="./texts/dolzhno-byt-eto-rai/">
+      <a class="card" href="./texts/dolzhno-byt-eto-rai/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -125,21 +165,21 @@
         <h3>Культурные исследования Европы в пользу славного народа Палестины, или «Должно быть, это рай»</h3>
         <p>Элиа Сулейман снял фильм, в котором герой почти ни на что не влияет — и именно поэтому зритель остаётся наедине с собственными выводами.</p>
       </div>
-    </a><a class="card" href="./texts/dvoe-na-kachelyah/">
-      <div class="thumb"><img src="./images/kacheli.jpg" alt="Двое на качелях. Где здесь я и нужен ли я" loading="lazy"></div>
+    </a><a class="card" href="./texts/dvoe-na-kachelyah/" data-tag="спектакль">
+      <div class="thumb"><img src="./images/kacheli.jpg" alt="Двое на качелях. Где здесь я и нужен ли я" width="1600" height="1066" loading="lazy"></div>
       <div class="body">
         <span class="tag">спектакль</span>
         <h3>Двое на качелях. Где здесь я и нужен ли я</h3>
         <p>Отзыв, написанный не для того, чтобы порекомендовать, а чтобы отрефлексировать увиденное — по горячим следам премьеры в театре им. Ленсовета.</p>
       </div>
-    </a><a class="card" href="./texts/robot-kostya/">
-      <div class="thumb"><img src="./images/robot-kostya-1.jpg" alt="В поисках вдохновения, или Как жить среди роботов и не сойти с ума" loading="lazy"></div>
+    </a><a class="card" href="./texts/robot-kostya/" data-tag="спектакль">
+      <div class="thumb"><img src="./images/robot-kostya-1.jpg" alt="В поисках вдохновения, или Как жить среди роботов и не сойти с ума" width="790" height="527" loading="lazy"></div>
       <div class="body">
         <span class="tag">спектакль</span>
         <h3>В поисках вдохновения, или Как жить среди роботов и не сойти с ума</h3>
         <p>О рождении спектакля «Робот Костя» — первого в России роботического театра, где Чеховские страсти оказались подвластны и роботам.</p>
       </div>
-    </a><a class="card" href="./texts/vysokoe-razreshenie/">
+    </a><a class="card" href="./texts/vysokoe-razreshenie/" data-tag="альбом">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -149,7 +189,7 @@
         <h3>Вера Полозкова — «Высокое разрешение»</h3>
         <p>Стихи, которые с каждым разом находят всё большее дыхание в музыке — и слушать их становится интереснее, чем многие песни.</p>
       </div>
-    </a><a class="card" href="./texts/hod-korolevy/">
+    </a><a class="card" href="./texts/hod-korolevy/" data-tag="сериал">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -159,8 +199,8 @@
         <h3>Как не сойти с ума в этом мире, и ход королевы по правилам и без</h3>
         <p>«Ход королевы» сделал шахматы доступными даже для тех, кто брал в руки ферзя пару раз в жизни.</p>
       </div>
-    </a><a class="card" href="./texts/dom-radio/">
-      <div class="thumb"><img src="./images/dom-radio.jpg" alt="Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный" loading="lazy"></div>
+    </a><a class="card" href="./texts/dom-radio/" data-tag="пространство">
+      <div class="thumb"><img src="./images/dom-radio.jpg" alt="Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный" width="938" height="1332" loading="lazy"></div>
       <div class="body">
         <span class="tag">пространство</span>
         <h3>Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный</h3>
@@ -189,14 +229,14 @@
       </div>
       <span class="go">смотреть на Beat Film Festival →</span>
     </a><a class="recrow" href="texts/dvoe-na-kachelyah/" style="text-decoration:none;">
-      <div class="recimg"><img src="images/kacheli.jpg" alt="" loading="lazy"></div>
+      <div class="recimg"><img src="images/kacheli.jpg" alt="" width="1600" height="1066" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">Двое на качелях. Где здесь я и нужен ли я</h3>
       </div>
       <span class="go">билеты и репертуар театра →</span>
     </a><a class="recrow" href="texts/robot-kostya/" style="text-decoration:none;">
-      <div class="recimg"><img src="images/robot-kostya-1.jpg" alt="" loading="lazy"></div>
+      <div class="recimg"><img src="images/robot-kostya-1.jpg" alt="" width="790" height="527" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">В поисках вдохновения, или Как жить среди роботов и не сойти с ума</h3>
@@ -230,6 +270,7 @@
     <a href="./privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
     <a href="./cookies/" style="font-size:12px;color:var(--dim2);">Cookie</a>
     <a href="./bot-rules/" style="font-size:12px;color:var(--dim2);">Правила использования бота</a>
+    <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;" style="font-size:12px;color:var(--dim2);">Настройки cookie</a>
   </div>
 </footer>
 
@@ -272,11 +313,23 @@
   <div class="cb-text">
     <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="./cookies/">в соглашении об использовании cookie</a>.</p>
   </div>
-  <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');">Хорошо</button>
+  <div class="cb-buttons">
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Отклонить</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
+  </div>
 </div>
 <script>
   if (!localStorage.getItem('ok_cookie_consent')) {
     document.getElementById('cookie-banner').classList.add('show');
+  }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js').catch(function(e) {
+        console.error('SW registration failed:', e);
+      });
+    });
   }
 </script>
 </body>

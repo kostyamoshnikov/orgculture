@@ -6,18 +6,46 @@
 <title>Тексты — Организованная Культурность</title>
 <meta name="description" content="Все тексты: отзывы и рефлексии о фильмах, спектаклях, музыке и концертах.">
 <meta name="theme-color" content="#0A0A0A">
+<link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-180.png">
+<link rel="icon" href="../assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="alternate" type="application/rss+xml" title="Организованная Культурность — Тексты" href="https://orgculture.ru/feed.xml">
 <link rel="canonical" href="https://orgculture.ru/texts/">
 <meta property="og:title" content="Тексты — Организованная Культурность">
 <meta property="og:description" content="Все тексты: отзывы и рефлексии о фильмах, спектаклях, музыке и концертах.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="../images/og-default.jpg">
+<meta property="og:url" content="https://orgculture.ru/texts/">
+<meta property="og:site_name" content="Организованная Культурность">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/style.css?v=18">
+<link rel="manifest" href="../manifest.json">
+<!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
+<script type="text/javascript">
+  window.__loadYandexMetrika = function() {
+    if (window.__ymLoaded) return;
+    window.__ymLoaded = true;
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111176053', 'ym');
+    ym(111176053, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+  };
+  if (localStorage.getItem('ok_cookie_consent') === '1') {
+    window.__loadYandexMetrika();
+  }
+</script>
+<!-- /Yandex.Metrika counter -->
 </head>
 <body>
+<a href="#main" class="skip-link">Перейти к содержимому</a>
 
 <header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
@@ -35,11 +63,11 @@
       <a href="../recommendations/">Рекомендации</a>
       <a href="../about/">Автор</a>
     </nav>
-    <label for="nav-toggle" class="burger" aria-label="Меню">
+    <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
     </label>
   </div>
-  <nav class="mobile-nav">
+  <nav class="mobile-nav" id="mobile-nav-panel">
     <a href="../manifesto/">Манифест</a>
       <a href="../texts/" class="active">Тексты</a>
       <a href="../projects/">Проекты</a>
@@ -47,16 +75,32 @@
       <a href="../about/">Автор</a>
   </nav>
 </header>
+<div id="main"></div>
+<script>
+  (function(){
+    var cb = document.getElementById('nav-toggle');
+    var btn = document.querySelector('.burger');
+    if (cb && btn) {
+      cb.addEventListener('change', function(){
+        btn.setAttribute('aria-expanded', cb.checked ? 'true' : 'false');
+      });
+    }
+  })();
+</script>
 
 <section style="padding-top:64px;">
   <div class="wrap-wide">
     <div class="eyebrow">Раздел</div>
     <h1 style="font-size:34px;font-weight:300;margin:14px 0 10px;">Тексты</h1>
-    <p style="color:var(--dim);max-width:620px;font-size:15.5px;line-height:1.8;margin-bottom:44px;">
+    <p style="color:var(--dim);max-width:620px;font-size:15.5px;line-height:1.8;margin-bottom:32px;">
       Отзывы и рефлексии о фильмах, спектаклях, музыке и концертах — публикуются не по графику, а по мере того, как что-то требует высказывания.
     </p>
-    <div class="grid">
-      <a class="card" href="../texts/dolzhno-byt-eto-rai/">
+    <div class="filter-row" id="filter-row">
+      <button class="filter-pill active" data-filter="all">Все</button><button class="filter-pill" data-filter="альбом">альбом</button><button class="filter-pill" data-filter="балет">балет</button><button class="filter-pill" data-filter="заметки">заметки</button><button class="filter-pill" data-filter="концерт">концерт</button><button class="filter-pill" data-filter="лекция">лекция</button><button class="filter-pill" data-filter="пространство">пространство</button><button class="filter-pill" data-filter="сериал">сериал</button><button class="filter-pill" data-filter="спектакль">спектакль</button><button class="filter-pill" data-filter="фильм">фильм</button><button class="filter-pill" data-filter="читка">читка</button><button class="filter-pill" data-filter="эссе">эссе</button>
+    </div>
+    <div style="margin:-16px 0 32px;"><a href="../feed.xml" style="font-size:12px;color:var(--dim2);">RSS →</a></div>
+    <div class="grid" id="texts-grid">
+      <a class="card" href="../texts/dolzhno-byt-eto-rai/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -66,21 +110,21 @@
         <h3>Культурные исследования Европы в пользу славного народа Палестины, или «Должно быть, это рай»</h3>
         <p>Элиа Сулейман снял фильм, в котором герой почти ни на что не влияет — и именно поэтому зритель остаётся наедине с собственными выводами.</p>
       </div>
-    </a><a class="card" href="../texts/dvoe-na-kachelyah/">
-      <div class="thumb"><img src="../images/kacheli.jpg" alt="Двое на качелях. Где здесь я и нужен ли я" loading="lazy"></div>
+    </a><a class="card" href="../texts/dvoe-na-kachelyah/" data-tag="спектакль">
+      <div class="thumb"><img src="../images/kacheli.jpg" alt="Двое на качелях. Где здесь я и нужен ли я" width="1600" height="1066" loading="lazy"></div>
       <div class="body">
         <span class="tag">спектакль</span>
         <h3>Двое на качелях. Где здесь я и нужен ли я</h3>
         <p>Отзыв, написанный не для того, чтобы порекомендовать, а чтобы отрефлексировать увиденное — по горячим следам премьеры в театре им. Ленсовета.</p>
       </div>
-    </a><a class="card" href="../texts/robot-kostya/">
-      <div class="thumb"><img src="../images/robot-kostya-1.jpg" alt="В поисках вдохновения, или Как жить среди роботов и не сойти с ума" loading="lazy"></div>
+    </a><a class="card" href="../texts/robot-kostya/" data-tag="спектакль">
+      <div class="thumb"><img src="../images/robot-kostya-1.jpg" alt="В поисках вдохновения, или Как жить среди роботов и не сойти с ума" width="790" height="527" loading="lazy"></div>
       <div class="body">
         <span class="tag">спектакль</span>
         <h3>В поисках вдохновения, или Как жить среди роботов и не сойти с ума</h3>
         <p>О рождении спектакля «Робот Костя» — первого в России роботического театра, где Чеховские страсти оказались подвластны и роботам.</p>
       </div>
-    </a><a class="card" href="../texts/vysokoe-razreshenie/">
+    </a><a class="card" href="../texts/vysokoe-razreshenie/" data-tag="альбом">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -90,7 +134,7 @@
         <h3>Вера Полозкова — «Высокое разрешение»</h3>
         <p>Стихи, которые с каждым разом находят всё большее дыхание в музыке — и слушать их становится интереснее, чем многие песни.</p>
       </div>
-    </a><a class="card" href="../texts/hod-korolevy/">
+    </a><a class="card" href="../texts/hod-korolevy/" data-tag="сериал">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -100,28 +144,28 @@
         <h3>Как не сойти с ума в этом мире, и ход королевы по правилам и без</h3>
         <p>«Ход королевы» сделал шахматы доступными даже для тех, кто брал в руки ферзя пару раз в жизни.</p>
       </div>
-    </a><a class="card" href="../texts/dom-radio/">
-      <div class="thumb"><img src="../images/dom-radio.jpg" alt="Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный" loading="lazy"></div>
+    </a><a class="card" href="../texts/dom-radio/" data-tag="пространство">
+      <div class="thumb"><img src="../images/dom-radio.jpg" alt="Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный" width="938" height="1332" loading="lazy"></div>
       <div class="body">
         <span class="tag">пространство</span>
         <h3>Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный</h3>
         <p>С приездом Теодора Курентзиса абсолютом города стал Дом Радио. Текст о пространстве, в которое приходишь, чтобы измениться.</p>
       </div>
-    </a><a class="card" href="../texts/kurentzis-znal-videl-chuvstvoval/">
-      <div class="thumb"><img src="../images/kurentzis-poster.jpg" alt="Курентзис. Знал, видел, чувствовал" loading="lazy"></div>
+    </a><a class="card" href="../texts/kurentzis-znal-videl-chuvstvoval/" data-tag="концерт">
+      <div class="thumb"><img src="../images/kurentzis-poster.jpg" alt="Курентзис. Знал, видел, чувствовал" width="600" height="480" loading="lazy"></div>
       <div class="body">
         <span class="tag">концерт</span>
         <h3>Курентзис. Знал, видел, чувствовал</h3>
         <p>Дебюсси, Равель, Стравинский и Эрик Сати в один вечер в Петербургской филармонии — и зал, переродившийся вместе с музыкой.</p>
       </div>
-    </a><a class="card" href="../texts/annette/">
-      <div class="thumb"><img src="../images/annette-poster.jpg" alt="Смотрящий из бездны, или «Аннетт» — серьёзный разговор, который состоялся вовремя" loading="lazy"></div>
+    </a><a class="card" href="../texts/annette/" data-tag="фильм">
+      <div class="thumb"><img src="../images/annette-poster.jpg" alt="Смотрящий из бездны, или «Аннетт» — серьёзный разговор, который состоялся вовремя" width="1600" height="1106" loading="lazy"></div>
       <div class="body">
         <span class="tag">фильм</span>
         <h3>Смотрящий из бездны, или «Аннетт» — серьёзный разговор, который состоялся вовремя</h3>
         <p>Фильм Леоса Каракса, в котором конец истории не становится её пределом — предел каждый устанавливает сам.</p>
       </div>
-    </a><a class="card" href="../texts/maya-plisetskaya/">
+    </a><a class="card" href="../texts/maya-plisetskaya/" data-tag="балет">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -131,7 +175,7 @@
         <h3>Сила, которой завидуешь и преклоняешься — Майя Плисецкая</h3>
         <p>Момент, когда проблема эйджизма теряет смысл: ей 50, и она вневременная.</p>
       </div>
-    </a><a class="card" href="../texts/gerda/">
+    </a><a class="card" href="../texts/gerda/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -141,21 +185,21 @@
         <h3>Герда, или Глоток воздуха, который замёрзнет на подлёте — но долетит ли?</h3>
         <p>Фильм Натальи Кудряшовой — стихами, о городе, сжатом снегом, и о том, готов ли ты взлететь.</p>
       </div>
-    </a><a class="card" href="../texts/medeya/">
-      <div class="thumb"><img src="../images/medeya-poster.jpg" alt="Вообще всех жалко, а по отдельности никого, или «Медея» — за нас, про нас, против нас?" loading="lazy"></div>
+    </a><a class="card" href="../texts/medeya/" data-tag="фильм">
+      <div class="thumb"><img src="../images/medeya-poster.jpg" alt="Вообще всех жалко, а по отдельности никого, или «Медея» — за нас, про нас, против нас?" width="599" height="831" loading="lazy"></div>
       <div class="body">
         <span class="tag">фильм</span>
         <h3>Вообще всех жалко, а по отдельности никого, или «Медея» — за нас, про нас, против нас?</h3>
         <p>Фильм Александра Зельдовича, где слова не конкурируют с музыкой — а вопрос остаётся один: ты меня понимаешь?</p>
       </div>
-    </a><a class="card" href="../texts/intervyu-v/">
-      <div class="thumb"><img src="../images/interview-v.jpg" alt="Интервью В, или Времена не выбирают — в них живут" loading="lazy"></div>
+    </a><a class="card" href="../texts/intervyu-v/" data-tag="спектакль">
+      <div class="thumb"><img src="../images/interview-v.jpg" alt="Интервью В, или Времена не выбирают — в них живут" width="1440" height="1920" loading="lazy"></div>
       <div class="body">
         <span class="tag">спектакль</span>
         <h3>Интервью В, или Времена не выбирают — в них живут</h3>
         <p>Вертинский во плоти на «7-м ярусе» Александринского театра — и вопрос о том, насколько человек беззащитен и ограничен своим телом.</p>
       </div>
-    </a><a class="card" href="../texts/net-nuzhdy-pisat/">
+    </a><a class="card" href="../texts/net-nuzhdy-pisat/" data-tag="эссе">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -165,7 +209,7 @@
         <h3>Нет нужды писать</h3>
         <p>О том, что искусство не всегда спасает — и о попытке просто «дальше жить».</p>
       </div>
-    </a><a class="card" href="../texts/dnevnik-kinozala-liminalnye-prostranstva/">
+    </a><a class="card" href="../texts/dnevnik-kinozala-liminalnye-prostranstva/" data-tag="заметки">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -175,7 +219,7 @@
         <h3>Дневник кинозала: люминальные пространства и фестивальный забег</h3>
         <p>Шесть коротких впечатлений подряд — от «Прыгунов» до бэкрумсов: чем зацепил и почему тренд на люминальные пространства так хорош, пока разгадка не наступила.</p>
       </div>
-    </a><a class="card" href="../texts/michael/">
+    </a><a class="card" href="../texts/michael/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -185,7 +229,7 @@
         <h3>«Майкл» — впечатляюще, но похоже на агитку</h3>
         <p>Посмотрел бесплатно — и это, конечно, впечатляет: огромный бюджет, ремесленно выстроенный конфликт. Но контекст всех обвинений будто вычищен подчистую.</p>
       </div>
-    </a><a class="card" href="../texts/shurale/">
+    </a><a class="card" href="../texts/shurale/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -195,7 +239,7 @@
         <h3>«Шурале» — надежда, которая рассыпалась</h3>
         <p>Хороший состав, красивая картинка — и всё равно фильм рассыпается. О том, когда актрисе рано быть режиссёром.</p>
       </div>
-    </a><a class="card" href="../texts/nash-gorodok/">
+    </a><a class="card" href="../texts/nash-gorodok/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -205,7 +249,7 @@
         <h3>Фильм с крутым твистом, увиденный в Доме Радио</h3>
         <p>Титры идут почти в середине картины — и это оказывается ровно тем самым приёмом. Про пожилую пару, цветы и премиум-версию вознесения.</p>
       </div>
-    </a><a class="card" href="../texts/krasnaya-pustynya/">
+    </a><a class="card" href="../texts/krasnaya-pustynya/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -215,7 +259,7 @@
         <h3>«Красная пустыня» Антониони — кино, которое чувствуешь</h3>
         <p>Первый цветной фильм режиссёра, где не хватало даже имеющегося цвета — а тема оказалась про кризис всего.</p>
       </div>
-    </a><a class="card" href="../texts/novyy-ozon/">
+    </a><a class="card" href="../texts/novyy-ozon/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -225,7 +269,7 @@
         <h3>Новый Озон — снят красиво, как всегда</h3>
         <p>Чёрно-белая картина, в финале которой герою рубят голову, но не смыслы. Один из немногих поводов пойти в Дом Радио на такое.</p>
       </div>
-    </a><a class="card" href="../texts/novyy-dzharmush/">
+    </a><a class="card" href="../texts/novyy-dzharmush/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -235,7 +279,7 @@
         <h3>Новый Джармуш — возможно, просто не мой фильм</h3>
         <p>Всё прекрасно выверено и хорошие ходы — но ощущение, будто режиссёр совсем постарел.</p>
       </div>
-    </a><a class="card" href="../texts/gamlet-kolyada-teatr/">
+    </a><a class="card" href="../texts/gamlet-kolyada-teatr/" data-tag="спектакль">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -245,7 +289,7 @@
         <h3>«Гамлет» Николая Коляды — физически грязный театр на грани китча</h3>
         <p>Мир на грани исчезновения, превращённый в большую помойку. Спектакль не для случайных зрителей — и почти манифест театрального зрителя внутри рецензии.</p>
       </div>
-    </a><a class="card" href="../texts/poklonnitsa/">
+    </a><a class="card" href="../texts/poklonnitsa/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -255,7 +299,7 @@
         <h3>«Поклонница» — когда классик советского кино перегорает</h3>
         <p>Актёрский состав нешуточный, оператор снимал Балабанова — и всё равно фильм пытается выдавить слёзы пошло построенным романом.</p>
       </div>
-    </a><a class="card" href="../texts/nebesnyy-taper/">
+    </a><a class="card" href="../texts/nebesnyy-taper/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -265,7 +309,7 @@
         <h3>«Небесный тапёр» — документальное признание в любви Каравайчуку</h3>
         <p>Гениальный советский пианист и композитор, которого министерство культуры не спешит показывать миру, хотя само же его и профинансировало.</p>
       </div>
-    </a><a class="card" href="../texts/vernost/">
+    </a><a class="card" href="../texts/vernost/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -275,7 +319,7 @@
         <h3>«Верность» Нигины Сайфуллаевой — больше плохо, чем хорошо</h3>
         <p>Свободный каст готов на всё ради искусства — но фильм тонет в претензии на смыслы, которых там, кажется, и не было.</p>
       </div>
-    </a><a class="card" href="../texts/irlandets/">
+    </a><a class="card" href="../texts/irlandets/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -285,7 +329,7 @@
         <h3>«Ирландец» — три с половиной часа классики, которую будут пересматривать</h3>
         <p>Скорсезе, омоложенные Де Ниро и Пачино, 309 сцен на 170 локациях — и герой, который просто плывёт по течению, потому что душа ему не нужна.</p>
       </div>
-    </a><a class="card" href="../texts/opasnaya-zhalost-blizkie-lyudi/">
+    </a><a class="card" href="../texts/opasnaya-zhalost-blizkie-lyudi/" data-tag="спектакль">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -295,7 +339,7 @@
         <h3>«Опасная жалость» и «Близкие люди» — когда режиссёр берёт верх над текстом, и когда нет</h3>
         <p>Макбёрни справился с романом Цвейга, не разгадав до конца, как это сделано. Бондарь не справилась с прозой Водолазкина — и с пространством малой сцены заодно.</p>
       </div>
-    </a><a class="card" href="../texts/gadkie-lebedi/">
+    </a><a class="card" href="../texts/gadkie-lebedi/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -305,7 +349,7 @@
         <h3>Новый Лопушанский — почти чистая экранизация «Кроткой»</h3>
         <p>Ждал очередную русскую депрессуху, получил литературно-религиозную историю, достойную Достоевского. Максим Суханов — лучшая роль в российском кино за год.</p>
       </div>
-    </a><a class="card" href="../texts/myunhgauzen-brachnaya-istoriya/">
+    </a><a class="card" href="../texts/myunhgauzen-brachnaya-istoriya/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -315,7 +359,7 @@
         <h3>«Тот самый Мюнхгаузен» и «Брачная история» — про то, что никто не хочет слушать другого</h3>
         <p>Проблема толерантности стоит во главе всех наших проблем. Захаров кричал об этом ещё при советской цензуре — сейчас это звучит только громче.</p>
       </div>
-    </a><a class="card" href="../texts/lyubov-noe/">
+    </a><a class="card" href="../texts/lyubov-noe/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -325,7 +369,7 @@
         <h3>«Любовь» Гаспара Ноэ — искусство приходит вовремя, или не приходит вовсе</h3>
         <p>Диванные критики назвали его порно для интеллектуалов, а прокат в нашей стране запретили. О том, что бывает, если попал не в свой мир — или не в своё время.</p>
       </div>
-    </a><a class="card" href="../texts/eyforiya/">
+    </a><a class="card" href="../texts/eyforiya/" data-tag="сериал">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -335,7 +379,7 @@
         <h3>«Эйфория» — сериал про наркотики, который на самом деле про непонимание</h3>
         <p>Портрет современного человека, предпочитающего электронное общение живому — и цена, которую за это платят.</p>
       </div>
-    </a><a class="card" href="../texts/za-belym-krolikom/">
+    </a><a class="card" href="../texts/za-belym-krolikom/" data-tag="спектакль">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -345,7 +389,7 @@
         <h3>«За белым кроликом» — терапевтический эффект второго текста об одном спектакле</h3>
         <p>Пишу уже второй пост про один и тот же спектакль Ромы Кагановича — потому что проговаривать однотипные фразы про качество произведения искусства слишком пошло.</p>
       </div>
-    </a><a class="card" href="../texts/lyubimovka-pechenkin/">
+    </a><a class="card" href="../texts/lyubimovka-pechenkin/" data-tag="читка">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -355,7 +399,7 @@
         <h3>«Философы» на «Любимовке» — читка, которая не дошла до постановки</h3>
         <p>В дни фестиваля молодой драматургии Театр.doc рвётся от напряжения и счастья — а лучшее из читок можно смотреть, не выезжая из своего города.</p>
       </div>
-    </a><a class="card" href="../texts/teodor-ioannovich-masterskaya/">
+    </a><a class="card" href="../texts/teodor-ioannovich-masterskaya/" data-tag="пространство">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -365,7 +409,7 @@
         <h3>Теодор Иоаннович и Мастерская Современного Зрителя</h3>
         <p>Курентзис превратил Пермь из захолустной провинции в культурный центр — а потом его «изгнали» на родину ученических лет, в Петербург.</p>
       </div>
-    </a><a class="card" href="../texts/starshiy-syn/">
+    </a><a class="card" href="../texts/starshiy-syn/" data-tag="спектакль">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -375,7 +419,7 @@
         <h3>«Старший сын» — спектакль, которого больше нет в записи</h3>
         <p>Театр Ленсовета так и не опубликовал запись легендарной постановки Юрия Бутусова. Приходится вспоминать по видео, выложенному добрыми людьми.</p>
       </div>
-    </a><a class="card" href="../texts/krolik-dzhodzho/">
+    </a><a class="card" href="../texts/krolik-dzhodzho/" data-tag="фильм">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -385,7 +429,7 @@
         <h3>«Кролик Джоджо» — фильм про нацизм, который понравился неожиданно сильно</h3>
         <p>Тайка Вайтити сыграл Гитлера как воображаемого друга десятилетнего мальчика — и получилась редкая удачная форма, слитая с содержанием.</p>
       </div>
-    </a><a class="card" href="../texts/dyadya-vanya-tuminas/">
+    </a><a class="card" href="../texts/dyadya-vanya-tuminas/" data-tag="спектакль">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -395,7 +439,7 @@
         <h3>«Дядя Ваня» Римаса Туминаса — спектакль, который работает даже на видео</h3>
         <p>Десять лет прошло с премьеры, приёмы уже смотрятся архаично — а катарсис всё равно случается, даже через экран.</p>
       </div>
-    </a><a class="card" href="../texts/mauzer-terzopulos/">
+    </a><a class="card" href="../texts/mauzer-terzopulos/" data-tag="спектакль">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -405,7 +449,7 @@
         <h3>«Маузер» Теодороса Терзопулоса — театр тела в прямом эфире</h3>
         <p>Александринский показал премьеру онлайн — и это на 180 градусов повернуло представление о театре на видео. Понимания хватило процентов на двадцать, но и этого достаточно.</p>
       </div>
-    </a><a class="card" href="../texts/shum-antishum-voronovskiy/">
+    </a><a class="card" href="../texts/shum-antishum-voronovskiy/" data-tag="лекция">
       <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
@@ -417,6 +461,7 @@
       </div>
     </a>
     </div>
+    <p id="filter-empty" style="display:none;color:var(--dim);font-size:15px;margin-top:20px;">Пока нет текстов с этим тегом.</p>
   </div>
 </section>
 <footer>
@@ -432,6 +477,7 @@
     <a href="../privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
     <a href="../cookies/" style="font-size:12px;color:var(--dim2);">Cookie</a>
     <a href="../bot-rules/" style="font-size:12px;color:var(--dim2);">Правила использования бота</a>
+    <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;" style="font-size:12px;color:var(--dim2);">Настройки cookie</a>
   </div>
 </footer>
 
@@ -474,12 +520,45 @@
   <div class="cb-text">
     <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="../cookies/">в соглашении об использовании cookie</a>.</p>
   </div>
-  <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');">Хорошо</button>
+  <div class="cb-buttons">
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Отклонить</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
+  </div>
 </div>
 <script>
   if (!localStorage.getItem('ok_cookie_consent')) {
     document.getElementById('cookie-banner').classList.add('show');
   }
 </script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('../sw.js').catch(function(e) {
+        console.error('SW registration failed:', e);
+      });
+    });
+  }
+</script>
 </body>
 </html>
+<script>
+  (function(){
+    var row = document.getElementById('filter-row');
+    var cards = document.querySelectorAll('#texts-grid .card');
+    var empty = document.getElementById('filter-empty');
+    row.addEventListener('click', function(e){
+      var btn = e.target.closest('.filter-pill');
+      if (!btn) return;
+      row.querySelectorAll('.filter-pill').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.dataset.filter;
+      var shown = 0;
+      cards.forEach(function(c){
+        var match = (f === 'all' || c.dataset.tag === f);
+        c.style.display = match ? '' : 'none';
+        if (match) shown++;
+      });
+      empty.style.display = shown === 0 ? 'block' : 'none';
+    });
+  })();
+</script>

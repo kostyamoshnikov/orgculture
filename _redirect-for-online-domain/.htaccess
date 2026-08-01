@@ -1,0 +1,5 @@
+# Apache: orgculture.online/* -> orgculture.ru/* (301, preserves path)
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://orgculture.ru/$1 [R=301,L]
+RewriteRule ^(.*)$ https://orgculture.ru/$1 [R=301,L]

@@ -6,18 +6,46 @@
 <title>Проекты — Организованная Культурность</title>
 <meta name="description" content="Продюсирование, продвижение и сайты для театральных и арт-проектов: AELITA PRODUCTION, БуФест, Комната Света, Робот Костя.">
 <meta name="theme-color" content="#0A0A0A">
+<link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-180.png">
+<link rel="icon" href="../assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="alternate" type="application/rss+xml" title="Организованная Культурность — Тексты" href="https://orgculture.ru/feed.xml">
 <link rel="canonical" href="https://orgculture.ru/projects/">
 <meta property="og:title" content="Проекты — Организованная Культурность">
 <meta property="og:description" content="Продюсирование, продвижение и сайты для театральных и арт-проектов: AELITA PRODUCTION, БуФест, Комната Света, Робот Костя.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="../images/og-default.jpg">
+<meta property="og:url" content="https://orgculture.ru/projects/">
+<meta property="og:site_name" content="Организованная Культурность">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/style.css?v=18">
+<link rel="manifest" href="../manifest.json">
+<!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
+<script type="text/javascript">
+  window.__loadYandexMetrika = function() {
+    if (window.__ymLoaded) return;
+    window.__ymLoaded = true;
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111176053', 'ym');
+    ym(111176053, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+  };
+  if (localStorage.getItem('ok_cookie_consent') === '1') {
+    window.__loadYandexMetrika();
+  }
+</script>
+<!-- /Yandex.Metrika counter -->
 </head>
 <body>
+<a href="#main" class="skip-link">Перейти к содержимому</a>
 
 <header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
@@ -35,11 +63,11 @@
       <a href="../recommendations/">Рекомендации</a>
       <a href="../about/">Автор</a>
     </nav>
-    <label for="nav-toggle" class="burger" aria-label="Меню">
+    <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
     </label>
   </div>
-  <nav class="mobile-nav">
+  <nav class="mobile-nav" id="mobile-nav-panel">
     <a href="../manifesto/">Манифест</a>
       <a href="../texts/">Тексты</a>
       <a href="../projects/" class="active">Проекты</a>
@@ -47,6 +75,18 @@
       <a href="../about/">Автор</a>
   </nav>
 </header>
+<div id="main"></div>
+<script>
+  (function(){
+    var cb = document.getElementById('nav-toggle');
+    var btn = document.querySelector('.burger');
+    if (cb && btn) {
+      cb.addEventListener('change', function(){
+        btn.setAttribute('aria-expanded', cb.checked ? 'true' : 'false');
+      });
+    }
+  })();
+</script>
 
 <section style="padding-top:64px;">
   <div class="wrap-wide">
@@ -107,6 +147,7 @@
     <a href="../privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
     <a href="../cookies/" style="font-size:12px;color:var(--dim2);">Cookie</a>
     <a href="../bot-rules/" style="font-size:12px;color:var(--dim2);">Правила использования бота</a>
+    <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;" style="font-size:12px;color:var(--dim2);">Настройки cookie</a>
   </div>
 </footer>
 
@@ -149,11 +190,23 @@
   <div class="cb-text">
     <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="../cookies/">в соглашении об использовании cookie</a>.</p>
   </div>
-  <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');">Хорошо</button>
+  <div class="cb-buttons">
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Отклонить</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
+  </div>
 </div>
 <script>
   if (!localStorage.getItem('ok_cookie_consent')) {
     document.getElementById('cookie-banner').classList.add('show');
+  }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('../sw.js').catch(function(e) {
+        console.error('SW registration failed:', e);
+      });
+    });
   }
 </script>
 </body>

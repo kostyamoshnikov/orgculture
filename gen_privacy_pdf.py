@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import html, subprocess
+import html, os, subprocess
 
 SECTIONS = [
   ("1. Общие положения", [
@@ -84,14 +84,20 @@ html_doc = f'''<!DOCTYPE html>
 </body>
 </html>'''
 
-with open("privacy-src.html", "w", encoding="utf-8") as f:
+# Промежуточный HTML пишется во временную папку ОС, а не в корень сайта —
+# раньше privacy-src.html оставался лежать рядом с index.html и уезжал
+# на хостинг вместе со всем остальным при деплое.
+import tempfile
+with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False, encoding="utf-8") as f:
     f.write(html_doc)
+    tmp_path = f.name
 
 subprocess.run([
     "wkhtmltopdf", "--page-size", "A4",
     "--margin-top", "0", "--margin-bottom", "0", "--margin-left", "0", "--margin-right", "0",
     "--enable-local-file-access",
-    "privacy-src.html", "documents/privacy-policy.pdf"
+    tmp_path, "documents/privacy-policy.pdf"
 ])
+os.remove(tmp_path)
 
 print("privacy-policy.pdf written (branded)")

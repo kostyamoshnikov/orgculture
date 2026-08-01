@@ -221,6 +221,7 @@ section.tight{padding:48px 0;}
 
 /* ---------- footer ---------- */
 footer{border-top:1px solid var(--line);padding:48px 0 60px;margin-top:40px;}
+@media(max-width:760px){ footer{padding-bottom:160px;} }
 footer .foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
 footer .foot-tag{color:var(--dim2);font-size:13px;}
 footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
@@ -231,6 +232,7 @@ footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
   border-radius:999px;padding:11px 22px;transition:border-color .2s,color .2s;
 }
 .btn-line:hover{border-color:var(--accent);color:var(--accent);}
+.meta-note{display:block;margin-top:6px;font-size:11px;color:var(--dim2);line-height:1.5;}
 
 /* ---------- marquee (poster-strip, inspired by koroche.ru) ---------- */
 .marquee{
@@ -293,10 +295,14 @@ footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
 #cookie-banner .cb-text{flex:1;min-width:200px;}
 #cookie-banner p{font-size:13.5px;line-height:1.6;color:var(--dim);margin:0;}
 #cookie-banner a{color:var(--accent);}
+#cookie-banner .cb-buttons{display:flex;gap:10px;flex-shrink:0;}
 #cookie-banner button{
   font-family:'Manrope',sans-serif;font-size:13px;font-weight:500;color:#141414;background:var(--ink);
   border:none;border-radius:999px;padding:9px 22px;cursor:pointer;flex-shrink:0;
   transition:opacity .2s;
+}
+#cookie-banner button.cb-decline{
+  background:transparent;color:var(--dim);border:1px solid var(--line);
 }
 #cookie-banner button:hover{opacity:.85;}
 @media(max-width:640px){
@@ -336,3 +342,22 @@ footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
 .tg-btn:hover svg{opacity:1;}
 @media(max-width:760px){ .tg-widget{bottom:80px;} }
 @media(max-width:430px){ .tg-widget{left:16px;} .tg-bubble{max-width:180px;font-size:12.5px;} }
+
+/* ---------- tag filter ---------- */
+.filter-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px;}
+.filter-pill{
+  font-family:'Manrope',sans-serif;font-size:12.5px;letter-spacing:.04em;
+  color:var(--dim);background:transparent;border:1px solid var(--line);border-radius:999px;
+  padding:8px 16px;cursor:pointer;transition:border-color .2s,color .2s;
+}
+.filter-pill:hover{border-color:var(--dim);color:var(--ink);}
+.filter-pill.active{color:#141414;background:var(--accent);border-color:var(--accent);}
+
+/* ---------- accessibility: skip link ---------- */
+.skip-link{
+  position:absolute;left:-999px;top:auto;
+  background:var(--accent);color:#141414;padding:12px 20px;
+  border-radius:4px;font-size:14px;font-weight:500;z-index:200;
+  text-decoration:none;
+}
+.skip-link:focus{left:16px;top:16px;}
