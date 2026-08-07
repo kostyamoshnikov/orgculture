@@ -726,7 +726,7 @@ SITE_DOMAIN = "https://orgculture.ru"
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 18
+SITE_VERSION = 23
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -734,7 +734,7 @@ SITE_VERSION = 18
 # сборки сайта, а не дата конкретного текста — честнее, чем не иметь
 # lastmod вообще, но не путать одно с другим. Бампать вручную вместе с
 # SITE_VERSION при каждой пересборке.
-BUILD_DATE = "2026-08-01"
+BUILD_DATE = "2026-08-06"
 
 # Натуральные размеры картинок из images/ — только для атрибутов width/height
 # у <img> (чтобы браузер резервировал место и не прыгала вёрстка при
@@ -807,11 +807,23 @@ def yandex_metrika_snippet():
 <!-- /Yandex.Metrika counter -->
 '''
 
-def page_head(title, description, depth=0, og_image=None, path=""):
+def page_head(title, description, depth=0, og_image=None, path="", lang="ru"):
     root = "../" * depth if depth else "./"
     og = og_image or f"{SITE_DOMAIN}/images/og-default.jpg"
+    # hreflang: path всегда без языкового префикса для ru и с "en/" для en —
+    # так по одному path вычисляются оба варианта для rel=alternate.
+    ru_path = path[3:] if path.startswith("en/") else path
+    en_path = path if path.startswith("en/") else f"en/{path}"
+    skip_text = "Перейти к содержимому" if lang == "ru" else "Skip to content"
+    site_name = "Организованная Культурность" if lang == "ru" else "Organized Culturality"
+    rss_link = (
+        f'<link rel="alternate" type="application/rss+xml" title="Организованная Культурность — Тексты" href="{SITE_DOMAIN}/feed.xml">\n'
+        if lang == "ru" else
+        f'<link rel="alternate" type="application/rss+xml" title="Organized Culturality — Texts" href="{SITE_DOMAIN}/en/feed.xml">\n'
+    )
+    manifest_href = f"{root}manifest.json" if lang == "ru" else f"{root}en/manifest.json"
     return f'''<!DOCTYPE html>
-<html lang="ru">
+<html lang="{lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -822,51 +834,71 @@ def page_head(title, description, depth=0, og_image=None, path=""):
 <link rel="icon" href="{root}assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="{root}assets/icons/favicon-180.png">
 <link rel="icon" href="{root}assets/icons/favicon-192.png" sizes="192x192" type="image/png">
-<link rel="alternate" type="application/rss+xml" title="Организованная Культурность — Тексты" href="{SITE_DOMAIN}/feed.xml">
-<link rel="canonical" href="{SITE_DOMAIN}/{path}">
+{rss_link}<link rel="canonical" href="{SITE_DOMAIN}/{path}">
+<link rel="alternate" hreflang="ru" href="{SITE_DOMAIN}/{ru_path}">
+<link rel="alternate" hreflang="en" href="{SITE_DOMAIN}/{en_path}">
+<link rel="alternate" hreflang="x-default" href="{SITE_DOMAIN}/{ru_path}">
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(description)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{SITE_DOMAIN}/{path}">
-<meta property="og:site_name" content="Организованная Культурность">
-<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="{site_name}">
+<meta property="og:locale" content="{'ru_RU' if lang == 'ru' else 'en_US'}">
 <meta property="og:image" content="{og}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/style.css?v={SITE_VERSION}">
-<link rel="manifest" href="{root}manifest.json">
+<link rel="manifest" href="{manifest_href}">
 {yandex_metrika_snippet()}</head>
 <body>
-<a href="#main" class="skip-link">Перейти к содержимому</a>
+<a href="#main" class="skip-link">{skip_text}</a>
 '''
 
-def header(depth=0, active=""):
+def header(depth=0, active="", relpath="", lang="ru"):
     root = "../" * depth if depth else "./"
+    lang_prefix = "en/" if lang == "en" else ""
     def navlink(href, label, key):
         cls = " active" if active == key else ""
-        return f'<a href="{root}{href}" class="{cls.strip()}">{label}</a>' if cls.strip() else f'<a href="{root}{href}">{label}</a>'
-    nav_links = f'''{navlink('manifesto/', 'Манифест', 'manifesto')}
+        full = f"{root}{lang_prefix}{href}"
+        return f'<a href="{full}" class="{cls.strip()}">{label}</a>' if cls.strip() else f'<a href="{full}">{label}</a>'
+    if lang == "ru":
+        nav_links = f'''{navlink('manifesto/', 'Манифест', 'manifesto')}
       {navlink('texts/', 'Тексты', 'texts')}
       {navlink('projects/', 'Проекты', 'projects')}
       {navlink('recommendations/', 'Рекомендации', 'recommendations')}
       {navlink('about/', 'Автор', 'about')}'''
+        alt_href = root + "en/" + relpath
+        alt_label, alt_aria = "EN", "Switch to English"
+        burger_aria = "Открыть меню"
+    else:
+        nav_links = f'''{navlink('manifesto/', 'Manifesto', 'manifesto')}
+      {navlink('texts/', 'Texts', 'texts')}
+      {navlink('projects/', 'Projects', 'projects')}
+      {navlink('recommendations/', 'Recommendations', 'recommendations')}
+      {navlink('about/', 'Author', 'about')}'''
+        alt_href = root + relpath
+        alt_label, alt_aria = "RU", "Switch to Russian"
+        burger_aria = "Open menu"
+    lang_switch = f'<a href="{alt_href}" class="lang-switch" aria-label="{alt_aria}">{alt_label}</a>'
     return f'''<header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
   <div class="headbar">
-    <a href="{root}" class="brandmark" aria-label="Организованная Культурность — на главную">
+    <a href="{root}{'en/' if lang == 'en' else ''}" class="brandmark" aria-label="{'Organized Culturality — home' if lang == 'en' else 'Организованная Культурность — на главную'}">
       {LOGO_MARK_SVG}
     </a>
     <nav class="mainnav">
       {nav_links}
+      {lang_switch}
     </nav>
-    <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
+    <label for="nav-toggle" class="burger" aria-label="{burger_aria}" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
     </label>
   </div>
   <nav class="mobile-nav" id="mobile-nav-panel">
     {nav_links}
+    {lang_switch}
   </nav>
 </header>
 <div id="main"></div>
@@ -892,30 +924,50 @@ def marquee(text="БЕЗ АГРЕССИИ, НО С ЭКСПРЕССИЕЙ", repe
 def oval_divider():
     return f'<div class="oval-divider">{OVAL_DIVIDER_SVG}</div>'
 
-def footer(depth=0):
+def footer(depth=0, lang="ru"):
     root = "../" * depth if depth else "./"
+    lang_prefix = "en/" if lang == "en" else ""
+    r = root + lang_prefix
+    if lang == "ru":
+        tag_line = "#ОрганизованнаяКультурность"
+        slogan = "* Без агрессии, но с экспрессией"
+        priv_label, cookie_label, bot_label, cookie_settings_label = "Политика конфиденциальности", "Cookie", "Правила использования бота", "Настройки cookie"
+        cookie_banner_text = f'Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="{r}cookies/">в соглашении об использовании cookie</a>.'
+        decline_label, accept_label = "Отклонить", "Хорошо"
+        tg_bubble = "Напишите нам — бот ответит быстро"
+        tg_btn_label = "Написать боту"
+        tg_aria = "Написать в Telegram"
+    else:
+        tag_line = "#OrganizedCulturality"
+        slogan = "* Without aggression, but with expression"
+        priv_label, cookie_label, bot_label, cookie_settings_label = "Privacy Policy", "Cookies", "Bot Usage Rules", "Cookie settings"
+        cookie_banner_text = f'This site uses cookies for visit statistics. Details — <a href="{r}cookies/">in the cookie policy</a>.'
+        decline_label, accept_label = "Decline", "Accept"
+        tg_bubble = "Message us — the bot replies fast"
+        tg_btn_label = "Message the bot"
+        tg_aria = "Message on Telegram"
     return f'''<footer>
   <div class="wrap-wide foot-inner">
-    <div class="foot-tag">#ОрганизованнаяКультурность</div>
+    <div class="foot-tag">{tag_line}</div>
     <div style="display:flex;gap:18px;">
       <a href="https://t.me/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">Telegram</a>
       <a href="https://vk.ru/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">VK</a>
     </div>
-    <div class="foot-slogan">* Без агрессии, но с экспрессией</div>
+    <div class="foot-slogan">{slogan}</div>
   </div>
   <div class="wrap-wide" style="margin-top:20px;display:flex;gap:18px;">
-    <a href="{root}privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
-    <a href="{root}cookies/" style="font-size:12px;color:var(--dim2);">Cookie</a>
-    <a href="{root}bot-rules/" style="font-size:12px;color:var(--dim2);">Правила использования бота</a>
-    <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;" style="font-size:12px;color:var(--dim2);">Настройки cookie</a>
+    <a href="{r}privacy/" style="font-size:12px;color:var(--dim2);">{priv_label}</a>
+    <a href="{r}cookies/" style="font-size:12px;color:var(--dim2);">{cookie_label}</a>
+    <a href="{r}bot-rules/" style="font-size:12px;color:var(--dim2);">{bot_label}</a>
+    <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;" style="font-size:12px;color:var(--dim2);">{cookie_settings_label}</a>
   </div>
 </footer>
 
 <div class="tg-widget" id="tg-widget">
-  <div class="tg-bubble" id="tg-bubble">Напишите нам — бот ответит быстро</div>
-  <a class="tg-btn" href="{BOT_URL}" target="_blank" rel="noopener" aria-label="Написать в Telegram">
+  <div class="tg-bubble" id="tg-bubble">{tg_bubble}</div>
+  <a class="tg-btn" href="{BOT_URL}" target="_blank" rel="noopener" aria-label="{tg_aria}">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.093 13.68l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.88h.219z"/></svg>
-    Написать боту
+    {tg_btn_label}
   </a>
 </div>
 <script>
@@ -945,11 +997,11 @@ def footer(depth=0):
 <div id="cookie-banner">
   <div class="cb-mark">{LOGO_MARK_SVG}</div>
   <div class="cb-text">
-    <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="{root}cookies/">в соглашении об использовании cookie</a>.</p>
+    <p>{cookie_banner_text}</p>
   </div>
   <div class="cb-buttons">
-    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Отклонить</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">{decline_label}</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">{accept_label}</button>
   </div>
 </div>
 <script>
@@ -1015,12 +1067,16 @@ def build_index():
     </a>'''
 
     body = f'''
-{header(0)}
+{header(0, relpath="")}
 <div class="hero wrap">
   <div class="mark">{LOGO_MARK_SVG}</div>
   <div class="word">{WORDMARK_SVG}</div>
   <div class="slogan">* Без агрессии, но с экспрессией</div>
   <p class="lede">Пространство для рождения смыслов и новых значений. Тексты о фильмах, спектаклях, музыке и людях — написанные не для того, чтобы порекомендовать, а чтобы отрефлексировать.</p>
+  <div class="hero-ctas">
+    <a class="btn-line" href="texts/">Читать тексты</a>
+    <a class="btn-line btn-line-ghost" href="about/#collab">Для проектов</a>
+  </div>
 </div>
 
 {marquee()}
@@ -1073,13 +1129,25 @@ print("index.html written")
 # TEXTS INDEX
 # ---------------------------------------------------------------
 
+def build_search_index():
+    # Полнотекстовый индекс для клиентского поиска на /texts/ — заголовок,
+    # кикер, тег и все абзацы каждого текста. Никакого бэкенда: страница
+    # сама фильтрует карточки по совпадению подстроки в норм. строке.
+    idx = []
+    for t in TEXTS:
+        blob = " ".join([t["title"], t["kicker"], t["tag"]] + t["paragraphs"])
+        idx.append({"slug": t["slug"], "text": blob})
+    return idx
+
 def build_texts_index():
     tags = sorted(set(t["tag"] for t in TEXTS))
     filter_html = '<button class="filter-pill active" data-filter="all">Все</button>' + \
         "".join(f'<button class="filter-pill" data-filter="{html.escape(tg)}">{html.escape(tg)}</button>' for tg in tags)
 
+    search_data = json.dumps(build_search_index(), ensure_ascii=False)
+
     body = f'''
-{header(1, "texts")}
+{header(1, "texts", relpath="texts/")}
 <section style="padding-top:64px;">
   <div class="wrap-wide">
     <div class="eyebrow">Раздел</div>
@@ -1087,6 +1155,9 @@ def build_texts_index():
     <p style="color:var(--dim);max-width:620px;font-size:15.5px;line-height:1.8;margin-bottom:32px;">
       Отзывы и рефлексии о фильмах, спектаклях, музыке и концертах — публикуются не по графику, а по мере того, как что-то требует высказывания.
     </p>
+    <div class="search-row">
+      <input type="search" id="text-search" class="search-input" placeholder="Поиск по текстам…" aria-label="Поиск по текстам" autocomplete="off">
+    </div>
     <div class="filter-row" id="filter-row">
       {filter_html}
     </div>
@@ -1094,29 +1165,53 @@ def build_texts_index():
     <div class="grid" id="texts-grid">
       {''.join(card(t, 1) for t in TEXTS)}
     </div>
-    <p id="filter-empty" style="display:none;color:var(--dim);font-size:15px;margin-top:20px;">Пока нет текстов с этим тегом.</p>
+    <p id="filter-empty" style="display:none;color:var(--dim);font-size:15px;margin-top:20px;">Ничего не нашлось. Попробуйте другой запрос или тег.</p>
   </div>
 </section>
 {footer(1)}
+<script id="search-index" type="application/json">{search_data}</script>
 <script>
   (function(){{
     var row = document.getElementById('filter-row');
+    var input = document.getElementById('text-search');
     var cards = document.querySelectorAll('#texts-grid .card');
     var empty = document.getElementById('filter-empty');
+    var activeTag = 'all';
+    var searchIdx = {{}};
+    try {{
+      JSON.parse(document.getElementById('search-index').textContent).forEach(function(it){{
+        searchIdx[it.slug] = it.text.toLowerCase();
+      }});
+    }} catch(e) {{}}
+
+    function slugFromHref(href){{
+      var m = href.match(/texts\\/([^\\/]+)\\//);
+      return m ? m[1] : '';
+    }}
+
+    function applyFilters(){{
+      var q = input.value.trim().toLowerCase();
+      var shown = 0;
+      cards.forEach(function(c){{
+        var tagOk = (activeTag === 'all' || c.dataset.tag === activeTag);
+        var slug = slugFromHref(c.getAttribute('href'));
+        var textOk = !q || (searchIdx[slug] && searchIdx[slug].indexOf(q) !== -1);
+        var match = tagOk && textOk;
+        c.style.display = match ? '' : 'none';
+        if (match) shown++;
+      }});
+      empty.style.display = shown === 0 ? 'block' : 'none';
+    }}
+
     row.addEventListener('click', function(e){{
       var btn = e.target.closest('.filter-pill');
       if (!btn) return;
       row.querySelectorAll('.filter-pill').forEach(function(b){{ b.classList.remove('active'); }});
       btn.classList.add('active');
-      var f = btn.dataset.filter;
-      var shown = 0;
-      cards.forEach(function(c){{
-        var match = (f === 'all' || c.dataset.tag === f);
-        c.style.display = match ? '' : 'none';
-        if (match) shown++;
-      }});
-      empty.style.display = shown === 0 ? 'block' : 'none';
+      activeTag = btn.dataset.filter;
+      applyFilters();
     }});
+    input.addEventListener('input', applyFilters);
   }})();
 </script>
 '''
@@ -1188,7 +1283,7 @@ def build_text_page(t, idx):
 
     body = f'''
 {schema_html}
-{header(depth, "texts")}
+{header(depth, "texts", relpath=f"texts/{t['slug']}/")}
 <div class="text-hero wrap-wide">
   {tag_pill(t['tag'])}
   <h1 style="margin-top:16px;">{html.escape(t['title'])}</h1>
@@ -1236,7 +1331,7 @@ def build_manifesto():
     </div>
     '''
     body = f'''
-{header(1, "manifesto")}
+{header(1, "manifesto", relpath="manifesto/")}
 <section style="padding-top:64px;">
   <div class="wrap">
     <div class="eyebrow">Манифест</div>
@@ -1286,7 +1381,7 @@ def build_recommendations():
     '''
 
     body = f'''
-{header(1, "recommendations")}
+{header(1, "recommendations", relpath="recommendations/")}
 <section style="padding-top:64px;">
   <div class="wrap-wide">
     <div class="eyebrow">Раздел</div>
@@ -1445,7 +1540,7 @@ def build_about():
     '''
 
     body = f'''
-{header(1, "about")}
+{header(1, "about", relpath="about/")}
 <section style="padding-top:64px;">
   <div class="wrap-wide about-grid">
     <div class="about-photo"><img src="../images/author.jpg" alt="Автор «Организованной Культурности»"{img_dims_attr("author.jpg")}></div>
@@ -1488,7 +1583,7 @@ print("about/index.html written")
 # ---------------------------------------------------------------
 
 def collab_box():
-    return '''<div class="collab-box">
+    return '''<div class="collab-box" id="collab">
     <h2>Сотрудничество</h2>
     <p>Продюсирую, продвигаю и делаю сайты для театральных и арт-проектов. Если есть идея, фестиваль или спектакль, которому нужна такая же внимательность к деталям — пишите, обсудим.</p>
     <div class="collab-buttons">
@@ -1509,7 +1604,7 @@ def proj_card(pr, depth):
 
 def build_projects_index():
     body = f'''
-{header(1, "projects")}
+{header(1, "projects", relpath="projects/")}
 <section style="padding-top:64px;">
   <div class="wrap-wide">
     <div class="eyebrow">Раздел</div>
@@ -1552,7 +1647,7 @@ def build_project_page(pr, idx):
     </div></div>'''
 
     body = f'''
-{header(depth, "projects")}
+{header(depth, "projects", relpath=f"projects/{pr['slug']}/")}
 <div class="text-hero wrap-wide">
   {tag_pill(pr['role'])}
   <h1 style="margin-top:16px;">{html.escape(pr['title'])}</h1>
@@ -1620,7 +1715,7 @@ def build_privacy():
         sections_html += f"<h2>{html.escape(title)}</h2>\n" + "\n".join(f"<p>{html.escape(p)}</p>" for p in paras) + "\n"
 
     body = f'''
-{header(1)}
+{header(1, relpath="privacy/")}
 <section style="padding-top:64px;">
   <div class="wrap">
     <div class="eyebrow">Документ</div>
@@ -1680,7 +1775,7 @@ def build_bot_rules():
         sections_html += f"<h2>{html.escape(title)}</h2>\n" + "\n".join(f"<p>{html.escape(p)}</p>" for p in paras) + "\n"
 
     body = f'''
-{header(1)}
+{header(1, relpath="bot-rules/")}
 <section style="padding-top:64px;">
   <div class="wrap">
     <div class="eyebrow">Документ</div>
@@ -1740,7 +1835,7 @@ def build_cookies():
         sections_html += f"<h2>{html.escape(title)}</h2>\n" + "\n".join(f"<p>{html.escape(p)}</p>" for p in paras) + "\n"
 
     body = f'''
-{header(1)}
+{header(1, relpath="cookies/")}
 <section style="padding-top:64px;">
   <div class="wrap">
     <div class="eyebrow">Документ</div>

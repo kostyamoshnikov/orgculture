@@ -59,6 +59,14 @@ nav.mainnav a{
   transition:color .2s;
 }
 nav.mainnav a:hover,nav.mainnav a.active{color:var(--ink);}
+.lang-switch{
+  border:1px solid var(--line);border-radius:999px;padding:5px 12px !important;
+  font-size:12px !important;color:var(--dim2) !important;
+}
+.lang-switch:hover{border-color:var(--accent);color:var(--accent) !important;}
+nav.mobile-nav .lang-switch{
+  display:inline-block !important;margin-top:16px;border-top:none !important;padding:6px 14px !important;
+}
 
 /* burger — hidden on desktop */
 .nav-toggle{display:none;}
@@ -105,6 +113,7 @@ nav.mobile-nav a.active{color:var(--accent);}
 .hero .lede{
   max-width:620px;margin:34px auto 0;color:var(--dim);font-size:16.5px;line-height:1.8;font-weight:300;
 }
+.hero-ctas{display:flex;gap:14px;justify-content:center;margin-top:34px;flex-wrap:wrap;}
 
 /* ---------- oval divider ---------- */
 .oval-divider{display:flex;justify-content:center;margin:64px 0;}
@@ -117,6 +126,16 @@ section.tight{padding:48px 0;}
 .sec-head h2{font-size:26px;font-weight:300;}
 .sec-head a.more{font-size:13px;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:2px;}
 .sec-head a.more:hover{color:var(--accent);border-color:var(--accent);}
+
+/* ---------- search ---------- */
+.search-row{margin-bottom:20px;}
+.search-input{
+  width:100%;max-width:420px;background:var(--panel);border:1px solid var(--line);
+  border-radius:999px;padding:12px 20px;color:var(--ink);font-size:14.5px;
+  font-family:'Manrope',sans-serif;transition:border-color .2s;
+}
+.search-input::placeholder{color:var(--dim2);}
+.search-input:focus{outline:none;border-color:var(--accent);}
 
 /* ---------- cards ---------- */
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
@@ -232,6 +251,8 @@ footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
   border-radius:999px;padding:11px 22px;transition:border-color .2s,color .2s;
 }
 .btn-line:hover{border-color:var(--accent);color:var(--accent);}
+.btn-line-ghost{border-color:rgba(217,119,87,.45);color:var(--accent);}
+.btn-line-ghost:hover{background:rgba(217,119,87,.12);}
 .meta-note{display:block;margin-top:6px;font-size:11px;color:var(--dim2);line-height:1.5;}
 
 /* ---------- marquee (poster-strip, inspired by koroche.ru) ---------- */
