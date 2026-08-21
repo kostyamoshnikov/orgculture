@@ -219,6 +219,20 @@ section.tight{padding:48px 0;}
   border:1px solid rgba(217,119,87,.45);border-radius:999px;padding:9px 18px;
 }
 .text-meta .btn:hover{background:rgba(217,119,87,.12);}
+
+/* ---------- фактический контекст (context.json) ---------- */
+.text-context{
+  margin-top:20px;padding:20px 24px;background:var(--panel);
+  border:1px solid var(--line);border-radius:2px;
+}
+.ctx-eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+.ctx-row{display:flex;gap:10px;font-size:13.5px;margin-bottom:6px;}
+.ctx-label{color:var(--dim2);min-width:78px;flex:0 0 auto;}
+.ctx-value{color:var(--ink);}
+.ctx-fact{color:var(--dim);font-size:13.5px;line-height:1.7;margin-top:10px;}
+.ctx-source{display:inline-block;margin-top:10px;font-size:12.5px;color:var(--accent);}
+.ctx-source:hover{text-decoration:underline;}
+
 .text-nav{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:36px 0 0;border-top:1px solid var(--line);margin-top:44px;}
 .text-nav a{font-size:14px;color:var(--dim);}
 .text-nav a:hover{color:var(--ink);}
@@ -292,6 +306,17 @@ footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
 .collab-box h2{font-size:26px;font-weight:300;margin-bottom:14px;}
 .collab-box p{color:var(--dim);font-size:15.5px;max-width:520px;margin:0 auto 28px;line-height:1.75;}
 .collab-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+
+/* ---------- отзывы на тексты ---------- */
+.reviews-block{margin-top:8px;}
+.reviews-block h2{font-size:20px;font-weight:300;margin-bottom:20px;}
+.review-item{
+  border-left:2px solid var(--accent);padding-left:18px;margin-bottom:24px;
+}
+.review-item p{color:var(--ink);font-size:15.5px;line-height:1.75;margin-bottom:8px;}
+.review-meta{color:var(--dim2);font-size:13px;}
+.review-cta{margin-top:24px;text-align:center;}
+.review-cta p{color:var(--dim);font-size:14px;margin-bottom:14px;}
 
 /* ---------- legal doc pages ---------- */
 .doc-meta{color:var(--dim2);font-size:13px;margin-top:14px;}

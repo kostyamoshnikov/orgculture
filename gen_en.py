@@ -29,6 +29,9 @@ ns = runpy.run_path(os.path.join(HERE, "gen.py"))
 
 ROOT = ns["ROOT"]
 SITE_DOMAIN = ns["SITE_DOMAIN"]
+BOT_USERNAME = ns["BOT_USERNAME"]
+REVIEWS = ns["REVIEWS"]
+CONTEXT = ns["CONTEXT"]
 BUILD_DATE = ns["BUILD_DATE"]
 TEXTS_RU = ns["TEXTS"]
 PROJECTS_RU = ns["PROJECTS"]
@@ -257,7 +260,7 @@ def build_index_en():
   <p class="lede">A space where meanings get made. Texts about films, plays, music and people \u2014 written not to recommend, but to think something through.</p>
   <div class="hero-ctas">
     <a class="btn-line" href="texts/">Read the texts</a>
-    <a class="btn-line btn-line-ghost" href="about/#collab">For projects</a>
+    <a class="btn-line btn-line-ghost" href="about/#collab">Production &amp; promotion</a>
   </div>
 </div>
 
@@ -301,7 +304,7 @@ def build_index_en():
 
 {footer(1, lang="en")}
 '''
-    return page_head("Organized Culturality", "A space where meanings get made. Texts about films, plays, music and people.", 1, path="en/", lang="en") + body
+    return page_head("Organized Culturality", "Texts about films, plays, music and people — plus production and promotion for cultural and arts projects.", 1, path="en/", lang="en") + body
 
 os.makedirs(EN_ROOT, exist_ok=True)
 with open(os.path.join(EN_ROOT, "index.html"), "w", encoding="utf-8") as f:
@@ -410,6 +413,37 @@ def build_text_page_en(t, idx):
             link_html = f'<br><a class="btn" href="{html.escape(t["link"])}" target="_blank" rel="noopener">{label} \u2192</a>{note}'
         meta_html = f'<div class="text-meta">{html.escape(t["meta"])}{link_html}</div>'
 
+    # Фактическая справка — данные из context.json общие для RU/EN по
+    # структуре, но director/fact/source_label переведены отдельно
+    # (_en-поля): это мой собственный текст в context.json, не
+    # пользовательский контент вроде отзывов, поэтому переводится
+    # полностью, а не оставляется как есть. orig_title и year не требуют
+    # перевода (уже интернациональные).
+    context_html = ""
+    ctx = CONTEXT.get(t["slug"])
+    if ctx:
+        rows = ""
+        orig_title = ctx.get("orig_title_en") or ctx.get("orig_title")
+        if orig_title:
+            rows += f'<div class="ctx-row"><span class="ctx-label">Original title</span><span class="ctx-value">{html.escape(orig_title)}</span></div>'
+        if ctx.get("year"):
+            rows += f'<div class="ctx-row"><span class="ctx-label">Year</span><span class="ctx-value">{html.escape(ctx["year"])}</span></div>'
+        director = ctx.get("director_en") or ctx.get("director")
+        if director:
+            rows += f'<div class="ctx-row"><span class="ctx-label">Author</span><span class="ctx-value">{html.escape(director)}</span></div>'
+        fact = ctx.get("fact_en") or ctx.get("fact")
+        fact_html = f'<p class="ctx-fact">{html.escape(fact)}</p>' if fact else ""
+        source_html = ""
+        if ctx.get("source_url"):
+            source_label = ctx.get("source_label_en") or ctx.get("source_label", "source")
+            source_html = f'<a class="ctx-source" href="{html.escape(ctx["source_url"])}" target="_blank" rel="noopener">{html.escape(source_label)} \u2192</a>'
+        context_html = f'''<div class="text-context">
+      <div class="ctx-eyebrow">Context</div>
+      {rows}
+      {fact_html}
+      {source_html}
+    </div>'''
+
     prev_t = TEXTS_EN[idx-1] if idx > 0 else TEXTS_EN[-1]
     next_t = TEXTS_EN[idx+1] if idx < len(TEXTS_EN)-1 else TEXTS_EN[0]
     nav_html = f'''<div class="wrap"><div class="text-nav">
@@ -430,6 +464,29 @@ def build_text_page_en(t, idx):
     <p style="margin-bottom:22px;">New texts go out on the Telegram channel \u2014 no algorithm, no feed.</p>
     <div class="collab-buttons">
       <a class="btn-line" href="https://t.me/orgculture" target="_blank" rel="noopener">Subscribe on Telegram</a>
+    </div>
+  </div>
+</div>'''
+
+    # Отзывы хранятся общими для обоих языков (RU/EN) — читатель может
+    # оставить отзыв на любом языке через бота, независимо от того, с
+    # какой версии страницы пришёл; шапка блока и CTA переведены,
+    # содержимое самих отзывов — как прислали (см. gen.py, тот же принцип).
+    existing_reviews = REVIEWS.get(t["slug"], [])
+    reviews_items_html = "".join(
+        f'''<div class="review-item">
+      <p>{html.escape(r["text"])}</p>
+      <div class="review-meta">{html.escape(r["name"])} \u00b7 {html.escape(r["date"])}</div>
+    </div>'''
+        for r in existing_reviews
+    )
+    review_deep_link = f"https://t.me/{BOT_USERNAME}?start=review_{t['slug']}"
+    reviews_block = f'''<div class="wrap" style="padding:56px 0 0;">
+  <div class="reviews-block">
+    {'<h2>Reviews</h2>' + reviews_items_html if existing_reviews else ''}
+    <div class="review-cta">
+      <p>What did you think of this text?</p>
+      <a class="btn-line" href="{review_deep_link}" target="_blank" rel="noopener">Leave a review on Telegram</a>
     </div>
   </div>
 </div>'''
@@ -458,8 +515,10 @@ def build_text_page_en(t, idx):
 <div class="text-body wrap">
   {paras}
   {meta_html}
+  {context_html}
 </div>
 {related_block}
+{reviews_block}
 {channel_cta}
 {nav_html}
 {footer(depth, lang="en")}
