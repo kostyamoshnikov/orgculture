@@ -7,7 +7,7 @@
 // ?v=N у style.css и версию кэша здесь. Без этого вернувшиеся пользователи
 // могут долго видеть старые стили из-за cache-first стратегии.
 
-const SITE_VERSION = 29;
+const SITE_VERSION = 37;
 const CACHE_NAME = `orgculture-v${SITE_VERSION}`;
 const STATIC_CACHE = `orgculture-static-v${SITE_VERSION}`;
 
@@ -26,7 +26,7 @@ const PRECACHE_URLS = [
   '/assets/icons/favicon.svg',
   '/assets/icons/favicon-192.png',
   '/assets/icons/favicon-512.png',
-  '/assets/style.css?v=29'
+  '/assets/style.css?v=37'
 ];
 
 self.addEventListener('install', event => {

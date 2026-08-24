@@ -1,4 +1,5 @@
 :root{
+  color-scheme:dark;
   --bg:#0A0A0A;
   --panel:#131313;
   --line:#262523;
@@ -263,6 +264,7 @@ footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
 .btn-line{
   display:inline-block;font-size:14px;color:var(--ink);border:1px solid var(--line);
   border-radius:999px;padding:11px 22px;transition:border-color .2s,color .2s;
+  background:none;-webkit-appearance:none;appearance:none;cursor:pointer;font-family:inherit;
 }
 .btn-line:hover{border-color:var(--accent);color:var(--accent);}
 .btn-line-ghost{border-color:rgba(217,119,87,.45);color:var(--accent);}
@@ -307,6 +309,12 @@ footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
 .collab-box p{color:var(--dim);font-size:15.5px;max-width:520px;margin:0 auto 28px;line-height:1.75;}
 .collab-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
 
+/* ---------- страница /production/ ---------- */
+.prod-services{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+.prod-service h3{font-size:17px;font-weight:400;color:var(--ink);margin-bottom:10px;}
+.prod-service p{color:var(--dim);font-size:14.5px;line-height:1.75;}
+@media (max-width:760px){.prod-services{grid-template-columns:1fr;gap:32px;}}
+
 /* ---------- отзывы на тексты ---------- */
 .reviews-block{margin-top:8px;}
 .reviews-block h2{font-size:20px;font-weight:300;margin-bottom:20px;}
@@ -317,6 +325,17 @@ footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
 .review-meta{color:var(--dim2);font-size:13px;}
 .review-cta{margin-top:24px;text-align:center;}
 .review-cta p{color:var(--dim);font-size:14px;margin-bottom:14px;}
+.review-cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.review-form{max-width:480px;margin:20px auto 0;text-align:left;}
+.review-form-input,.review-form-textarea{
+  width:100%;background:var(--panel);border:1px solid var(--line);border-radius:2px;
+  color:var(--ink);font-family:inherit;font-size:14.5px;padding:11px 14px;margin-bottom:10px;
+}
+.review-form-textarea{resize:vertical;min-height:90px;}
+.review-form-input::placeholder,.review-form-textarea::placeholder{color:var(--dim2);}
+.review-form-input:focus,.review-form-textarea:focus{outline:none;border-color:var(--accent);}
+.review-form-honeypot{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
+.review-form-status{color:var(--dim);font-size:13px;margin-top:10px;text-align:center;}
 
 /* ---------- legal doc pages ---------- */
 .doc-meta{color:var(--dim2);font-size:13px;margin-top:14px;}

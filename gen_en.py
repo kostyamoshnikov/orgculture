@@ -30,6 +30,7 @@ ns = runpy.run_path(os.path.join(HERE, "gen.py"))
 ROOT = ns["ROOT"]
 SITE_DOMAIN = ns["SITE_DOMAIN"]
 BOT_USERNAME = ns["BOT_USERNAME"]
+WORKER_BASE = ns["WORKER_BASE"]
 REVIEWS = ns["REVIEWS"]
 CONTEXT = ns["CONTEXT"]
 BUILD_DATE = ns["BUILD_DATE"]
@@ -223,6 +224,74 @@ def proj_card_en(pr, depth):
       <p>{html.escape(pr['kicker'])}</p>
     </a>'''
 
+# ---------------------------------------------------------------
+# PRODUCTION page — EN mirror of build_production() in gen.py
+# ---------------------------------------------------------------
+
+def build_production_en():
+    example_slugs = ["aelita-production", "bufest", "robot-kostya-project"]
+    examples = [p for p in PROJECTS_EN if p["slug"] in example_slugs]
+    cards_html = "".join(proj_card_en(pr, 2) for pr in examples)
+
+    body = f'''
+{header(2, "", relpath="production/", lang="en")}
+<section style="padding-top:64px;">
+  <div class="wrap">
+    <div class="eyebrow">Production &amp; promotion</div>
+    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">I take cultural and arts projects from idea to audience</h1>
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:12px;">
+      15+ years on stage, in circus and in theatre. I know the industry from the inside, at every level of it \u2014 from venue logistics to holding an audience's attention after the announcement.
+    </p>
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:44px;">
+      I work with theatre and arts projects \u2014 festivals, productions, independent teams who want the same attention to detail the texts on this site are written with.
+    </p>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:0 0 28px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
+    <div class="eyebrow" style="margin-bottom:20px;">What I do</div>
+    <div class="prod-services">
+      <div class="prod-service">
+        <h3>Producing</h3>
+        <p>Concept through to launch: budget, venue, team, logistics, deadlines. I take on the organisational side so the production has room to stay creative.</p>
+      </div>
+      <div class="prod-service">
+        <h3>Promotion</h3>
+        <p>Social media, coordination with venues and partners, press and blogger outreach. Not one-off advertising \u2014 a sustained presence, from the announcement through to the archive after the run.</p>
+      </div>
+      <div class="prod-service">
+        <h3>Websites</h3>
+        <p>A dedicated site for a project or festival, when a single social media page isn't enough: programme, tickets, press kit and archive in one place.</p>
+      </div>
+    </div>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
+    <div class="eyebrow" style="margin-bottom:20px;">Examples</div>
+  </div>
+  <div class="wrap-wide">
+    <div class="grid">
+      {cards_html}
+    </div>
+    <p style="text-align:center;margin-top:28px;"><a class="btn-line" href="../projects/">All projects \u2192</a></p>
+  </div>
+  <div class="wrap">
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
+    <div class="eyebrow" style="margin-bottom:16px;">Who's behind it</div>
+    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:20px;">
+      Konstantin Moshnikov \u2014 producer and circus performer. Co-founder of AELITA PRODUCTION, organiser of BuFest, author of \u201cOrganized Culturality.\u201d
+    </p>
+    <p style="margin-bottom:52px;"><a class="btn-line" href="../about/">Full bio and CV \u2192</a></p>
+
+    {collab_box_en()}
+  </div>
+</section>
+{footer(2, lang="en")}
+'''
+    return page_head("Production &amp; promotion \u2014 Organized Culturality", "Production, promotion and websites for theatre and arts projects. 15+ years in the industry, from concept to audience.", 2, path="en/production/", lang="en") + body
+
+os.makedirs(os.path.join(EN_ROOT, "production"), exist_ok=True)
+with open(os.path.join(EN_ROOT, "production", "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_production_en())
+print("en/production/index.html written")
+
 def build_search_index_en():
     idx = []
     for t in TEXTS_EN:
@@ -236,6 +305,35 @@ def build_search_index_en():
 def build_index_en():
     latest = TEXTS_EN[:6]
     rec_with_link = [t for t in TEXTS_EN if t["link"]][:3]
+
+    index_schema_en = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": f"{SITE_DOMAIN}/#website",
+                "url": f"{SITE_DOMAIN}/en/",
+                "name": "Organized Culturality",
+                "description": "Texts about films, plays, music and people \u2014 plus producing and promoting cultural and arts projects.",
+                "inLanguage": "en-US",
+                "author": {"@id": f"{SITE_DOMAIN}/about/#person"},
+            },
+            {
+                "@type": "Person",
+                "@id": f"{SITE_DOMAIN}/about/#person",
+                "name": "Konstantin Moshnikov",
+                "url": f"{SITE_DOMAIN}/en/about/",
+                "jobTitle": "Producer, cultural project promotion; circus performer",
+                "sameAs": [
+                    "https://t.me/orgculture",
+                    "https://vk.ru/orgculture",
+                    "https://aelita-production.ru",
+                ],
+            },
+        ],
+    }
+    index_schema_en_html = f'<script type="application/ld+json">{json.dumps(index_schema_en, ensure_ascii=False)}</script>'
+
     rec_html = ""
     for t in rec_with_link:
         if t["image"]:
@@ -252,6 +350,7 @@ def build_index_en():
     </a>'''
 
     body = f'''
+{index_schema_en_html}
 {header(1, lang="en")}
 <div class="hero wrap">
   <div class="mark">{LOGO_MARK_SVG}</div>
@@ -260,7 +359,7 @@ def build_index_en():
   <p class="lede">A space where meanings get made. Texts about films, plays, music and people \u2014 written not to recommend, but to think something through.</p>
   <div class="hero-ctas">
     <a class="btn-line" href="texts/">Read the texts</a>
-    <a class="btn-line btn-line-ghost" href="about/#collab">Production &amp; promotion</a>
+    <a class="btn-line btn-line-ghost" href="production/">Production &amp; promotion</a>
   </div>
 </div>
 
@@ -469,9 +568,11 @@ def build_text_page_en(t, idx):
 </div>'''
 
     # Отзывы хранятся общими для обоих языков (RU/EN) — читатель может
-    # оставить отзыв на любом языке через бота, независимо от того, с
-    # какой версии страницы пришёл; шапка блока и CTA переведены,
-    # содержимое самих отзывов — как прислали (см. gen.py, тот же принцип).
+    # оставить отзыв на любом языке через бота или форму, независимо от
+    # того, с какой версии страницы пришёл; шапка блока, CTA и форма
+    # переведены, содержимое самих отзывов — как прислали (см. gen.py,
+    # тот же принцип, что и раньше). Живая подгрузка и форма — тот же
+    # JS, что и на RU-странице, только переведённые подписи внутри.
     existing_reviews = REVIEWS.get(t["slug"], [])
     reviews_items_html = "".join(
         f'''<div class="review-item">
@@ -481,15 +582,94 @@ def build_text_page_en(t, idx):
         for r in existing_reviews
     )
     review_deep_link = f"https://t.me/{BOT_USERNAME}?start=review_{t['slug']}"
+    slug_json = json.dumps(t["slug"])
+    static_count_json = json.dumps(len(existing_reviews))
+    worker_base_json = json.dumps(WORKER_BASE)
     reviews_block = f'''<div class="wrap" style="padding:56px 0 0;">
   <div class="reviews-block">
-    {'<h2>Reviews</h2>' + reviews_items_html if existing_reviews else ''}
+    <div id="review-list">
+      {'<h2>Reviews</h2>' + reviews_items_html if existing_reviews else ''}
+    </div>
     <div class="review-cta">
       <p>What did you think of this text?</p>
-      <a class="btn-line" href="{review_deep_link}" target="_blank" rel="noopener">Leave a review on Telegram</a>
+      <div class="review-cta-buttons">
+        <button type="button" class="btn-line" id="review-toggle-form">Leave a review</button>
+        <a class="btn-line btn-line-ghost" href="{review_deep_link}" target="_blank" rel="noopener">on Telegram</a>
+      </div>
+      <div class="review-form" id="review-form" hidden>
+        <input type="text" id="review-name" class="review-form-input" placeholder="Name (optional)">
+        <textarea id="review-text" class="review-form-textarea" placeholder="Your review\u2026" rows="4"></textarea>
+        <input type="text" id="review-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="button" class="btn-line" id="review-submit">Send</button>
+        <p class="review-form-status" id="review-form-status"></p>
+      </div>
     </div>
   </div>
-</div>'''
+</div>
+<script>
+(function(){{
+  var SLUG = {slug_json}, API = {worker_base_json}, STATIC_COUNT = {static_count_json};
+  var listEl = document.getElementById('review-list');
+
+  function reviewCard(r) {{
+    var div = document.createElement('div'); div.className = 'review-item';
+    var p = document.createElement('p'); p.textContent = r.text;
+    var meta = document.createElement('div'); meta.className = 'review-meta';
+    meta.textContent = (r.name || 'Anonymous') + ' \u00b7 ' + (r.date || '');
+    div.appendChild(p); div.appendChild(meta);
+    return div;
+  }}
+
+  fetch(API + '/reviews?slug=' + encodeURIComponent(SLUG)).then(function(r) {{
+    return r.ok ? r.json() : null;
+  }}).then(function(data) {{
+    if (!data || !data.reviews) return;
+    var extra = data.reviews.slice(STATIC_COUNT);
+    if (!extra.length) return;
+    if (!listEl.querySelector('h2')) {{
+      var h2 = document.createElement('h2'); h2.textContent = 'Reviews';
+      listEl.insertBefore(h2, listEl.firstChild);
+    }}
+    extra.forEach(function(r) {{ listEl.appendChild(reviewCard(r)); }});
+  }}).catch(function() {{}});
+
+  var toggleBtn = document.getElementById('review-toggle-form');
+  var formEl = document.getElementById('review-form');
+  var submitBtn = document.getElementById('review-submit');
+  var statusEl = document.getElementById('review-form-status');
+  toggleBtn.addEventListener('click', function() {{
+    formEl.hidden = !formEl.hidden;
+    toggleBtn.style.display = formEl.hidden ? '' : 'none';
+  }});
+  submitBtn.addEventListener('click', function() {{
+    var text = document.getElementById('review-text').value.trim();
+    if (!text) {{ statusEl.textContent = 'Please write your review first.'; return; }}
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Sending\u2026';
+    fetch(API + '/submit-review', {{
+      method: 'POST',
+      headers: {{'Content-Type': 'application/json'}},
+      body: JSON.stringify({{
+        slug: SLUG,
+        name: document.getElementById('review-name').value,
+        text: text,
+        website: document.getElementById('review-website').value,
+      }}),
+    }}).then(function(r) {{ return r.json().catch(function() {{ return {{ ok: false }}; }}); }})
+      .then(function(data) {{
+        if (data && data.ok) {{
+          formEl.innerHTML = '<p class="review-form-status">Thank you! Your review has been sent for moderation.</p>';
+        }} else {{
+          statusEl.textContent = "Couldn't send it \u2014 try Telegram instead.";
+          submitBtn.disabled = false;
+        }}
+      }}).catch(function() {{
+        statusEl.textContent = "Couldn't send it \u2014 try Telegram instead.";
+        submitBtn.disabled = false;
+      }});
+  }});
+}})();
+</script>'''
 
     schema = {
         "@context": "https://schema.org", "@type": "Article",
@@ -618,6 +798,24 @@ print("en/recommendations/index.html written")
 # ABOUT
 # ---------------------------------------------------------------
 def build_about_en():
+    about_schema_en = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "@id": f"{SITE_DOMAIN}/about/#person",
+        "name": "Konstantin Moshnikov",
+        "url": f"{SITE_DOMAIN}/en/about/",
+        "image": f"{SITE_DOMAIN}/images/author.jpg",
+        "jobTitle": "Producer, cultural project promotion; circus performer",
+        "email": "kostyamoshnikov@gmail.com",
+        "telephone": "+7 904 617-01-88",
+        "sameAs": [
+            "https://t.me/orgculture",
+            "https://vk.ru/orgculture",
+            "https://aelita-production.ru",
+        ],
+    }
+    about_schema_en_html = f'<script type="application/ld+json">{json.dumps(about_schema_en, ensure_ascii=False)}</script>'
+
     roles_html = ""
     for r in CV_ROLES_EN:
         bullets = "".join(f"<li>{html.escape(b)}</li>" for b in r["bullets"])
@@ -629,6 +827,7 @@ def build_about_en():
     </div>
     '''
     body = f'''
+{about_schema_en_html}
 {header(2, "about", relpath="about/", lang="en")}
 <section style="padding-top:64px;">
   <div class="wrap-wide about-grid">
@@ -880,7 +1079,7 @@ print("en/cookies/index.html written")
 # COMBINED SITEMAP (RU + EN, with hreflang alternates)
 # ---------------------------------------------------------------
 def build_combined_sitemap():
-    core = ["", "manifesto/", "texts/", "projects/", "recommendations/", "about/", "privacy/", "bot-rules/", "cookies/"]
+    core = ["", "manifesto/", "texts/", "projects/", "production/", "recommendations/", "about/", "privacy/", "bot-rules/", "cookies/"]
     ru_paths = list(core) + [f"texts/{t['slug']}/" for t in TEXTS_RU] + [f"projects/{p['slug']}/" for p in PROJECTS_RU]
     en_paths = list(core) + [f"texts/{t['slug']}/" for t in TEXTS_EN] + [f"projects/{p['slug']}/" for p in PROJECTS_EN]
     entries = []

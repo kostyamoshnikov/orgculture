@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./assets/style.css?v=29">
+<link rel="stylesheet" href="./assets/style.css?v=37">
 <link rel="manifest" href="./manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -46,10 +46,31 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
+<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
+<script type="text/javascript">
+  window.__loadOwnStats = function() {
+    if (window.__statsLoaded) return;
+    window.__statsLoaded = true;
+    try {
+      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
+      var payload = JSON.stringify({
+        path: location.pathname,
+        lang: isEn ? 'en' : 'ru',
+        ref: document.referrer || ''
+      });
+      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
+    } catch (e) {}
+  };
+  if (localStorage.getItem('ok_cookie_consent') === '1') {
+    window.__loadOwnStats();
+  }
+</script>
+<!-- /Own stats beacon -->
 </head>
 <body>
 <a href="#main" class="skip-link">Перейти к содержимому</a>
 
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://orgculture.ru/#website", "url": "https://orgculture.ru/", "name": "Организованная Культурность", "description": "Тексты о фильмах, спектаклях, музыке и людях — и продюсирование, продвижение культурных и арт-проектов.", "inLanguage": "ru-RU", "author": {"@id": "https://orgculture.ru/about/#person"}}, {"@type": "Person", "@id": "https://orgculture.ru/about/#person", "name": "Константин Мошников", "url": "https://orgculture.ru/about/", "jobTitle": "Продюсер, продвижение культурных проектов; артист цирка", "sameAs": ["https://t.me/orgculture", "https://vk.ru/orgculture", "https://aelita-production.ru"]}]}</script>
 <header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
   <div class="headbar">
@@ -147,7 +168,7 @@
   <p class="lede">Пространство для рождения смыслов и новых значений. Тексты о фильмах, спектаклях, музыке и людях — написанные не для того, чтобы порекомендовать, а чтобы отрефлексировать.</p>
   <div class="hero-ctas">
     <a class="btn-line" href="texts/">Читать тексты</a>
-    <a class="btn-line btn-line-ghost" href="about/#collab">Продюсирование и продвижение</a>
+    <a class="btn-line btn-line-ghost" href="production/">Продюсирование и продвижение</a>
   </div>
 </div>
 
@@ -175,14 +196,14 @@
         <p>Элиа Сулейман снял фильм, в котором герой почти ни на что не влияет — и именно поэтому зритель остаётся наедине с собственными выводами.</p>
       </div>
     </a><a class="card" href="./texts/dvoe-na-kachelyah/" data-tag="спектакль">
-      <div class="thumb"><img src="./images/kacheli.jpg" alt="Двое на качелях. Где здесь я и нужен ли я" width="1600" height="1066" loading="lazy"></div>
+      <div class="thumb"><img src="./images/robot-kostya-1.jpg" alt="Двое на качелях. Где здесь я и нужен ли я" width="790" height="527" loading="lazy"></div>
       <div class="body">
         <span class="tag">спектакль</span>
         <h3>Двое на качелях. Где здесь я и нужен ли я</h3>
         <p>Отзыв, написанный не для того, чтобы порекомендовать, а чтобы отрефлексировать увиденное — по горячим следам премьеры в театре им. Ленсовета.</p>
       </div>
     </a><a class="card" href="./texts/robot-kostya/" data-tag="спектакль">
-      <div class="thumb"><img src="./images/robot-kostya-1.jpg" alt="В поисках вдохновения, или Как жить среди роботов и не сойти с ума" width="790" height="527" loading="lazy"></div>
+      <div class="thumb"><img src="./images/annette-poster.jpg" alt="В поисках вдохновения, или Как жить среди роботов и не сойти с ума" width="1600" height="1106" loading="lazy"></div>
       <div class="body">
         <span class="tag">спектакль</span>
         <h3>В поисках вдохновения, или Как жить среди роботов и не сойти с ума</h3>
@@ -209,7 +230,10 @@
         <p>«Ход королевы» сделал шахматы доступными даже для тех, кто брал в руки ферзя пару раз в жизни.</p>
       </div>
     </a><a class="card" href="./texts/dom-radio/" data-tag="пространство">
-      <div class="thumb"><img src="./images/dom-radio.jpg" alt="Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный" width="938" height="1332" loading="lazy"></div>
+      <div class="thumb noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="364" cy="540" rx="200" ry="110"/>
+  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
+</svg></div>
       <div class="body">
         <span class="tag">пространство</span>
         <h3>Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный</h3>
@@ -238,14 +262,14 @@
       </div>
       <span class="go">смотреть на Beat Film Festival →</span>
     </a><a class="recrow" href="texts/dvoe-na-kachelyah/" style="text-decoration:none;">
-      <div class="recimg"><img src="images/kacheli.jpg" alt="" width="1600" height="1066" loading="lazy"></div>
+      <div class="recimg"><img src="images/robot-kostya-1.jpg" alt="" width="790" height="527" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">Двое на качелях. Где здесь я и нужен ли я</h3>
       </div>
       <span class="go">билеты и репертуар театра →</span>
     </a><a class="recrow" href="texts/robot-kostya/" style="text-decoration:none;">
-      <div class="recimg"><img src="images/robot-kostya-1.jpg" alt="" width="790" height="527" loading="lazy"></div>
+      <div class="recimg"><img src="images/annette-poster.jpg" alt="" width="1600" height="1106" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">В поисках вдохновения, или Как жить среди роботов и не сойти с ума</h3>
@@ -324,7 +348,7 @@
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Отклонить</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Хорошо</button>
   </div>
 </div>
 <script>

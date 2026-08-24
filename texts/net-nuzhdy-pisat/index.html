@@ -21,12 +21,12 @@
 <meta property="og:url" content="https://orgculture.ru/texts/net-nuzhdy-pisat/">
 <meta property="og:site_name" content="Организованная Культурность">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
+<meta property="og:image" content="https://orgculture.ru/images/kurentzis-poster.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/style.css?v=29">
+<link rel="stylesheet" href="../../assets/style.css?v=37">
 <link rel="manifest" href="../../manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -46,11 +46,31 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
+<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
+<script type="text/javascript">
+  window.__loadOwnStats = function() {
+    if (window.__statsLoaded) return;
+    window.__statsLoaded = true;
+    try {
+      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
+      var payload = JSON.stringify({
+        path: location.pathname,
+        lang: isEn ? 'en' : 'ru',
+        ref: document.referrer || ''
+      });
+      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
+    } catch (e) {}
+  };
+  if (localStorage.getItem('ok_cookie_consent') === '1') {
+    window.__loadOwnStats();
+  }
+</script>
+<!-- /Own stats beacon -->
 </head>
 <body>
 <a href="#main" class="skip-link">Перейти к содержимому</a>
 
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Нет нужды писать", "description": "О том, что искусство не всегда спасает — и о попытке просто «дальше жить».", "author": {"@type": "Person", "name": "Константин Мошников"}, "publisher": {"@type": "Organization", "name": "Организованная Культурность"}, "mainEntityOfPage": "https://orgculture.ru/texts/net-nuzhdy-pisat/"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Нет нужды писать", "description": "О том, что искусство не всегда спасает — и о попытке просто «дальше жить».", "author": {"@type": "Person", "name": "Константин Мошников"}, "publisher": {"@type": "Organization", "name": "Организованная Культурность"}, "mainEntityOfPage": "https://orgculture.ru/texts/net-nuzhdy-pisat/", "image": "https://orgculture.ru/images/kurentzis-poster.jpg"}</script>
 <header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
   <div class="headbar">
@@ -99,7 +119,7 @@
   <h1 style="margin-top:16px;">Нет нужды писать</h1>
   <p class="kicker">О том, что искусство не всегда спасает — и о попытке просто «дальше жить».</p>
 </div>
-
+<div class="wrap-wide"><div class="text-heroimg"><img src="../../images/kurentzis-poster.jpg" alt="Нет нужды писать" width="600" height="480"></div></div>
 <div class="text-body wrap">
   <p>Я всегда думал, что искусство спасает. Но в последнее время оказалось, что нужно многое переосмыслить, чтобы принять то, что на нас навалилось.</p>
       <p>Пока сложно поменять свой дискурс, привести в порядок ментальное здоровье — и хоть что-то описать, не заходя в сошедший с ума контекст происходящего.</p>
@@ -123,14 +143,14 @@
         <p>Элиа Сулейман снял фильм, в котором герой почти ни на что не влияет — и именно поэтому зритель остаётся наедине с собственными выводами.</p>
       </div>
     </a><a class="card" href="../../texts/dvoe-na-kachelyah/" data-tag="спектакль">
-      <div class="thumb"><img src="../../images/kacheli.jpg" alt="Двое на качелях. Где здесь я и нужен ли я" width="1600" height="1066" loading="lazy"></div>
+      <div class="thumb"><img src="../../images/robot-kostya-1.jpg" alt="Двое на качелях. Где здесь я и нужен ли я" width="790" height="527" loading="lazy"></div>
       <div class="body">
         <span class="tag">спектакль</span>
         <h3>Двое на качелях. Где здесь я и нужен ли я</h3>
         <p>Отзыв, написанный не для того, чтобы порекомендовать, а чтобы отрефлексировать увиденное — по горячим следам премьеры в театре им. Ленсовета.</p>
       </div>
     </a><a class="card" href="../../texts/robot-kostya/" data-tag="спектакль">
-      <div class="thumb"><img src="../../images/robot-kostya-1.jpg" alt="В поисках вдохновения, или Как жить среди роботов и не сойти с ума" width="790" height="527" loading="lazy"></div>
+      <div class="thumb"><img src="../../images/annette-poster.jpg" alt="В поисках вдохновения, или Как жить среди роботов и не сойти с ума" width="1600" height="1106" loading="lazy"></div>
       <div class="body">
         <span class="tag">спектакль</span>
         <h3>В поисках вдохновения, или Как жить среди роботов и не сойти с ума</h3>
@@ -140,13 +160,89 @@
 </div>
 <div class="wrap" style="padding:56px 0 0;">
   <div class="reviews-block">
-    
+    <div id="review-list">
+      
+    </div>
     <div class="review-cta">
       <p>Что думаете об этом тексте?</p>
-      <a class="btn-line" href="https://t.me/orgculture_bot?start=review_net-nuzhdy-pisat" target="_blank" rel="noopener">Оставить отзыв в Telegram</a>
+      <div class="review-cta-buttons">
+        <button type="button" class="btn-line" id="review-toggle-form">Оставить отзыв</button>
+        <a class="btn-line btn-line-ghost" href="https://t.me/orgculture_bot?start=review_net-nuzhdy-pisat" target="_blank" rel="noopener">через Telegram</a>
+      </div>
+      <div class="review-form" id="review-form" hidden>
+        <input type="text" id="review-name" class="review-form-input" placeholder="Имя (необязательно)">
+        <textarea id="review-text" class="review-form-textarea" placeholder="Ваш отзыв…" rows="4"></textarea>
+        <input type="text" id="review-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="button" class="btn-line" id="review-submit">Отправить</button>
+        <p class="review-form-status" id="review-form-status"></p>
+      </div>
     </div>
   </div>
 </div>
+<script>
+(function(){
+  var SLUG = "net-nuzhdy-pisat", API = "https://orgculture-bot.\u0417\u0410\u041c\u0415\u041d\u0418-\u041d\u0410-\u0421\u0412\u041e\u0419-\u0410\u041a\u041a\u0410\u0423\u041d\u0422.workers.dev", STATIC_COUNT = 0;
+  var listEl = document.getElementById('review-list');
+
+  function reviewCard(r) {
+    var div = document.createElement('div'); div.className = 'review-item';
+    var p = document.createElement('p'); p.textContent = r.text;
+    var meta = document.createElement('div'); meta.className = 'review-meta';
+    meta.textContent = (r.name || 'Аноним') + ' · ' + (r.date || '');
+    div.appendChild(p); div.appendChild(meta);
+    return div;
+  }
+
+  fetch(API + '/reviews?slug=' + encodeURIComponent(SLUG)).then(function(r) {
+    return r.ok ? r.json() : null;
+  }).then(function(data) {
+    if (!data || !data.reviews) return;
+    var extra = data.reviews.slice(STATIC_COUNT);
+    if (!extra.length) return;
+    if (!listEl.querySelector('h2')) {
+      var h2 = document.createElement('h2'); h2.textContent = 'Отзывы';
+      listEl.insertBefore(h2, listEl.firstChild);
+    }
+    extra.forEach(function(r) { listEl.appendChild(reviewCard(r)); });
+  }).catch(function() {});
+
+  var toggleBtn = document.getElementById('review-toggle-form');
+  var formEl = document.getElementById('review-form');
+  var submitBtn = document.getElementById('review-submit');
+  var statusEl = document.getElementById('review-form-status');
+  toggleBtn.addEventListener('click', function() {
+    formEl.hidden = !formEl.hidden;
+    toggleBtn.style.display = formEl.hidden ? '' : 'none';
+  });
+  submitBtn.addEventListener('click', function() {
+    var text = document.getElementById('review-text').value.trim();
+    if (!text) { statusEl.textContent = 'Напишите текст отзыва.'; return; }
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Отправляю…';
+    fetch(API + '/submit-review', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        slug: SLUG,
+        name: document.getElementById('review-name').value,
+        text: text,
+        website: document.getElementById('review-website').value,
+      }),
+    }).then(function(r) { return r.json().catch(function() { return { ok: false }; }); })
+      .then(function(data) {
+        if (data && data.ok) {
+          formEl.innerHTML = '<p class="review-form-status">Спасибо! Отзыв отправлен на модерацию.</p>';
+        } else {
+          statusEl.textContent = 'Не получилось отправить — попробуйте через Telegram.';
+          submitBtn.disabled = false;
+        }
+      }).catch(function() {
+        statusEl.textContent = 'Не получилось отправить — попробуйте через Telegram.';
+        submitBtn.disabled = false;
+      });
+  });
+})();
+</script>
 <div class="wrap" style="padding:56px 0 0;">
   <div class="collab-box" style="text-align:center;">
     <p style="margin-bottom:22px;">Новые тексты — в Telegram-канале, без алгоритмов и без ленты.</p>
@@ -217,7 +313,7 @@
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Отклонить</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Хорошо</button>
   </div>
 </div>
 <script>

@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/style.css?v=29">
+<link rel="stylesheet" href="../../assets/style.css?v=37">
 <link rel="manifest" href="../../en/manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -46,6 +46,26 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
+<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
+<script type="text/javascript">
+  window.__loadOwnStats = function() {
+    if (window.__statsLoaded) return;
+    window.__statsLoaded = true;
+    try {
+      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
+      var payload = JSON.stringify({
+        path: location.pathname,
+        lang: isEn ? 'en' : 'ru',
+        ref: document.referrer || ''
+      });
+      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
+    } catch (e) {}
+  };
+  if (localStorage.getItem('ok_cookie_consent') === '1') {
+    window.__loadOwnStats();
+  }
+</script>
+<!-- /Own stats beacon -->
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -180,7 +200,7 @@
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Decline</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Accept</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Accept</button>
   </div>
 </div>
 <script>

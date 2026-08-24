@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
+# privacy-policy.pdf/cookies-policy.pdf дублируют содержимое /privacy/ и
+# /cookies/ (тот же источник, просто PDF-формат) — не индексируем дубль,
+# каноническая версия — HTML-страница. CV не блокируется, у него нет
+# HTML-двойника.
+Disallow: /documents/privacy-policy.pdf
+Disallow: /documents/cookies-policy.pdf
 
 Sitemap: https://orgculture.ru/sitemap.xml

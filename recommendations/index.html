@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css?v=29">
+<link rel="stylesheet" href="../assets/style.css?v=37">
 <link rel="manifest" href="../manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -46,6 +46,26 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
+<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
+<script type="text/javascript">
+  window.__loadOwnStats = function() {
+    if (window.__statsLoaded) return;
+    window.__statsLoaded = true;
+    try {
+      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
+      var payload = JSON.stringify({
+        path: location.pathname,
+        lang: isEn ? 'en' : 'ru',
+        ref: document.referrer || ''
+      });
+      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
+    } catch (e) {}
+  };
+  if (localStorage.getItem('ok_cookie_consent') === '1') {
+    window.__loadOwnStats();
+  }
+</script>
+<!-- /Own stats beacon -->
 </head>
 <body>
 <a href="#main" class="skip-link">Перейти к содержимому</a>
@@ -114,7 +134,7 @@
       <a class="go" href="https://vk.cc/bWvaOl" target="_blank" rel="noopener">смотреть на Beat Film Festival →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/kacheli.jpg" alt="" width="1600" height="1066" loading="lazy"></div>
+      <div class="recimg"><img src="../images/robot-kostya-1.jpg" alt="" width="790" height="527" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">Двое на качелях. Где здесь я и нужен ли я</h3>
@@ -123,7 +143,7 @@
       <a class="go" href="https://lensov-theatre.spb.ru/repertoire" target="_blank" rel="noopener">билеты и репертуар театра →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/robot-kostya-1.jpg" alt="" width="790" height="527" loading="lazy"></div>
+      <div class="recimg"><img src="../images/annette-poster.jpg" alt="" width="1600" height="1106" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">В поисках вдохновения, или Как жить среди роботов и не сойти с ума</h3>
@@ -156,7 +176,10 @@
       <a class="go" href="../texts/hod-korolevy/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/dom-radio.jpg" alt="" width="938" height="1332" loading="lazy"></div>
+      <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="364" cy="540" rx="200" ry="110"/>
+  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
+</svg></div>
       <div>
         <span class="tag">пространство</span>
         <h3 style="margin-top:8px;">Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный</h3>
@@ -165,7 +188,7 @@
       <a class="go" href="https://musicaeterna.org/ru/" target="_blank" rel="noopener">афиша musicAeterna →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/kurentzis-poster.jpg" alt="" width="600" height="480" loading="lazy"></div>
+      <div class="recimg"><img src="../images/interview-v.jpg" alt="" width="1440" height="1920" loading="lazy"></div>
       <div>
         <span class="tag">концерт</span>
         <h3 style="margin-top:8px;">Курентзис. Знал, видел, чувствовал</h3>
@@ -174,7 +197,7 @@
       <a class="go" href="https://musicaeterna.org/ru/visit/" target="_blank" rel="noopener">афиша ближайших концертов →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/annette-poster.jpg" alt="" width="1600" height="1106" loading="lazy"></div>
+      <div class="recimg"><img src="../images/medeya-poster.jpg" alt="" width="599" height="831" loading="lazy"></div>
       <div>
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Смотрящий из бездны, или «Аннетт» — серьёзный разговор, который состоялся вовремя</h3>
@@ -207,7 +230,7 @@
       <a class="go" href="../texts/gerda/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/medeya-poster.jpg" alt="" width="599" height="831" loading="lazy"></div>
+      <div class="recimg"><img src="../images/dom-radio.jpg" alt="" width="938" height="1332" loading="lazy"></div>
       <div>
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Вообще всех жалко, а по отдельности никого, или «Медея» — за нас, про нас, против нас?</h3>
@@ -216,7 +239,7 @@
       <a class="go" href="../texts/medeya/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg"><img src="../images/interview-v.jpg" alt="" width="1440" height="1920" loading="lazy"></div>
+      <div class="recimg"><img src="../images/kacheli.jpg" alt="" width="1600" height="1066" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">Интервью В, или Времена не выбирают — в них живут</h3>
@@ -225,10 +248,7 @@
       <a class="go" href="../texts/intervyu-v/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-  <ellipse cx="364" cy="540" rx="200" ry="110"/>
-  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
-</svg></div>
+      <div class="recimg"><img src="../images/kurentzis-poster.jpg" alt="" width="600" height="480" loading="lazy"></div>
       <div>
         <span class="tag">эссе</span>
         <h3 style="margin-top:8px;">Нет нужды писать</h3>
@@ -429,10 +449,7 @@
       <a class="go" href="../texts/lyubov-noe/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-  <ellipse cx="364" cy="540" rx="200" ry="110"/>
-  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
-</svg></div>
+      <div class="recimg"><img src="../images/eyforiya.jpg" alt="" width="1600" height="900" loading="lazy"></div>
       <div>
         <span class="tag">сериал</span>
         <h3 style="margin-top:8px;">«Эйфория» — сериал про наркотики, который на самом деле про непонимание</h3>
@@ -441,10 +458,7 @@
       <a class="go" href="../texts/eyforiya/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-  <ellipse cx="364" cy="540" rx="200" ry="110"/>
-  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
-</svg></div>
+      <div class="recimg"><img src="../images/za-belym-krolikom.jpg" alt="" width="1280" height="891" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">«За белым кроликом» — терапевтический эффект второго текста об одном спектакле</h3>
@@ -453,10 +467,7 @@
       <a class="go" href="../texts/za-belym-krolikom/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-  <ellipse cx="364" cy="540" rx="200" ry="110"/>
-  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
-</svg></div>
+      <div class="recimg"><img src="../images/lyubimovka-pechenkin.jpg" alt="" width="375" height="235" loading="lazy"></div>
       <div>
         <span class="tag">читка</span>
         <h3 style="margin-top:8px;">«Философы» на «Любимовке» — читка, которая не дошла до постановки</h3>
@@ -477,10 +488,7 @@
       <a class="go" href="https://musicaeterna.org/ru/" target="_blank" rel="noopener">программа musicAeterna →</a>
     </div>
     <div class="recrow">
-      <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-  <ellipse cx="364" cy="540" rx="200" ry="110"/>
-  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
-</svg></div>
+      <div class="recimg"><img src="../images/starshiy-syn.jpg" alt="" width="752" height="527" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">«Старший сын» — спектакль, которого больше нет в записи</h3>
@@ -489,10 +497,7 @@
       <a class="go" href="../texts/starshiy-syn/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-  <ellipse cx="364" cy="540" rx="200" ry="110"/>
-  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
-</svg></div>
+      <div class="recimg"><img src="../images/krolik-dzhodzho.jpg" alt="" width="960" height="540" loading="lazy"></div>
       <div>
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Кролик Джоджо» — фильм про нацизм, который понравился неожиданно сильно</h3>
@@ -501,10 +506,7 @@
       <a class="go" href="../texts/krolik-dzhodzho/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-  <ellipse cx="364" cy="540" rx="200" ry="110"/>
-  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
-</svg></div>
+      <div class="recimg"><img src="../images/dyadya-vanya-tuminas.jpg" alt="" width="800" height="533" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">«Дядя Ваня» Римаса Туминаса — спектакль, который работает даже на видео</h3>
@@ -513,10 +515,7 @@
       <a class="go" href="../texts/dyadya-vanya-tuminas/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-  <ellipse cx="364" cy="540" rx="200" ry="110"/>
-  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
-</svg></div>
+      <div class="recimg"><img src="../images/mauzer-terzopulos.jpg" alt="" width="1600" height="1067" loading="lazy"></div>
       <div>
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">«Маузер» Теодороса Терзопулоса — театр тела в прямом эфире</h3>
@@ -525,10 +524,7 @@
       <a class="go" href="../texts/mauzer-terzopulos/">читать →</a>
     </div>
     <div class="recrow">
-      <div class="recimg noimg"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-  <ellipse cx="364" cy="540" rx="200" ry="110"/>
-  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
-</svg></div>
+      <div class="recimg"><img src="../images/shum-antishum-voronovskiy.jpg" alt="" width="1600" height="900" loading="lazy"></div>
       <div>
         <span class="tag">лекция</span>
         <h3 style="margin-top:8px;">Шум и антишум — лекция Евгения Вороновского, которую понадобилось время осмыслить</h3>
@@ -598,7 +594,7 @@
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Отклонить</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Хорошо</button>
   </div>
 </div>
 <script>

@@ -89,7 +89,7 @@ TEXTS = [
     "tag": "спектакль",
     "title": "Двое на качелях. Где здесь я и нужен ли я",
     "kicker": "Отзыв, написанный не для того, чтобы порекомендовать, а чтобы отрефлексировать увиденное — по горячим следам премьеры в театре им. Ленсовета.",
-    "image": "kacheli.jpg",
+    "image": "robot-kostya-1.jpg",
     "paragraphs": [
       "Давайте договоримся так: вы прочитаете и не будете делать никаких выводов. Я очень слаб в том, чтобы рекомендовать вам смотреть этот спектакль. Даже сейчас я пишу лишь в попытке отрефлексировать и понять, а не рассказать и поделиться.",
       "Пожалуйста, примите и не судите строго. В нашей метамодернистской реальности слишком странно говорить «понравилось» — критерии этого убиты, растоптаны и интерпретируются как угодно в зависимости от ситуации.",
@@ -111,7 +111,7 @@ TEXTS = [
     "tag": "спектакль",
     "title": "В поисках вдохновения, или Как жить среди роботов и не сойти с ума",
     "kicker": "О рождении спектакля «Робот Костя» — первого в России роботического театра, где Чеховские страсти оказались подвластны и роботам.",
-    "image": "robot-kostya-1.jpg",
+    "image": "annette-poster.jpg",
     "paragraphs": [
       "Далеко не всякий может оказаться предметом искусства. При этом всё настолько зависит от обстоятельств, что при определённом свете им станет любой.",
       "В этом отчасти и есть творчество — в создании трогающих контекстов и созерцательных решений.",
@@ -169,7 +169,7 @@ TEXTS = [
     "tag": "пространство",
     "title": "Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный",
     "kicker": "С приездом Теодора Курентзиса абсолютом города стал Дом Радио. Текст о пространстве, в которое приходишь, чтобы измениться.",
-    "image": "dom-radio.jpg",
+    "image": None,
     "paragraphs": [
       "Когда-то центром притяжения была режиссура Юрия Бутусова в театре Ленсовета, теперь с приездом в наш город Теодора Курентзиса абсолютом стал Дом Радио.",
       "Вне зависимости от цели, я постоянно выхожу оттуда наполненным. Вернее так: туда я прихожу, чтобы попасть в иной мир и измениться. Не зря говорят, что театр начинается с вешалки — здесь всё начинается с двери.",
@@ -187,7 +187,7 @@ TEXTS = [
     "tag": "концерт",
     "title": "Курентзис. Знал, видел, чувствовал",
     "kicker": "Дебюсси, Равель, Стравинский и Эрик Сати в один вечер в Петербургской филармонии — и зал, переродившийся вместе с музыкой.",
-    "image": "kurentzis-poster.jpg",
+    "image": "interview-v.jpg",
     "paragraphs": [
       "Где вы были, что вы чувствовали? Нет, этот вопрос совсем неприемлем для любого концерта Курентзиса. Этого не могло быть на самом деле, но оно происходило — за пределом сознания.",
       "Проснувшись утром, я осознал: всё случившееся в филармонии вчера — правда, и она действует ещё сильнее сейчас, чем тогда.",
@@ -206,7 +206,7 @@ TEXTS = [
     "tag": "фильм",
     "title": "Смотрящий из бездны, или «Аннетт» — серьёзный разговор, который состоялся вовремя",
     "kicker": "Фильм Леоса Каракса, в котором конец истории не становится её пределом — предел каждый устанавливает сам.",
-    "image": "annette-poster.jpg",
+    "image": "medeya-poster.jpg",
     "paragraphs": [
       "Давно было пора написать, но для этого фильма нужно время.",
       "Не составит труда придумать моралистский текст о том, что герой сам виноват, — но не станет ли сопротивляться сама природа этого: ты ведь и сам не птенчик, а история далеко не так проста, как кажется на первый взгляд.",
@@ -253,7 +253,7 @@ TEXTS = [
     "tag": "фильм",
     "title": "Вообще всех жалко, а по отдельности никого, или «Медея» — за нас, про нас, против нас?",
     "kicker": "Фильм Александра Зельдовича, где слова не конкурируют с музыкой — а вопрос остаётся один: ты меня понимаешь?",
-    "image": "medeya-poster.jpg",
+    "image": "dom-radio.jpg",
     "paragraphs": [
       "Этот фильм немногословен, но слова в нём имеют не ту цену или смысл — они звучат, но многозначны.",
       "Им не нужно конкурировать с музыкой: всё лишь перебинтуется в бетон, остатки рассеются в пыль, обретая свою жизнь в гигантской песочнице.",
@@ -271,7 +271,7 @@ TEXTS = [
     "tag": "спектакль",
     "title": "Интервью В, или Времена не выбирают — в них живут",
     "kicker": "Вертинский во плоти на «7-м ярусе» Александринского театра — и вопрос о том, насколько человек беззащитен и ограничен своим телом.",
-    "image": "interview-v.jpg",
+    "image": "kacheli.jpg",
     "paragraphs": [
       "Он медленно надевает свои чулки, и ничто не должно помешать ему закончить.",
       "В спектакле Романа Кагановича «Интервью В» маэстро Вертинский явлен во плоти — в прямом и переносном смысле. Пространство зала, в котором всё происходит, столь невелико, а вымысел почувствовать легко — достаточно приложить нужный объектив.",
@@ -289,7 +289,7 @@ TEXTS = [
     "tag": "эссе",
     "title": "Нет нужды писать",
     "kicker": "О том, что искусство не всегда спасает — и о попытке просто «дальше жить».",
-    "image": None,
+    "image": "kurentzis-poster.jpg",
     "paragraphs": [
       "Я всегда думал, что искусство спасает. Но в последнее время оказалось, что нужно многое переосмыслить, чтобы принять то, что на нас навалилось.",
       "Пока сложно поменять свой дискурс, привести в порядок ментальное здоровье — и хоть что-то описать, не заходя в сошедший с ума контекст происходящего.",
@@ -567,7 +567,7 @@ TEXTS = [
     "tag": "сериал",
     "title": "«Эйфория» — сериал про наркотики, который на самом деле про непонимание",
     "kicker": "Портрет современного человека, предпочитающего электронное общение живому — и цена, которую за это платят.",
-    "image": None,
+    "image": "eyforiya.jpg",
     "paragraphs": [
       "Все мы живём в компромиссах — приходится мириться с тем, что не нравится, потому что обязательно найдётся кто-то другой, кто перечеркнёт всё к чертям. С одной стороны, такие встряски необходимы, иначе застынешь в своём выдуманном мире; с другой — сложно после них восстановиться, прийти в себя. Больно осознавать, что человек тебя не понимает и вряд ли поймёт в ближайшем будущем.",
       "Но катастрофически нужно стремиться к диалогу — иначе все мы превратимся в сообщество разрозненных квадратов: вроде и подходят друг другу, но вечно упираются в тупые углы каждого.",
@@ -583,7 +583,7 @@ TEXTS = [
     "tag": "спектакль",
     "title": "«За белым кроликом» — терапевтический эффект второго текста об одном спектакле",
     "kicker": "Пишу уже второй пост про один и тот же спектакль Ромы Кагановича — потому что проговаривать однотипные фразы про качество произведения искусства слишком пошло.",
-    "image": None,
+    "image": "za-belym-krolikom.jpg",
     "paragraphs": [
       "Здесь это происходит впервые: пишу уже второй пост про один и тот же спектакль. Это действие скорее терапевтическое — видимо, не получается держать всё внутри, есть острая необходимость высказаться. Проговаривать, как мантру, однотипные фразы про качество произведения искусства кажется пошлым и абсолютно бессмысленным; гораздо интереснее создать на его основе что-то своё — в моём случае пусть это будет текст.",
       "Я очень хорошо отношусь к малой форме: сжатый формат не даёт художнику особо распространяться и заставляет сосредоточиться на главном. Перед спектаклем «За белым кроликом», уточняя продолжительность, я даже выразил скуку по поводу часового зрелища. И снова не думал, что вплоть до следующего дня меня не будет отпускать тревожное, немного истерическое ощущение от увиденного — точнее, прочувствованного. Каждый видит по-разному, и, возможно, просто для меня открылось то, чего раньше не замечал.",
@@ -602,7 +602,7 @@ TEXTS = [
     "tag": "читка",
     "title": "«Философы» на «Любимовке» — читка, которая не дошла до постановки",
     "kicker": "В дни фестиваля молодой драматургии Театр.doc рвётся от напряжения и счастья — а лучшее из читок можно смотреть, не выезжая из своего города.",
-    "image": None,
+    "image": "lyubimovka-pechenkin.jpg",
     "paragraphs": [
       "В дни фестиваля молодой драматургии «Любимовка» Театр.doc рвётся от напряжения и счастья — там происходит очень многое. Сам я не был, но даже по хронике чувствуется вся эта нереальная атмосфера сотворчества и праздника.",
       "Туда присылают удачные и не очень тексты, но всегда любопытно погрузиться в мир человека через них — идеальные они или наивные по форме. Тем, кто в других городах, стоит следить за фестивалем на его ютуб-канале, где выложены все читки с обсуждениями, лекции и мастер-классы: уверен, там найдётся что-то по душе даже не особо подкованному в театре зрителю.",
@@ -636,7 +636,7 @@ TEXTS = [
     "tag": "спектакль",
     "title": "«Старший сын» — спектакль, которого больше нет в записи",
     "kicker": "Театр Ленсовета так и не опубликовал запись легендарной постановки Юрия Бутусова. Приходится вспоминать по видео, выложенному добрыми людьми.",
-    "image": None,
+    "image": "starshiy-syn.jpg",
     "paragraphs": [
       "Можно, я разочек проявлю слабость — никакой последний фильм не впечатлял меня так, как этот спектакль. Думал, что театр Ленсовета, особенно не заботящийся об архиве, никогда не опубликует запись «Старшего сына» Юрия Николаевича Бутусова — так, собственно, и случилось.",
       "Надеюсь, что когда-нибудь, желательно при моей жизни, там станет хорошо и тем, кто там служит постоянно, и тем, кто приходит в гости — пока перспектив не видно даже в самом далёком будущем. Поэтому приходится вспоминать спектакль по записи, выложенной добрыми людьми.",
@@ -651,7 +651,7 @@ TEXTS = [
     "tag": "фильм",
     "title": "«Кролик Джоджо» — фильм про нацизм, который понравился неожиданно сильно",
     "kicker": "Тайка Вайтити сыграл Гитлера как воображаемого друга десятилетнего мальчика — и получилась редкая удачная форма, слитая с содержанием.",
-    "image": None,
+    "image": "krolik-dzhodzho.jpg",
     "paragraphs": [
       "Накликал, как говорится: Тайка Вайтити снял фильм, который мне очень сильно понравился — и он про нацизм.",
       "«Кролик Джоджо» — тот случай, когда очень удачная форма эффектно сплелась с содержанием. Вроде бы обычная драма о взрослении в условиях тотального контроля и подчинения. В первой половине фильма меня не отпускала мысль, что Вайтити решил снять учебник по созданию крепкой идеологии — ведь он сам сыграл Гитлера, который появляется не как грозный повелитель всего земного шара, а как воображаемый друг-помощник десятилетнего мальчика Джоджо.",
@@ -667,7 +667,7 @@ TEXTS = [
     "tag": "спектакль",
     "title": "«Дядя Ваня» Римаса Туминаса — спектакль, который работает даже на видео",
     "kicker": "Десять лет прошло с премьеры, приёмы уже смотрятся архаично — а катарсис всё равно случается, даже через экран.",
-    "image": None,
+    "image": "dyadya-vanya-tuminas.jpg",
     "paragraphs": [
       "Жестокая боль, её переживание, а порой лишь фантомы и придумки — вот что чаще всего формирует самые сильные произведения искусства. Кажется, важное часто рождается в бесконечной борьбе с собой и саморефлексии — но это нужно снова и снова проговаривать, потому что не всегда получается держать всё внутри. Нужен эвакуационный выход, куда можно случайно вбежать и хоть раз пройти немного по-другому.",
       "Услышать голос чаек и хоть ненадолго заглушить бесконечное нытьё о лучшей жизни, которое никогда не кончится — и от этого не легче, вечно приходится с ним бороться и идти вперёд, потому что сам себе не позволишь, сам от себя не убежишь. Рано или поздно всё настигнет, и неясно, станет ли от этого лучше.",
@@ -683,7 +683,7 @@ TEXTS = [
     "tag": "спектакль",
     "title": "«Маузер» Теодороса Терзопулоса — театр тела в прямом эфире",
     "kicker": "Александринский показал премьеру онлайн — и это на 180 градусов повернуло представление о театре на видео. Понимания хватило процентов на двадцать, но и этого достаточно.",
-    "image": None,
+    "image": "mauzer-terzopulos.jpg",
     "paragraphs": [
       "Слава богу, не начал жаловаться, что в трансляциях не хватает погружения и включённости. Сегодня Александринский показал премьеру Теодороса Терзопулоса в прямом эфире и на сто восемьдесят градусов повернул моё представление о театре на видео.",
       "Красивые крупные планы, необычный дыхательный способ существования актёров на сцене — не представляю, как это удалось, но особо не нужно было следить за тем, что они говорят: невидимая сила удерживает внимание на экране.",
@@ -698,7 +698,7 @@ TEXTS = [
     "tag": "лекция",
     "title": "Шум и антишум — лекция Евгения Вороновского, которую понадобилось время осмыслить",
     "kicker": "О физике звука, ставшей формой искусства — и о пространстве, которое невозможно просто скачать: только впустить в себя и прочувствовать.",
-    "image": None,
+    "image": "shum-antishum-voronovskiy.jpg",
     "paragraphs": [
       "Вы, наверное, почувствовали: в окне и за окном стало слишком шумно от всего мусора, что выливается далеко за пределы — будто нас нарочно взбудоражили, чтобы мы не расслаблялись и хоть на секунду задумались. Но нет — все мы только и можем, что переходить в онлайн, устраивая бесконечные обсуждения ни о чём, прерываясь на смайлик в конце.",
       "Настало время это опубликовать. Лекция прошла ещё в январе, но потребность рассказать о ней возникла именно сейчас — важно понять, насколько весь этот поток на нас влияет; что с ним делать и как себя обезопасить, всё равно неясно, каждый решает сам.",
@@ -752,7 +752,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 29
+SITE_VERSION = 37
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -760,7 +760,7 @@ SITE_VERSION = 29
 # сборки сайта, а не дата конкретного текста — честнее, чем не иметь
 # lastmod вообще, но не путать одно с другим. Бампать вручную вместе с
 # SITE_VERSION при каждой пересборке.
-BUILD_DATE = "2026-08-06"
+BUILD_DATE = "2026-08-24"
 
 # Натуральные размеры картинок из images/ — только для атрибутов width/height
 # у <img> (чтобы браузер резервировал место и не прыгала вёрстка при
@@ -778,6 +778,14 @@ IMAGE_DIMS = {
     "og-default.jpg": (1200, 630),
     "robot-kostya-1.jpg": (790, 527),
     "robot-kostya-2.jpg": (1600, 1068),
+    "shum-antishum-voronovskiy.jpg": (1600, 900),
+    "mauzer-terzopulos.jpg": (1600, 1067),
+    "dyadya-vanya-tuminas.jpg": (800, 533),
+    "krolik-dzhodzho.jpg": (960, 540),
+    "starshiy-syn.jpg": (752, 527),
+    "lyubimovka-pechenkin.jpg": (375, 235),
+    "za-belym-krolikom.jpg": (1280, 891),
+    "eyforiya.jpg": (1600, 900),
 }
 
 def img_dims_attr(filename):
@@ -801,6 +809,20 @@ def link_label_with_meta_note(label, url):
 # про отзывы), а не отдельным литералом: раньше здесь и там был один и тот
 # же юзернейм продублирован дважды, и обновить пришлось бы в двух местах.
 BOT_URL = f"https://t.me/{BOT_USERNAME}"
+
+# Адрес того же Cloudflare Worker, что и бот (см. 04-bot/) — не t.me-ссылка
+# для человека, а HTTP-адрес самого воркера. От него строятся все три пути,
+# которые использует сайт: /track (анонимный маячок о просмотре, см.
+# own_stats_snippet), /reviews (живая отдача уже опубликованных отзывов
+# без пересборки сайта, см. reviews_live_fetch_snippet) и /submit-review
+# (форма отзыва прямо на странице текста, см. review_form_snippet).
+# ⚠️ ЗАМЕНИТЬ после деплоя воркера на реальный адрес — Cloudflare даёт его
+# в виде https://<имя-воркера>.<твой-аккаунт>.workers.dev сразу после
+# первого Deploy (см. 04-bot/README.md, Шаг 3). До замены все три канала
+# просто не работают — сайт при этом не ломается (везде try/catch,
+# fetch-ошибки проглатываются молча, см. сниппеты ниже).
+WORKER_BASE = "https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev"
+STATS_ENDPOINT = f"{WORKER_BASE}/track"
 
 # Счётчик Яндекс.Метрики. Сайт нормально работает и без него — просто
 # впиши номер сюда числом (без кавычек) и пересобери сайт (python3 gen.py).
@@ -834,6 +856,46 @@ def yandex_metrika_snippet():
   }}
 </script>
 <!-- /Yandex.Metrika counter -->
+'''
+
+def own_stats_snippet():
+    """Анонимный "маячок" о просмотре страницы — на тот же Worker, что
+    обслуживает бота (см. 04-bot/worker.js, обработчик /track). Не
+    сторонний сервис (в отличие от Яндекс.Метрики) — данные идут только
+    на инфраструктуру автора сайта, не передаются никому третьему.
+
+    Устроено так же, как __loadYandexMetrika (см. выше): не запускается
+    автоматически, только по тому же согласию на cookie (хотя сам маячок
+    cookie не ставит — см. cookies-policy.pdf, там это оговорено отдельно;
+    решили не заводить для него отдельного, второго баннера согласия —
+    один и тот же "Хорошо" в баннере включает обе статистики разом,
+    так проще и для пользователя, и для поддержки этого кода).
+
+    Формат данных: {path, lang, ref} — путь страницы, язык, источник
+    перехода (document.referrer). Никаких идентификаторов пользователя,
+    никакого IP на уровне payload (Cloudflare видит IP на уровне
+    соединения технически неизбежно, как любой хостинг — но воркер его
+    никуда не пишет и не использует, см. 04-bot/worker.js)."""
+    return f'''<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
+<script type="text/javascript">
+  window.__loadOwnStats = function() {{
+    if (window.__statsLoaded) return;
+    window.__statsLoaded = true;
+    try {{
+      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
+      var payload = JSON.stringify({{
+        path: location.pathname,
+        lang: isEn ? 'en' : 'ru',
+        ref: document.referrer || ''
+      }});
+      navigator.sendBeacon('{STATS_ENDPOINT}', new Blob([payload], {{type: 'text/plain'}}));
+    }} catch (e) {{}}
+  }};
+  if (localStorage.getItem('ok_cookie_consent') === '1') {{
+    window.__loadOwnStats();
+  }}
+</script>
+<!-- /Own stats beacon -->
 '''
 
 def page_head(title, description, depth=0, og_image=None, path="", lang="ru"):
@@ -880,7 +942,7 @@ def page_head(title, description, depth=0, og_image=None, path="", lang="ru"):
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/style.css?v={SITE_VERSION}">
 <link rel="manifest" href="{manifest_href}">
-{yandex_metrika_snippet()}</head>
+{yandex_metrika_snippet()}{own_stats_snippet()}</head>
 <body>
 <a href="#main" class="skip-link">{skip_text}</a>
 '''
@@ -1030,7 +1092,7 @@ def footer(depth=0, lang="ru"):
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">{decline_label}</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">{accept_label}</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">{accept_label}</button>
   </div>
 </div>
 <script>
@@ -1080,6 +1142,34 @@ def build_index():
     latest = TEXTS[:6]
     rec_with_link = [t for t in TEXTS if t["link"]][:3]
 
+    index_schema = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": f"{SITE_DOMAIN}/#website",
+                "url": f"{SITE_DOMAIN}/",
+                "name": "Организованная Культурность",
+                "description": "Тексты о фильмах, спектаклях, музыке и людях — и продюсирование, продвижение культурных и арт-проектов.",
+                "inLanguage": "ru-RU",
+                "author": {"@id": f"{SITE_DOMAIN}/about/#person"},
+            },
+            {
+                "@type": "Person",
+                "@id": f"{SITE_DOMAIN}/about/#person",
+                "name": "Константин Мошников",
+                "url": f"{SITE_DOMAIN}/about/",
+                "jobTitle": "Продюсер, продвижение культурных проектов; артист цирка",
+                "sameAs": [
+                    "https://t.me/orgculture",
+                    "https://vk.ru/orgculture",
+                    "https://aelita-production.ru",
+                ],
+            },
+        ],
+    }
+    index_schema_html = f'<script type="application/ld+json">{json.dumps(index_schema, ensure_ascii=False)}</script>'
+
     rec_html = ""
     for t in rec_with_link:
         if t["image"]:
@@ -1096,6 +1186,7 @@ def build_index():
     </a>'''
 
     body = f'''
+{index_schema_html}
 {header(0, relpath="")}
 <div class="hero wrap">
   <div class="mark">{LOGO_MARK_SVG}</div>
@@ -1104,7 +1195,7 @@ def build_index():
   <p class="lede">Пространство для рождения смыслов и новых значений. Тексты о фильмах, спектаклях, музыке и людях — написанные не для того, чтобы порекомендовать, а чтобы отрефлексировать.</p>
   <div class="hero-ctas">
     <a class="btn-line" href="texts/">Читать тексты</a>
-    <a class="btn-line btn-line-ghost" href="about/#collab">Продюсирование и продвижение</a>
+    <a class="btn-line btn-line-ghost" href="production/">Продюсирование и продвижение</a>
   </div>
 </div>
 
@@ -1321,9 +1412,23 @@ def build_text_page(t, idx):
   </div>
 </div>'''
 
-    # Отзывы — публикуются через бота с модерацией (см. 04-bot/README.md).
-    # reviews.json пуст для большинства текстов первое время — это нормально,
-    # блок в любом случае показывает призыв оставить первый отзыв.
+    # Отзывы — три независимых источника, все ведут в одну и ту же
+    # модерацию у тебя в Telegram:
+    #  1. reviews.json (этот файл, читает REVIEWS выше) — отрисовывается
+    #     на сервере при сборке, попадает в статический HTML. Работает
+    #     без JS, хорошо для SEO, но отстаёт от реальности до следующей
+    #     пересборки (пуш в GitHub → Pages).
+    #  2. Живая подгрузка (review_live_fetch) — JS на странице спрашивает
+    #     у воркера /reviews?slug=... то, что реально лежит в KV прямо
+    #     сейчас, и дорисовывает то, чего ещё нет в статике. Требует JS,
+    #     но не ждёт пересборки — отзыв виден сразу после того, как ты
+    #     нажал «Опубликовать» в боте.
+    #  3. Форма на странице (review_form) — альтернатива боту, не замена:
+    #     POST на /submit-review, тот же путь модерации, что и у бота
+    #     (см. forwardWebReviewToAdmin в 04-bot/worker.js).
+    # Идея живой подгрузки и формы на странице — по образцу
+    # _tools/Reviews в паке AELITA (там Google-таблица вместо KV, но
+    # тот же принцип: модерация → сразу видно на сайте, без пересборки).
     existing_reviews = REVIEWS.get(t["slug"], [])
     reviews_items_html = "".join(
         f'''<div class="review-item">
@@ -1333,15 +1438,94 @@ def build_text_page(t, idx):
         for r in existing_reviews
     )
     review_deep_link = f"https://t.me/{BOT_USERNAME}?start=review_{t['slug']}"
+    slug_json = json.dumps(t["slug"])
+    static_count_json = json.dumps(len(existing_reviews))
+    worker_base_json = json.dumps(WORKER_BASE)
     reviews_block = f'''<div class="wrap" style="padding:56px 0 0;">
   <div class="reviews-block">
-    {'<h2>Отзывы</h2>' + reviews_items_html if existing_reviews else ''}
+    <div id="review-list">
+      {'<h2>Отзывы</h2>' + reviews_items_html if existing_reviews else ''}
+    </div>
     <div class="review-cta">
       <p>Что думаете об этом тексте?</p>
-      <a class="btn-line" href="{review_deep_link}" target="_blank" rel="noopener">Оставить отзыв в Telegram</a>
+      <div class="review-cta-buttons">
+        <button type="button" class="btn-line" id="review-toggle-form">Оставить отзыв</button>
+        <a class="btn-line btn-line-ghost" href="{review_deep_link}" target="_blank" rel="noopener">через Telegram</a>
+      </div>
+      <div class="review-form" id="review-form" hidden>
+        <input type="text" id="review-name" class="review-form-input" placeholder="Имя (необязательно)">
+        <textarea id="review-text" class="review-form-textarea" placeholder="Ваш отзыв…" rows="4"></textarea>
+        <input type="text" id="review-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="button" class="btn-line" id="review-submit">Отправить</button>
+        <p class="review-form-status" id="review-form-status"></p>
+      </div>
     </div>
   </div>
-</div>'''
+</div>
+<script>
+(function(){{
+  var SLUG = {slug_json}, API = {worker_base_json}, STATIC_COUNT = {static_count_json};
+  var listEl = document.getElementById('review-list');
+
+  function reviewCard(r) {{
+    var div = document.createElement('div'); div.className = 'review-item';
+    var p = document.createElement('p'); p.textContent = r.text;
+    var meta = document.createElement('div'); meta.className = 'review-meta';
+    meta.textContent = (r.name || 'Аноним') + ' · ' + (r.date || '');
+    div.appendChild(p); div.appendChild(meta);
+    return div;
+  }}
+
+  fetch(API + '/reviews?slug=' + encodeURIComponent(SLUG)).then(function(r) {{
+    return r.ok ? r.json() : null;
+  }}).then(function(data) {{
+    if (!data || !data.reviews) return;
+    var extra = data.reviews.slice(STATIC_COUNT);
+    if (!extra.length) return;
+    if (!listEl.querySelector('h2')) {{
+      var h2 = document.createElement('h2'); h2.textContent = 'Отзывы';
+      listEl.insertBefore(h2, listEl.firstChild);
+    }}
+    extra.forEach(function(r) {{ listEl.appendChild(reviewCard(r)); }});
+  }}).catch(function() {{}});
+
+  var toggleBtn = document.getElementById('review-toggle-form');
+  var formEl = document.getElementById('review-form');
+  var submitBtn = document.getElementById('review-submit');
+  var statusEl = document.getElementById('review-form-status');
+  toggleBtn.addEventListener('click', function() {{
+    formEl.hidden = !formEl.hidden;
+    toggleBtn.style.display = formEl.hidden ? '' : 'none';
+  }});
+  submitBtn.addEventListener('click', function() {{
+    var text = document.getElementById('review-text').value.trim();
+    if (!text) {{ statusEl.textContent = 'Напишите текст отзыва.'; return; }}
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Отправляю…';
+    fetch(API + '/submit-review', {{
+      method: 'POST',
+      headers: {{'Content-Type': 'application/json'}},
+      body: JSON.stringify({{
+        slug: SLUG,
+        name: document.getElementById('review-name').value,
+        text: text,
+        website: document.getElementById('review-website').value,
+      }}),
+    }}).then(function(r) {{ return r.json().catch(function() {{ return {{ ok: false }}; }}); }})
+      .then(function(data) {{
+        if (data && data.ok) {{
+          formEl.innerHTML = '<p class="review-form-status">Спасибо! Отзыв отправлен на модерацию.</p>';
+        }} else {{
+          statusEl.textContent = 'Не получилось отправить — попробуйте через Telegram.';
+          submitBtn.disabled = false;
+        }}
+      }}).catch(function() {{
+        statusEl.textContent = 'Не получилось отправить — попробуйте через Telegram.';
+        submitBtn.disabled = false;
+      }});
+  }});
+}})();
+</script>'''
 
     schema = {
         "@context": "https://schema.org",
@@ -1605,6 +1789,24 @@ CV_ROLES = [
 ]
 
 def build_about():
+    about_schema = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "@id": f"{SITE_DOMAIN}/about/#person",
+        "name": "Константин Мошников",
+        "url": f"{SITE_DOMAIN}/about/",
+        "image": f"{SITE_DOMAIN}/images/author.jpg",
+        "jobTitle": "Продюсер, продвижение культурных проектов; артист цирка",
+        "email": "kostyamoshnikov@gmail.com",
+        "telephone": "+7 904 617-01-88",
+        "sameAs": [
+            "https://t.me/orgculture",
+            "https://vk.ru/orgculture",
+            "https://aelita-production.ru",
+        ],
+    }
+    about_schema_html = f'<script type="application/ld+json">{json.dumps(about_schema, ensure_ascii=False)}</script>'
+
     roles_html = ""
     for r in CV_ROLES:
         bullets = "".join(f"<li>{html.escape(b)}</li>" for b in r["bullets"])
@@ -1617,6 +1819,7 @@ def build_about():
     '''
 
     body = f'''
+{about_schema_html}
 {header(1, "about", relpath="about/")}
 <section style="padding-top:64px;">
   <div class="wrap-wide about-grid">
@@ -1678,6 +1881,87 @@ def proj_card(pr, depth):
       <h3>{html.escape(pr['title'])}</h3>
       <p>{html.escape(pr['kicker'])}</p>
     </a>'''
+
+# ---------------------------------------------------------------
+# PRODUCTION page — коммерческое предложение
+# ---------------------------------------------------------------
+# Раньше кнопка «Продюсирование и продвижение» на главной вела на
+# about/#collab — но на /about/ никогда не было элемента с id="collab"
+# (там нет ни слова про услуги, только био и CV), collab_box() рендерится
+# только на /projects/ — так что якорь физически ни на что не указывал,
+# просто открывал верх страницы с био. Человек нажимал кнопку про услуги
+# и попадал на фотографию и биографию — что и разбиралось как проблема.
+#
+# Теперь /production/ — самостоятельная страница-предложение: что делаю,
+# для кого, примеры (карточки из PROJECTS, тот же proj_card()), кто
+# делает — с ссылкой на /about/ за полной биографией и CV, а не сама био
+# как отправная точка. Тот самый принцип «био — отросток КП, не КП сама
+# по себе», как и просили. Использует proj_card()/collab_box() — поэтому
+# определена здесь, а не раньше по файлу, где их ещё не существует.
+
+def build_production():
+    example_slugs = ["aelita-production", "bufest", "robot-kostya-project"]
+    examples = [p for p in PROJECTS if p["slug"] in example_slugs]
+    cards_html = "".join(proj_card(pr, 1) for pr in examples)
+
+    body = f'''
+{header(1, "", relpath="production/")}
+<section style="padding-top:64px;">
+  <div class="wrap">
+    <div class="eyebrow">Продюсирование и продвижение</div>
+    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">Довожу культурные и арт-проекты от идеи до зрителя</h1>
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:12px;">
+      Более 15 лет на сцене — в цирке, в театре. Знаю индустрию изнутри и понимаю её механику на каждом уровне: от площадки и логистики до того, как удержать внимание зрителя после анонса.
+    </p>
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:44px;">
+      Работаю с театральными и арт-проектами — фестивалями, спектаклями, независимыми командами, которым важна такая же внимательность к деталям, с какой пишутся тексты на этом сайте.
+    </p>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:0 0 28px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
+    <div class="eyebrow" style="margin-bottom:20px;">Что делаю</div>
+    <div class="prod-services">
+      <div class="prod-service">
+        <h3>Продюсирование</h3>
+        <p>От концепции до выпуска: бюджет, площадка, команда, логистика, дедлайны. Беру на себя организационную часть, чтобы у постановки было пространство остаться творческой.</p>
+      </div>
+      <div class="prod-service">
+        <h3>Продвижение</h3>
+        <p>SMM, коммуникация с площадками и партнёрами, работа с прессой и блогерами. Не разовая реклама, а последовательное присутствие — от анонса до архива после показов.</p>
+      </div>
+      <div class="prod-service">
+        <h3>Сайты</h3>
+        <p>Отдельный сайт под проект или фестиваль — когда одной страницы в соцсети недостаточно: программа, билеты, пресс-кит, архив в одном месте.</p>
+      </div>
+    </div>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
+    <div class="eyebrow" style="margin-bottom:20px;">Примеры</div>
+  </div>
+  <div class="wrap-wide">
+    <div class="grid">
+      {cards_html}
+    </div>
+    <p style="text-align:center;margin-top:28px;"><a class="btn-line" href="../projects/">Все проекты →</a></p>
+  </div>
+  <div class="wrap">
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
+    <div class="eyebrow" style="margin-bottom:16px;">Кто делает</div>
+    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:20px;">
+      Константин Мошников — продюсер и артист цирка. Соучредитель AELITA PRODUCTION, организатор фестиваля БуФест, автор «Организованной Культурности».
+    </p>
+    <p style="margin-bottom:52px;"><a class="btn-line" href="../about/">Полная биография и CV →</a></p>
+
+    {collab_box()}
+  </div>
+</section>
+{footer(1)}
+'''
+    return page_head("Продюсирование и продвижение — Организованная Культурность", "Продюсирование, продвижение и сайты для театральных и арт-проектов. Более 15 лет в индустрии — от концепции до зрителя.", 1, path="production/") + body
+
+os.makedirs(os.path.join(ROOT, "production"), exist_ok=True)
+with open(os.path.join(ROOT, "production", "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_production())
+print("production/index.html written")
 
 def build_projects_index():
     body = f'''
@@ -2003,7 +2287,7 @@ def build_sitemap():
     # обновлялся при добавлении текстов — при следующем тексте список
     # снова придётся дописывать руками. Теперь пересобирается на каждый
     # запуск gen.py из тех же списков, что и сам сайт, плюс lastmod.
-    core_paths = ["", "manifesto/", "texts/", "projects/", "recommendations/",
+    core_paths = ["", "manifesto/", "texts/", "projects/", "production/", "recommendations/",
                   "about/", "privacy/", "bot-rules/", "cookies/"]
     paths = list(core_paths)
     paths += [f"texts/{t['slug']}/" for t in TEXTS]

@@ -21,12 +21,12 @@
 <meta property="og:url" content="https://orgculture.ru/en/texts/shum-antishum-voronovskiy/">
 <meta property="og:site_name" content="Organized Culturality">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
+<meta property="og:image" content="https://orgculture.ru/images/shum-antishum-voronovskiy.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../assets/style.css?v=29">
+<link rel="stylesheet" href="../../../assets/style.css?v=37">
 <link rel="manifest" href="../../../en/manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -46,11 +46,31 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
+<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
+<script type="text/javascript">
+  window.__loadOwnStats = function() {
+    if (window.__statsLoaded) return;
+    window.__statsLoaded = true;
+    try {
+      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
+      var payload = JSON.stringify({
+        path: location.pathname,
+        lang: isEn ? 'en' : 'ru',
+        ref: document.referrer || ''
+      });
+      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
+    } catch (e) {}
+  };
+  if (localStorage.getItem('ok_cookie_consent') === '1') {
+    window.__loadOwnStats();
+  }
+</script>
+<!-- /Own stats beacon -->
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
 
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Noise and Anti-Noise — Evgeny Voronovsky's Lecture, Which Needed Time to Land", "description": "On the physics of sound turned into a form of art — and on a place you can't download, only walk into and feel.", "author": {"@type": "Person", "name": "Konstantin Moshnikov"}, "publisher": {"@type": "Organization", "name": "Organized Culturality"}, "mainEntityOfPage": "https://orgculture.ru/en/texts/shum-antishum-voronovskiy/", "inLanguage": "en"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Noise and Anti-Noise — Evgeny Voronovsky's Lecture, Which Needed Time to Land", "description": "On the physics of sound turned into a form of art — and on a place you can't download, only walk into and feel.", "author": {"@type": "Person", "name": "Konstantin Moshnikov"}, "publisher": {"@type": "Organization", "name": "Organized Culturality"}, "mainEntityOfPage": "https://orgculture.ru/en/texts/shum-antishum-voronovskiy/", "inLanguage": "en", "image": "https://orgculture.ru/images/shum-antishum-voronovskiy.jpg"}</script>
 <header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
   <div class="headbar">
@@ -99,7 +119,7 @@
   <h1 style="margin-top:16px;">Noise and Anti-Noise — Evgeny Voronovsky&#x27;s Lecture, Which Needed Time to Land</h1>
   <p class="kicker">On the physics of sound turned into a form of art — and on a place you can&#x27;t download, only walk into and feel.</p>
 </div>
-
+<div class="wrap-wide"><div class="text-heroimg"><img src="../../../images/shum-antishum-voronovskiy.jpg" alt="Noise and Anti-Noise — Evgeny Voronovsky&#x27;s Lecture, Which Needed Time to Land" width="1600" height="900"></div></div>
 <div class="text-body wrap">
   <p>You&#x27;ll have felt it: it&#x27;s got too loud, inside the window and outside it, from all the rubbish spilling well past its own edges — as though we&#x27;re being stirred up deliberately so that we won&#x27;t settle and think for a second. And we don&#x27;t; the most we manage is to move it online, running endless discussions about nothing and signing off with an emoji.</p>
       <p>Time to publish this at last. The lecture was back in January and the wish to write about it has only arrived now — it feels important to understand how much all of that stream is doing to us. What to do about it, and how to protect yourself, is still unclear; everyone works that out alone.</p>
@@ -122,14 +142,14 @@
         <p>Elia Suleiman made a film whose hero changes almost nothing — which is exactly what leaves you alone with your own conclusions.</p>
       </div>
     </a><a class="card" href="../../../en/texts/dvoe-na-kachelyah/" data-tag="Play">
-      <div class="thumb"><img src="../../../images/kacheli.jpg" alt="Two on a Swing: Where Am I in This, and Am I Wanted" width="1600" height="1066" loading="lazy"></div>
+      <div class="thumb"><img src="../../../images/robot-kostya-1.jpg" alt="Two on a Swing: Where Am I in This, and Am I Wanted" width="790" height="527" loading="lazy"></div>
       <div class="body">
         <span class="tag">Play</span>
         <h3>Two on a Swing: Where Am I in This, and Am I Wanted</h3>
         <p>Not a recommendation but an attempt to think it through — written straight after the run at the Lensoviet Theatre.</p>
       </div>
     </a><a class="card" href="../../../en/texts/robot-kostya/" data-tag="Play">
-      <div class="thumb"><img src="../../../images/robot-kostya-1.jpg" alt="Looking for Inspiration, or How to Live Among Robots and Keep Your Head" width="790" height="527" loading="lazy"></div>
+      <div class="thumb"><img src="../../../images/annette-poster.jpg" alt="Looking for Inspiration, or How to Live Among Robots and Keep Your Head" width="1600" height="1106" loading="lazy"></div>
       <div class="body">
         <span class="tag">Play</span>
         <h3>Looking for Inspiration, or How to Live Among Robots and Keep Your Head</h3>
@@ -139,13 +159,89 @@
 </div>
 <div class="wrap" style="padding:56px 0 0;">
   <div class="reviews-block">
-    
+    <div id="review-list">
+      
+    </div>
     <div class="review-cta">
       <p>What did you think of this text?</p>
-      <a class="btn-line" href="https://t.me/orgculture_bot?start=review_shum-antishum-voronovskiy" target="_blank" rel="noopener">Leave a review on Telegram</a>
+      <div class="review-cta-buttons">
+        <button type="button" class="btn-line" id="review-toggle-form">Leave a review</button>
+        <a class="btn-line btn-line-ghost" href="https://t.me/orgculture_bot?start=review_shum-antishum-voronovskiy" target="_blank" rel="noopener">on Telegram</a>
+      </div>
+      <div class="review-form" id="review-form" hidden>
+        <input type="text" id="review-name" class="review-form-input" placeholder="Name (optional)">
+        <textarea id="review-text" class="review-form-textarea" placeholder="Your review…" rows="4"></textarea>
+        <input type="text" id="review-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="button" class="btn-line" id="review-submit">Send</button>
+        <p class="review-form-status" id="review-form-status"></p>
+      </div>
     </div>
   </div>
 </div>
+<script>
+(function(){
+  var SLUG = "shum-antishum-voronovskiy", API = "https://orgculture-bot.\u0417\u0410\u041c\u0415\u041d\u0418-\u041d\u0410-\u0421\u0412\u041e\u0419-\u0410\u041a\u041a\u0410\u0423\u041d\u0422.workers.dev", STATIC_COUNT = 0;
+  var listEl = document.getElementById('review-list');
+
+  function reviewCard(r) {
+    var div = document.createElement('div'); div.className = 'review-item';
+    var p = document.createElement('p'); p.textContent = r.text;
+    var meta = document.createElement('div'); meta.className = 'review-meta';
+    meta.textContent = (r.name || 'Anonymous') + ' · ' + (r.date || '');
+    div.appendChild(p); div.appendChild(meta);
+    return div;
+  }
+
+  fetch(API + '/reviews?slug=' + encodeURIComponent(SLUG)).then(function(r) {
+    return r.ok ? r.json() : null;
+  }).then(function(data) {
+    if (!data || !data.reviews) return;
+    var extra = data.reviews.slice(STATIC_COUNT);
+    if (!extra.length) return;
+    if (!listEl.querySelector('h2')) {
+      var h2 = document.createElement('h2'); h2.textContent = 'Reviews';
+      listEl.insertBefore(h2, listEl.firstChild);
+    }
+    extra.forEach(function(r) { listEl.appendChild(reviewCard(r)); });
+  }).catch(function() {});
+
+  var toggleBtn = document.getElementById('review-toggle-form');
+  var formEl = document.getElementById('review-form');
+  var submitBtn = document.getElementById('review-submit');
+  var statusEl = document.getElementById('review-form-status');
+  toggleBtn.addEventListener('click', function() {
+    formEl.hidden = !formEl.hidden;
+    toggleBtn.style.display = formEl.hidden ? '' : 'none';
+  });
+  submitBtn.addEventListener('click', function() {
+    var text = document.getElementById('review-text').value.trim();
+    if (!text) { statusEl.textContent = 'Please write your review first.'; return; }
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Sending…';
+    fetch(API + '/submit-review', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        slug: SLUG,
+        name: document.getElementById('review-name').value,
+        text: text,
+        website: document.getElementById('review-website').value,
+      }),
+    }).then(function(r) { return r.json().catch(function() { return { ok: false }; }); })
+      .then(function(data) {
+        if (data && data.ok) {
+          formEl.innerHTML = '<p class="review-form-status">Thank you! Your review has been sent for moderation.</p>';
+        } else {
+          statusEl.textContent = "Couldn't send it — try Telegram instead.";
+          submitBtn.disabled = false;
+        }
+      }).catch(function() {
+        statusEl.textContent = "Couldn't send it — try Telegram instead.";
+        submitBtn.disabled = false;
+      });
+  });
+})();
+</script>
 <div class="wrap" style="padding:56px 0 0;">
   <div class="collab-box" style="text-align:center;">
     <p style="margin-bottom:22px;">New texts go out on the Telegram channel — no algorithm, no feed.</p>
@@ -216,7 +312,7 @@
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Decline</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Accept</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Accept</button>
   </div>
 </div>
 <script>
