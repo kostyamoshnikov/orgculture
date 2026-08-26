@@ -1,13 +1,11 @@
-// ── Организованная Культурность · Service Worker ─────────────────
-// Стратегия: Cache First для статики, Network First для HTML страниц
-// (тот же проверенный подход, что и на aelita-production.ru)
+// ── Organized Culturality · Service Worker (RU + EN) ─────────────────────
+// Стратегия: Cache First для статики, Network First для HTML страниц.
+// Офлайн-фолбэк выбирается по префиксу /en/ в пути запроса.
 //
-// ⚠️ При каждой правке сайта (новый orgculture-vN) — бампать SITE_VERSION
-// в gen.py на тот же N и пересобирать сайт: это одновременно поднимает
-// ?v=N у style.css и версию кэша здесь. Без этого вернувшиеся пользователи
-// могут долго видеть старые стили из-за cache-first стратегии.
+// ⚠️ Этот файл пересобирается в gen_en.py (после gen.py) — не правьте версию
+// в gen.py изолированно: список PRECACHE_URLS здесь включает оба языка.
 
-const SITE_VERSION = 37;
+const SITE_VERSION = 40;
 const CACHE_NAME = `orgculture-v${SITE_VERSION}`;
 const STATIC_CACHE = `orgculture-static-v${SITE_VERSION}`;
 
@@ -21,12 +19,23 @@ const PRECACHE_URLS = [
   '/privacy/',
   '/cookies/',
   '/bot-rules/',
+  '/en/',
+  '/en/manifesto/',
+  '/en/texts/',
+  '/en/projects/',
+  '/en/recommendations/',
+  '/en/about/',
+  '/en/privacy/',
+  '/en/cookies/',
+  '/en/bot-rules/',
   '/offline.html',
+  '/en/offline.html',
   '/manifest.json',
+  '/en/manifest.json',
   '/assets/icons/favicon.svg',
   '/assets/icons/favicon-192.png',
   '/assets/icons/favicon-512.png',
-  '/assets/style.css?v=37'
+  '/assets/style.css?v=40'
 ];
 
 self.addEventListener('install', event => {
@@ -88,8 +97,14 @@ async function networkFirst(request) {
     const cached = await cache.match(request);
     if (cached) return cached;
     if (request.headers.get('accept')?.includes('text/html')) {
-      return cache.match('/offline.html') || new Response(
-        '<html><body style="background:#0A0A0A;color:#F5F2ED;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center"><div><h1 style="font-weight:300;">Организованная Культурность</h1><p style="color:#9A968E;">Нет подключения к интернету</p></div></body></html>',
+      const url = new URL(request.url);
+      const isEn = url.pathname.startsWith('/en/');
+      const fallback = await cache.match(isEn ? '/en/offline.html' : '/offline.html');
+      if (fallback) return fallback;
+      const title = isEn ? 'Organized Culturality' : 'Организованная Культурность';
+      const msg = isEn ? 'No internet connection' : 'Нет подключения к интернету';
+      return new Response(
+        `<html><body style="background:#0A0A0A;color:#F5F2ED;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center"><div><h1 style="font-weight:300;">${title}</h1><p style="color:#9A968E;">${msg}</p></div></body></html>`,
         { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
       );
     }

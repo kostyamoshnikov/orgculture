@@ -46,6 +46,17 @@ if not os.path.isfile('texts_en.json'):
 TEXTS_EN = json.load(open('texts_en.json', encoding='utf-8'))
 en_by_slug = {t['slug']: t for t in TEXTS_EN}
 
+# ⚠️ gen.py выше — побочный эффект (нужен только TEXTS_RU для сравнения) —
+# только что перезаписал sitemap.xml/sw.js RU-only версией. Если этот
+# скрипт запустить ПОСЛЕ gen_en.py (а именно так написано в README, шаг 7
+# «Проверка после правок»), то без строки ниже check_en.py сам бы тихо
+# откатывал EN-слой (hreflang в sitemap, /en/ в precache sw.js), который
+# только что собрал gen_en.py — проверка чистоты ломала бы то, что должна
+# проверять. Баг найден и исправлен 25.08.2026 (см. историю v40) — раньше
+# это давало ложно-чистый результат, потому что check 4c ниже сравнивал
+# ru_count==en_count, а 0==0 тоже проходит эту проверку.
+runpy.run_path('gen_en.py')
+
 glossary = {}
 if os.path.isfile('glossary_en.json'):
     glossary = json.load(open('glossary_en.json', encoding='utf-8'))
@@ -141,6 +152,22 @@ def check_integrity():
         en_count = sm.count('hreflang="en"')
         if ru_count != en_count:
             issue('integrity', f'sitemap.xml: {ru_count} hreflang="ru" vs {en_count} hreflang="en" — должно совпадать')
+        elif ru_count == 0:
+            # Пойманный 25.08.2026 баг: gen.py без gen_en.py поверх даёт sitemap
+            # БЕЗ hreflang вообще — ru_count==en_count==0 проходил проверку выше
+            # как "совпадают", хотя на деле EN-слой просто отсутствует целиком.
+            issue('integrity', 'sitemap.xml: hreflang полностью отсутствует (0/0) — '
+                               'похоже, собран только gen.py, без gen_en.py поверх')
+
+    # 4e. EN-слой в sw.js — та же болезнь, что и с sitemap.xml выше: gen_en.py
+    # дополняет precache /en/-путями и делает офлайн-фолбэк языкозависимым;
+    # без этого прогона sw.js остаётся RU-only, но без явной проверки это
+    # никак не всплывает (сам sw.js не «невалиден», просто неполон).
+    if os.path.isfile('sw.js'):
+        sw = open('sw.js', encoding='utf-8').read()
+        if '/en/' not in sw:
+            issue('integrity', 'sw.js: нет ни одного пути /en/ в precache — '
+                               'похоже, собран только gen.py, без gen_en.py поверх')
 
     # 4d. внутренние ссылки на EN-страницах не 404
     broken = 0

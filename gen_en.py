@@ -97,7 +97,7 @@ CV_ROLES_EN = [
         "period": "January 2022 \u2014 present",
         "bullets": [
             "Social media for Komnata Sveta \u2014 productions by graduates of Yuri Butusov\u2019s workshop",
-            "Organiser of BuFest 2026, a theatre festival at the Skorokhod venue (10\u201315 August)",
+            "Organiser of BuFest 2026, a theatre festival at the Skorokhod venue (August 2026)",
             "Ran \u201cZAVIST\u2019\u201d (dir. Sofia Nikiforova) \u2014 sold out, with real interest from the profession",
             "Brought Butusov\u2019s workshop to St. Petersburg for regular guest performances; every night sold out",
         ],
@@ -600,7 +600,11 @@ def build_text_page_en(t, idx):
         <input type="text" id="review-name" class="review-form-input" placeholder="Name (optional)">
         <textarea id="review-text" class="review-form-textarea" placeholder="Your review\u2026" rows="4"></textarea>
         <input type="text" id="review-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="button" class="btn-line" id="review-submit">Send</button>
+        <label class="review-form-consent" for="review-consent">
+          <input type="checkbox" id="review-consent">
+          <span>I consent to this review being published on the site and to the data above being processed per the <a href="{root}en/privacy/" target="_blank" rel="noopener">Privacy Policy</a></span>
+        </label>
+        <button type="button" class="btn-line" id="review-submit" disabled>Send</button>
         <p class="review-form-status" id="review-form-status"></p>
       </div>
     </div>
@@ -637,13 +641,18 @@ def build_text_page_en(t, idx):
   var formEl = document.getElementById('review-form');
   var submitBtn = document.getElementById('review-submit');
   var statusEl = document.getElementById('review-form-status');
+  var consentEl = document.getElementById('review-consent');
   toggleBtn.addEventListener('click', function() {{
     formEl.hidden = !formEl.hidden;
     toggleBtn.style.display = formEl.hidden ? '' : 'none';
   }});
+  consentEl.addEventListener('change', function() {{
+    submitBtn.disabled = !consentEl.checked;
+  }});
   submitBtn.addEventListener('click', function() {{
     var text = document.getElementById('review-text').value.trim();
     if (!text) {{ statusEl.textContent = 'Please write your review first.'; return; }}
+    if (!consentEl.checked) {{ statusEl.textContent = 'Please check the consent box.'; return; }}
     submitBtn.disabled = true;
     statusEl.textContent = 'Sending\u2026';
     fetch(API + '/submit-review', {{
@@ -853,7 +862,7 @@ def build_about_en():
       </div>
 
       <div class="eyebrow" style="margin:36px 0 8px;">Performing arts</div>
-      <p style="font-size:15px;color:var(--dim);">Circus performer, 15+ years. Currently in the operetta \u201cPrincess Circus\u201d at the St. Petersburg Musical Comedy Theatre (August and October 2026).</p>
+      <p style="font-size:15px;color:var(--dim);">Circus performer, 15+ years. Currently in the operetta \u201cPrincess Circus\u201d at the St. Petersburg Musical Comedy Theatre \u2014 a production currently in repertory.</p>
     </div>
   </div>
 </section>

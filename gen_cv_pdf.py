@@ -60,7 +60,7 @@ SKILLS = [
 ]
 ARTISTIC = ("Артист цирка · более 15 лет. В настоящее время занят в оперетте "
             "«Принцесса цирка» в Театре музыкальной комедии Санкт-Петербурга "
-            "(август и октябрь 2026).")
+            "— спектакль в прокате.")
 
 LOGO_MARK_SVG = '''<svg viewBox="140 240 800 600" fill="none" stroke="#F5F2ED" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
   <ellipse cx="364" cy="540" rx="200" ry="110"/>

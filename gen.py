@@ -752,7 +752,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 37
+SITE_VERSION = 40
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -1456,7 +1456,11 @@ def build_text_page(t, idx):
         <input type="text" id="review-name" class="review-form-input" placeholder="Имя (необязательно)">
         <textarea id="review-text" class="review-form-textarea" placeholder="Ваш отзыв…" rows="4"></textarea>
         <input type="text" id="review-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="button" class="btn-line" id="review-submit">Отправить</button>
+        <label class="review-form-consent" for="review-consent">
+          <input type="checkbox" id="review-consent">
+          <span>Согласен(на) на публикацию отзыва на сайте и обработку указанных данных согласно <a href="{root}privacy/" target="_blank" rel="noopener">Политике конфиденциальности</a></span>
+        </label>
+        <button type="button" class="btn-line" id="review-submit" disabled>Отправить</button>
         <p class="review-form-status" id="review-form-status"></p>
       </div>
     </div>
@@ -1493,13 +1497,22 @@ def build_text_page(t, idx):
   var formEl = document.getElementById('review-form');
   var submitBtn = document.getElementById('review-submit');
   var statusEl = document.getElementById('review-form-status');
+  var consentEl = document.getElementById('review-consent');
   toggleBtn.addEventListener('click', function() {{
     formEl.hidden = !formEl.hidden;
     toggleBtn.style.display = formEl.hidden ? '' : 'none';
   }});
+  // Чекбокс согласия не отмечен по умолчанию и блокирует отправку, пока
+  // не поставлен (ст. 9 152-ФЗ — явное, отдельное действие, не вывод
+  // согласия из факта отправки формы). Проверка продублирована и внутри
+  // обработчика клика — на случай, если кто-то снимет `disabled` в devtools.
+  consentEl.addEventListener('change', function() {{
+    submitBtn.disabled = !consentEl.checked;
+  }});
   submitBtn.addEventListener('click', function() {{
     var text = document.getElementById('review-text').value.trim();
     if (!text) {{ statusEl.textContent = 'Напишите текст отзыва.'; return; }}
+    if (!consentEl.checked) {{ statusEl.textContent = 'Отметьте согласие на публикацию отзыва.'; return; }}
     submitBtn.disabled = true;
     statusEl.textContent = 'Отправляю…';
     fetch(API + '/submit-review', {{
@@ -1759,7 +1772,7 @@ CV_ROLES = [
         "period": "январь 2022 — н.в.",
         "bullets": [
             "SMM театральной компании «Комната Света» — спектакли мастерской Юрия Бутусова",
-            "Организатор БУФЕСТ 2026 — театральный фестиваль на площадке «Скороход» (10–15 августа)",
+            "Организатор фестиваля БУФЕСТ 2026 на площадке «Скороход» (август 2026)",
             "Прокат «ZAVIST'» (реж. София Никифорова) — sold-out, широкий интерес профессионального сообщества",
             "Организация регулярных гастролей мастерской Бутусова в Петербурге: все показы с аншлагом",
         ],
@@ -1845,7 +1858,7 @@ def build_about():
       </div>
 
       <div class="eyebrow" style="margin:36px 0 8px;">Артистическая деятельность</div>
-      <p style="font-size:15px;color:var(--dim);">Артист цирка · более 15 лет. Сейчас занят в оперетте «Принцесса цирка» в Театре музыкальной комедии Санкт-Петербурга (август и октябрь 2026).</p>
+      <p style="font-size:15px;color:var(--dim);">Артист цирка · более 15 лет. Сейчас занят в оперетте «Принцесса цирка» в Театре музыкальной комедии Санкт-Петербурга — спектакль в прокате.</p>
     </div>
   </div>
 </section>

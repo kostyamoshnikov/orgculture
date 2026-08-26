@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/style.css?v=37">
+<link rel="stylesheet" href="../../assets/style.css?v=40">
 <link rel="manifest" href="../../manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -178,7 +178,11 @@
         <input type="text" id="review-name" class="review-form-input" placeholder="Имя (необязательно)">
         <textarea id="review-text" class="review-form-textarea" placeholder="Ваш отзыв…" rows="4"></textarea>
         <input type="text" id="review-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="button" class="btn-line" id="review-submit">Отправить</button>
+        <label class="review-form-consent" for="review-consent">
+          <input type="checkbox" id="review-consent">
+          <span>Согласен(на) на публикацию отзыва на сайте и обработку указанных данных согласно <a href="../../privacy/" target="_blank" rel="noopener">Политике конфиденциальности</a></span>
+        </label>
+        <button type="button" class="btn-line" id="review-submit" disabled>Отправить</button>
         <p class="review-form-status" id="review-form-status"></p>
       </div>
     </div>
@@ -215,13 +219,22 @@
   var formEl = document.getElementById('review-form');
   var submitBtn = document.getElementById('review-submit');
   var statusEl = document.getElementById('review-form-status');
+  var consentEl = document.getElementById('review-consent');
   toggleBtn.addEventListener('click', function() {
     formEl.hidden = !formEl.hidden;
     toggleBtn.style.display = formEl.hidden ? '' : 'none';
   });
+  // Чекбокс согласия не отмечен по умолчанию и блокирует отправку, пока
+  // не поставлен (ст. 9 152-ФЗ — явное, отдельное действие, не вывод
+  // согласия из факта отправки формы). Проверка продублирована и внутри
+  // обработчика клика — на случай, если кто-то снимет `disabled` в devtools.
+  consentEl.addEventListener('change', function() {
+    submitBtn.disabled = !consentEl.checked;
+  });
   submitBtn.addEventListener('click', function() {
     var text = document.getElementById('review-text').value.trim();
     if (!text) { statusEl.textContent = 'Напишите текст отзыва.'; return; }
+    if (!consentEl.checked) { statusEl.textContent = 'Отметьте согласие на публикацию отзыва.'; return; }
     submitBtn.disabled = true;
     statusEl.textContent = 'Отправляю…';
     fetch(API + '/submit-review', {
