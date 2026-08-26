@@ -868,7 +868,7 @@ def build_about_en():
 </section>
 {footer(2, lang="en")}
 '''
-    return page_head("Author \u2014 Organized Culturality", "Konstantin Moshnikov \u2014 producer, social media, circus performer. Author of \u201cOrganized Culturality.\u201d", 2, path="en/about/", lang="en") + body
+    return page_head("Author \u2014 Organized Culturality", "Konstantin Moshnikov \u2014 producer, promotion for cultural projects, circus performer. Author of \u201cOrganized Culturality.\u201d", 2, path="en/about/", lang="en") + body
 
 os.makedirs(os.path.join(EN_ROOT, "about"), exist_ok=True)
 with open(os.path.join(EN_ROOT, "about", "index.html"), "w", encoding="utf-8") as f:

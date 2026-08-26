@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css?v=40">
+<link rel="stylesheet" href="../assets/style.css?v=42">
 <link rel="manifest" href="../en/manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -53,10 +53,15 @@
     window.__statsLoaded = true;
     try {
       var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
+      var qs = new URLSearchParams(location.search);
       var payload = JSON.stringify({
         path: location.pathname,
         lang: isEn ? 'en' : 'ru',
-        ref: document.referrer || ''
+        ref: document.referrer || '',
+        utm_source: qs.get('utm_source') || '',
+        utm_medium: qs.get('utm_medium') || '',
+        utm_campaign: qs.get('utm_campaign') || '',
+        utm_content: qs.get('utm_content') || ''
       });
       navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
     } catch (e) {}

@@ -752,7 +752,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 40
+SITE_VERSION = 42
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -871,11 +871,17 @@ def own_stats_snippet():
     один и тот же "Хорошо" в баннере включает обе статистики разом,
     так проще и для пользователя, и для поддержки этого кода).
 
-    Формат данных: {path, lang, ref} — путь страницы, язык, источник
-    перехода (document.referrer). Никаких идентификаторов пользователя,
-    никакого IP на уровне payload (Cloudflare видит IP на уровне
-    соединения технически неизбежно, как любой хостинг — но воркер его
-    никуда не пишет и не использует, см. 04-bot/worker.js)."""
+    Формат данных: {path, lang, ref, utm_source, utm_medium, utm_campaign,
+    utm_content} — путь страницы, язык, источник перехода
+    (document.referrer), и отдельно — UTM-метки из самого URL, если они
+    там есть (?utm_source=sticker&utm_medium=qr&...). Раньше эти метки
+    сюда не попадали — маячок брал только location.pathname, а
+    UTM-параметры живут в location.search; QR-код с UTM (см.
+    10-qr-codes/) без этой правки просто не давал бы никакой аналитики,
+    несмотря на разметку в самой ссылке. Никаких идентификаторов
+    пользователя, никакого IP на уровне payload (Cloudflare видит IP на
+    уровне соединения технически неизбежно, как любой хостинг — но
+    воркер его никуда не пишет и не использует, см. 04-bot/worker.js)."""
     return f'''<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
 <script type="text/javascript">
   window.__loadOwnStats = function() {{
@@ -883,10 +889,15 @@ def own_stats_snippet():
     window.__statsLoaded = true;
     try {{
       var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
+      var qs = new URLSearchParams(location.search);
       var payload = JSON.stringify({{
         path: location.pathname,
         lang: isEn ? 'en' : 'ru',
-        ref: document.referrer || ''
+        ref: document.referrer || '',
+        utm_source: qs.get('utm_source') || '',
+        utm_medium: qs.get('utm_medium') || '',
+        utm_campaign: qs.get('utm_campaign') || '',
+        utm_content: qs.get('utm_content') || ''
       }});
       navigator.sendBeacon('{STATS_ENDPOINT}', new Blob([payload], {{type: 'text/plain'}}));
     }} catch (e) {{}}
