@@ -263,6 +263,12 @@ def build_production_en():
       </div>
     </div>
 
+    <div class="oval-divider" style="justify-content:flex-start;margin:44px 0 28px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
+    <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:560px;margin-bottom:16px;">
+      Full list of services, prices, and terms of cooperation \u2014 in one document.
+    </p>
+    <a class="btn-line btn-line-ghost" href="../../documents/orgculture-services-and-prices.pdf" download>Download the offer (PDF) \u2192</a>
+
     <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
     <div class="eyebrow" style="margin-bottom:20px;">Examples</div>
   </div>

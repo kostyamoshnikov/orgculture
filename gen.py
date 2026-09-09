@@ -752,7 +752,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 44
+SITE_VERSION = 45
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -1962,6 +1962,12 @@ def build_production():
         <p>Отдельный сайт под проект или фестиваль — когда одной страницы в соцсети недостаточно: программа, билеты, пресс-кит, архив в одном месте.</p>
       </div>
     </div>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:44px 0 28px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
+    <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:560px;margin-bottom:16px;">
+      Полный список услуг, цены и условия сотрудничества — в одном документе.
+    </p>
+    <a class="btn-line btn-line-ghost" href="../documents/orgculture-uslugi-i-ceny.pdf" download>Скачать КП (PDF) →</a>
 
     <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
     <div class="eyebrow" style="margin-bottom:20px;">Примеры</div>
