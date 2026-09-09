@@ -431,3 +431,12 @@ footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
   text-decoration:none;
 }
 .skip-link:focus{left:16px;top:16px;}
+
+/* Заголовок, видимый только скринридерам и поисковикам. Нужен на
+   главной: название сайта там — SVG-словомарка, текстового h1 не было
+   вообще, страница начиналась сразу с h2 «Последние тексты». Внешний
+   вид не меняется. */
+.visually-hidden{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}

@@ -752,7 +752,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 42
+SITE_VERSION = 44
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -950,7 +950,7 @@ def page_head(title, description, depth=0, og_image=None, path="", lang="ru"):
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/style.css?v={SITE_VERSION}">
 <link rel="manifest" href="{manifest_href}">
 {yandex_metrika_snippet()}{own_stats_snippet()}</head>
@@ -1200,6 +1200,7 @@ def build_index():
 {index_schema_html}
 {header(0, relpath="")}
 <div class="hero wrap">
+  <h1 class="visually-hidden">Организованная Культурность — тексты о фильмах, спектаклях и музыке</h1>
   <div class="mark">{LOGO_MARK_SVG}</div>
   <div class="word">{WORDMARK_SVG}</div>
   <div class="slogan">* Без агрессии, но с экспрессией</div>
@@ -1463,6 +1464,10 @@ def build_text_page(t, idx):
         <button type="button" class="btn-line" id="review-toggle-form">Оставить отзыв</button>
         <a class="btn-line btn-line-ghost" href="{review_deep_link}" target="_blank" rel="noopener">через Telegram</a>
       </div>
+      <noscript>
+        <style>#review-toggle-form{{display:none}}</style>
+        <p style="color:var(--dim);font-size:13.5px;margin-top:10px;">Форма отзыва на сайте требует JavaScript — но кнопка «через Telegram» рядом работает и без него.</p>
+      </noscript>
       <div class="review-form" id="review-form" hidden>
         <input type="text" id="review-name" class="review-form-input" placeholder="Имя (необязательно)">
         <textarea id="review-text" class="review-form-textarea" placeholder="Ваш отзыв…" rows="4"></textarea>

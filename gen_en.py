@@ -353,6 +353,7 @@ def build_index_en():
 {index_schema_en_html}
 {header(1, lang="en")}
 <div class="hero wrap">
+  <h1 class="visually-hidden">Organized Culturality \u2014 texts about films, theatre and music</h1>
   <div class="mark">{LOGO_MARK_SVG}</div>
   <div class="word">{WORDMARK_SVG}</div>
   <div class="slogan">* Without aggression, but with expression</div>
@@ -596,6 +597,10 @@ def build_text_page_en(t, idx):
         <button type="button" class="btn-line" id="review-toggle-form">Leave a review</button>
         <a class="btn-line btn-line-ghost" href="{review_deep_link}" target="_blank" rel="noopener">on Telegram</a>
       </div>
+      <noscript>
+        <style>#review-toggle-form{{display:none}}</style>
+        <p style="color:var(--dim);font-size:13.5px;margin-top:10px;">The on-site review form needs JavaScript \u2014 but the \u201con Telegram\u201d button next to it works without it.</p>
+      </noscript>
       <div class="review-form" id="review-form" hidden>
         <input type="text" id="review-name" class="review-form-input" placeholder="Name (optional)">
         <textarea id="review-text" class="review-form-textarea" placeholder="Your review\u2026" rows="4"></textarea>
