@@ -238,11 +238,11 @@ def build_production_en():
 <section style="padding-top:64px;">
   <div class="wrap">
     <div class="eyebrow">Production &amp; promotion</div>
-    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">I take cultural and arts projects from idea to audience</h1>
-    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:12px;">
+    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;" data-editable="production_h1_en">I take cultural and arts projects from idea to audience</h1>
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:12px;" data-editable="production_intro1_en">
       15+ years on stage, in circus and in theatre. I know the industry from the inside, at every level of it \u2014 from venue logistics to holding an audience's attention after the announcement.
     </p>
-    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:44px;">
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:44px;" data-editable="production_intro2_en">
       I work with theatre and arts projects \u2014 festivals, productions, independent teams who want the same attention to detail the texts on this site are written with.
     </p>
 
@@ -290,6 +290,7 @@ def build_production_en():
   </div>
 </section>
 {footer(2, lang="en")}
+<script src="../../site-content.js"></script>
 '''
     return page_head("Production &amp; promotion \u2014 Organized Culturality", "Production, promotion and websites for theatre and arts projects. 15+ years in the industry, from concept to audience.", 2, path="en/production/", lang="en") + body
 
@@ -362,8 +363,8 @@ def build_index_en():
   <h1 class="visually-hidden">Organized Culturality \u2014 texts about films, theatre and music</h1>
   <div class="mark">{LOGO_MARK_SVG}</div>
   <div class="word">{WORDMARK_SVG}</div>
-  <div class="slogan">* Without aggression, but with expression</div>
-  <p class="lede">A space where meanings get made. Texts about films, plays, music and people \u2014 written not to recommend, but to think something through.</p>
+  <div class="slogan" data-editable="home_slogan_en">* Without aggression, but with expression</div>
+  <p class="lede" data-editable="home_lede_en">A space where meanings get made. Texts about films, plays, music and people \u2014 written not to recommend, but to think something through. Alongside \u2014 production and promotion for arts projects.</p>
   <div class="hero-ctas">
     <a class="btn-line" href="texts/">Read the texts</a>
     <a class="btn-line btn-line-ghost" href="production/">Production &amp; promotion</a>
@@ -409,6 +410,7 @@ def build_index_en():
 </section>
 
 {footer(1, lang="en")}
+<script src="../site-content.js"></script>
 '''
     return page_head("Organized Culturality", "Texts about films, plays, music and people — plus production and promotion for cultural and arts projects.", 1, path="en/", lang="en") + body
 
@@ -856,7 +858,7 @@ def build_about_en():
       <div class="eyebrow">Author</div>
       <h1 style="font-size:30px;font-weight:300;margin:14px 0 24px;">Konstantin Moshnikov</h1>
       <p>15+ years on stage, in circus and in theatre. I know the industry from the inside, at every level of it.</p>
-      <p>I produce and run social media for cultural and arts projects: concept through to launch, marketing through to logistics. \u201cOrganized Culturality\u201d runs alongside that work \u2014 texts about whatever struck a nerve, with no obligation to convince anyone of anything.</p>
+      <p data-editable="about_intro_en">I produce and promote cultural and arts projects: concept through to launch, marketing through to logistics. \u201cOrganized Culturality\u201d runs alongside that work \u2014 texts about whatever struck a nerve, with no obligation to convince anyone of anything.</p>
       <p style="color:var(--dim);font-size:14.5px;">
         aelita-production.ru \u00b7 kostyamoshnikov@gmail.com \u00b7 +7 904 617-01-88
       </p>
@@ -878,6 +880,7 @@ def build_about_en():
   </div>
 </section>
 {footer(2, lang="en")}
+<script src="../../site-content.js"></script>
 '''
     return page_head("Author \u2014 Organized Culturality", "Konstantin Moshnikov \u2014 producer, promotion for cultural projects, circus performer. Author of \u201cOrganized Culturality.\u201d", 2, path="en/about/", lang="en") + body
 

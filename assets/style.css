@@ -102,6 +102,17 @@ nav.mobile-nav a.active{color:var(--accent);}
   .nav-toggle:checked ~ .headbar .burger span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
 }
 
+/* ---------- hero: плотнее на мобильном, десктоп не трогаем ---------- */
+@media(max-width:700px){
+  .hero{padding:56px 0 48px;}
+  .hero .mark{margin:0 auto 24px;}
+  .hero .mark svg{width:170px;}
+  .hero .word{margin-bottom:8px;}
+  .hero .slogan{margin-top:14px;}
+  .hero .lede{margin-top:22px;}
+  .hero-ctas{margin-top:22px;}
+}
+
 /* ---------- hero ---------- */
 .hero{padding:96px 0 64px;text-align:center;}
 .hero .mark{margin:0 auto 40px;}

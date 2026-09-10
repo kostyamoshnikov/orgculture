@@ -752,7 +752,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 45
+SITE_VERSION = 47
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -907,6 +907,45 @@ def own_stats_snippet():
   }}
 </script>
 <!-- /Own stats beacon -->
+'''
+
+# Живой текст из редактора — по образцу Site/site-content.js из пака
+# BALASHOV_pack, тот же принцип честного отката: если воркер недоступен
+# (не задеплоен, сеть легла, поле ещё не сохраняли) — молча ничего не
+# делает, посетитель видит исходный статический текст. На элементе с
+# атрибутом data-editable="ключ" (ключ — тот же, что в FIELDS в
+# 04-bot/worker.js) подменяет textContent, если в ответе редактора для
+# этого ключа есть строка (в т.ч. пустая — если кто-то в редакторе
+# осознанно стёр текст и сохранил пусто, это уважаемое решение, а не
+# сигнал откатиться на дефолт).
+#
+# Генерируется файлом (не статический, в отличие от исходного
+# site-content.js у BALASHOV), чтобы адрес воркера брался из того же
+# WORKER_BASE, что и everywhere else на сайте — не второе место,
+# которое нужно не забыть поправить после деплоя.
+def build_site_content_js():
+    return f'''// Подмена нескольких заголовков живым текстом из редактора
+// (04-bot/worker.js, маршруты /admin). Сгенерировано gen.py —
+// не редактировать руками, см. own_stats_snippet()/build_site_content_js()
+// в gen.py, если нужно поменять логику.
+(function () {{
+  var CONTENT_ENDPOINT = '{WORKER_BASE}/content';
+
+  fetch(CONTENT_ENDPOINT)
+    .then(function (r) {{ return r.json(); }})
+    .then(function (content) {{
+      document.querySelectorAll('[data-editable]').forEach(function (el) {{
+        var key = el.getAttribute('data-editable');
+        var value = content[key];
+        if (typeof value === 'string') {{
+          el.textContent = value;
+        }}
+      }});
+    }})
+    .catch(function () {{
+      // Редактор недоступен — молча остаёмся на статическом тексте.
+    }});
+}})();
 '''
 
 def page_head(title, description, depth=0, og_image=None, path="", lang="ru"):
@@ -1203,8 +1242,8 @@ def build_index():
   <h1 class="visually-hidden">Организованная Культурность — тексты о фильмах, спектаклях и музыке</h1>
   <div class="mark">{LOGO_MARK_SVG}</div>
   <div class="word">{WORDMARK_SVG}</div>
-  <div class="slogan">* Без агрессии, но с экспрессией</div>
-  <p class="lede">Пространство для рождения смыслов и новых значений. Тексты о фильмах, спектаклях, музыке и людях — написанные не для того, чтобы порекомендовать, а чтобы отрефлексировать.</p>
+  <div class="slogan" data-editable="home_slogan">* Без агрессии, но с экспрессией</div>
+  <p class="lede" data-editable="home_lede">Пространство для рождения смыслов и новых значений. Тексты о фильмах, спектаклях, музыке и людях — написанные не для того, чтобы порекомендовать, а чтобы отрефлексировать. Рядом — продюсирование и продвижение арт-проектов.</p>
   <div class="hero-ctas">
     <a class="btn-line" href="texts/">Читать тексты</a>
     <a class="btn-line btn-line-ghost" href="production/">Продюсирование и продвижение</a>
@@ -1250,6 +1289,7 @@ def build_index():
 </section>
 
 {footer(0)}
+<script src="site-content.js"></script>
 '''
     return page_head("Организованная Культурность", "Тексты о фильмах, спектаклях, музыке и людях — и продюсирование, продвижение культурных и арт-проектов.", 0, path="") + body
 
@@ -1857,7 +1897,7 @@ def build_about():
       <div class="eyebrow">Автор</div>
       <h1 style="font-size:30px;font-weight:300;margin:14px 0 24px;">Константин Мошников</h1>
       <p>Более 15 лет на сцене — в цирке, в театре. Знаю индустрию изнутри и понимаю её механику на каждом уровне.</p>
-      <p>Продюсирую и продвигаю культурные и арт-проекты: от концепции до выпуска, от маркетинга до логистики. «Организованная Культурность» — личное пространство рядом с этой работой: тексты о том, что задело, без обязательства кого-то в чём-то убедить.</p>
+      <p data-editable="about_intro">Продюсирую и продвигаю культурные и арт-проекты: от концепции до выпуска, от маркетинга до логистики. «Организованная Культурность» — личное пространство рядом с этой работой: тексты о том, что задело, без обязательства кого-то в чём-то убедить.</p>
       <p style="color:var(--dim);font-size:14.5px;">
         aelita-production.ru · kostyamoshnikov@gmail.com · +7 904 617-01-88
       </p>
@@ -1879,6 +1919,7 @@ def build_about():
   </div>
 </section>
 {footer(1)}
+<script src="../site-content.js"></script>
 '''
     return page_head("Автор — Организованная Культурность", "Константин Мошников — продюсер, продвижение культурных проектов, артист цирка. Автор «Организованной Культурности».", 1, path="about/") + body
 
@@ -1938,11 +1979,11 @@ def build_production():
 <section style="padding-top:64px;">
   <div class="wrap">
     <div class="eyebrow">Продюсирование и продвижение</div>
-    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">Довожу культурные и арт-проекты от идеи до зрителя</h1>
-    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:12px;">
+    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;" data-editable="production_h1">Довожу культурные и арт-проекты от идеи до зрителя</h1>
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:12px;" data-editable="production_intro1">
       Более 15 лет на сцене — в цирке, в театре. Знаю индустрию изнутри и понимаю её механику на каждом уровне: от площадки и логистики до того, как удержать внимание зрителя после анонса.
     </p>
-    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:44px;">
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:44px;" data-editable="production_intro2">
       Работаю с театральными и арт-проектами — фестивалями, спектаклями, независимыми командами, которым важна такая же внимательность к деталям, с какой пишутся тексты на этом сайте.
     </p>
 
@@ -1990,6 +2031,7 @@ def build_production():
   </div>
 </section>
 {footer(1)}
+<script src="../site-content.js"></script>
 '''
     return page_head("Продюсирование и продвижение — Организованная Культурность", "Продюсирование, продвижение и сайты для театральных и арт-проектов. Более 15 лет в индустрии — от концепции до зрителя.", 1, path="production/") + body
 
@@ -2506,6 +2548,10 @@ async function cacheFirst(request) {{
     with open(os.path.join(ROOT, "sw.js"), "w", encoding="utf-8") as f:
         f.write(sw)
     print("sw.js written")
+
+with open(os.path.join(ROOT, "site-content.js"), "w", encoding="utf-8") as f:
+    f.write(build_site_content_js())
+print("site-content.js written")
 
 build_manifest()
 build_offline_page()

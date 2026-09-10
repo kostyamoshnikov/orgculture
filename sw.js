@@ -5,7 +5,7 @@
 // ⚠️ Этот файл пересобирается в gen_en.py (после gen.py) — не правьте версию
 // в gen.py изолированно: список PRECACHE_URLS здесь включает оба языка.
 
-const SITE_VERSION = 45;
+const SITE_VERSION = 47;
 const CACHE_NAME = `orgculture-v${SITE_VERSION}`;
 const STATIC_CACHE = `orgculture-static-v${SITE_VERSION}`;
 
@@ -35,7 +35,7 @@ const PRECACHE_URLS = [
   '/assets/icons/favicon.svg',
   '/assets/icons/favicon-192.png',
   '/assets/icons/favicon-512.png',
-  '/assets/style.css?v=45'
+  '/assets/style.css?v=47'
 ];
 
 self.addEventListener('install', event => {
