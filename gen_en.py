@@ -364,7 +364,7 @@ def build_index_en():
   <div class="mark">{LOGO_MARK_SVG}</div>
   <div class="word">{WORDMARK_SVG}</div>
   <div class="slogan" data-editable="home_slogan_en">* Without aggression, but with expression</div>
-  <p class="lede" data-editable="home_lede_en">A space where meanings get made. Texts about films, plays, music and people \u2014 written not to recommend, but to think something through. Alongside \u2014 production and promotion for arts projects.</p>
+  <p class="lede" data-editable="home_lede_en">A space where meanings get made. Texts about culture \u2014 not to recommend, but to think something through. Alongside \u2014 production and promotion for arts projects.</p>
   <div class="hero-ctas">
     <a class="btn-line" href="texts/">Read the texts</a>
     <a class="btn-line btn-line-ghost" href="production/">Production &amp; promotion</a>

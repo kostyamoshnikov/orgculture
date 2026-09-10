@@ -752,7 +752,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 47
+SITE_VERSION = 48
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -1243,7 +1243,7 @@ def build_index():
   <div class="mark">{LOGO_MARK_SVG}</div>
   <div class="word">{WORDMARK_SVG}</div>
   <div class="slogan" data-editable="home_slogan">* Без агрессии, но с экспрессией</div>
-  <p class="lede" data-editable="home_lede">Пространство для рождения смыслов и новых значений. Тексты о фильмах, спектаклях, музыке и людях — написанные не для того, чтобы порекомендовать, а чтобы отрефлексировать. Рядом — продюсирование и продвижение арт-проектов.</p>
+  <p class="lede" data-editable="home_lede">Пространство для рождения смыслов и новых значений. Тексты о культуре — не чтобы порекомендовать, а чтобы отрефлексировать. Рядом — продюсирование и продвижение арт-проектов.</p>
   <div class="hero-ctas">
     <a class="btn-line" href="texts/">Читать тексты</a>
     <a class="btn-line btn-line-ghost" href="production/">Продюсирование и продвижение</a>
