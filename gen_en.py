@@ -68,7 +68,7 @@ for et in _EN_TEXT_DATA:
     rt = _ru_by_slug[et["slug"]]
     TEXTS_EN.append({
         "slug": et["slug"], "tag": et["tag"], "title": et["title"],
-        "kicker": et["kicker"], "image": rt["image"], "paragraphs": et["paragraphs"],
+        "kicker": et["kicker"], "image": rt["image"], "og_image": rt.get("og_image"), "paragraphs": et["paragraphs"],
         "meta": et.get("meta"), "link": et.get("link"), "link_label": et.get("link_label"),
     })
 
@@ -138,6 +138,18 @@ PROJECTS_EN = [
       "AELITA also works with the dance company Koroche \u2014 organising performances, touring and promotion.",
     ],
     "link": "https://aelita-production.ru", "link_label": "aelita-production.ru",
+  },
+  {
+    "slug": "koroche", "role": "Producer", "period": "June 2025 \u2014 present",
+    "title": "Koroche",
+    "kicker": "Choreographer Yulia Bychkova's contemporary dance company \u2014 Kaluga and St. Petersburg, an AELITA PRODUCTION partner.",
+    "facts": [("2020", "founded"), ("8+", "productions"), ("Kaluga \u2192 SPb", "based in")],
+    "paragraphs": [
+      "Koroche is a dance company choreographer Yulia Bychkova founded in Kaluga in 2020. It works in contemporary dance, where the body is the main instrument of expression; the repertoire has grown to more than eight productions since.",
+      "In 2026 the company premiered \u201cArchaeology of the Human\u201d \u2014 an evening of short contemporary dance pieces, three independent statements each guided by its own dance dramaturg. Earlier, the company toured to St. Petersburg with \u201cStories of Earth and Sky,\u201d staged at the Alexandrinsky Theatre's New Stage.",
+      "AELITA PRODUCTION has partnered with Koroche since June 2025, organising the company's performances, touring and promotion.",
+    ],
+    "link": "https://koroche-dance.ru", "link_label": "koroche-dance.ru",
   },
   {
     "slug": "bufest", "role": "Festival Organiser", "period": "August 2026",
@@ -725,7 +737,7 @@ def build_text_page_en(t, idx):
 {nav_html}
 {footer(depth, lang="en")}
 '''
-    return page_head(f"{t['title']} \u2014 Organized Culturality", t['kicker'], depth, og_image=(f"{SITE_DOMAIN}/images/{t['image']}" if t['image'] else None), path=f"en/texts/{t['slug']}/", lang="en") + body
+    return page_head(f"{t['title']} \u2014 Organized Culturality", t['kicker'], depth, og_image=(f"{SITE_DOMAIN}/images/{t.get('og_image') or t['image']}" if t['image'] else None), path=f"en/texts/{t['slug']}/", lang="en") + body
 
 for i, t in enumerate(TEXTS_EN):
     d = os.path.join(EN_ROOT, "texts", t["slug"])
@@ -1018,7 +1030,9 @@ def build_privacy_en():
         "5.2. Data is not transferred to third parties, except where expressly required by Russian law, for anonymized statistics processed by Yandex Metrica (Yandex LLC), or with the data subject's separate consent. Once the purpose of processing is achieved, or consent is withdrawn, data is destroyed or anonymized.",
       ]),
       ("6. Rights of Data Subjects", [
-        "Users are entitled to: receive information regarding the processing of their personal data; request correction, blocking, or deletion of data that is incomplete, outdated, or inaccurate; withdraw consent to processing. Requests can be sent to: kostyamoshnikov@gmail.com",
+        "6.1. Users are entitled to: receive information regarding the processing of their personal data; request correction, blocking, or deletion of data that is incomplete, outdated, or inaccurate; withdraw consent to processing.",
+        "6.2. Requests should be sent to kostyamoshnikov@gmail.com and must include the requester's full name, the email address used when contacting the site or bot, and the substance of the request. The Controller may ask for additional information needed to verify the requester's identity.",
+        "6.3. The Controller reviews the request and responds within 30 days of receipt. If a request does not include the information specified in clause 6.2, the Controller may decline to process it, notifying the requester of the reason.",
       ]),
       ("7. Liability", [
         "The Controller is liable for violations of personal data processing procedures in accordance with Russian law. Users are responsible for the accuracy of the data they provide.",
@@ -1031,7 +1045,7 @@ def build_privacy_en():
       ("../../", "\u2190 Home", ""),
       ("../../documents/privacy-policy.pdf", "Download PDF", " download"),
     ]
-    return legal_page_en("Privacy Policy \u2014 Organized Culturality", "Privacy Policy", "orgculture.ru \u00b7 revised 30.07.2026", sections, extra_links, "privacy/", "Privacy policy for orgculture.ru.")
+    return legal_page_en("Privacy Policy \u2014 Organized Culturality", "Privacy Policy", "orgculture.ru \u00b7 revised 11.09.2026", sections, extra_links, "privacy/", "Privacy policy for orgculture.ru.")
 
 os.makedirs(os.path.join(EN_ROOT, "privacy"), exist_ok=True)
 with open(os.path.join(EN_ROOT, "privacy", "index.html"), "w", encoding="utf-8") as f:

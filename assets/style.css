@@ -203,6 +203,17 @@ section.tight{padding:48px 0;}
   .recrow .recimg{width:64px;height:64px;}
 }
 
+/* На совсем узких экранах (≈320px, старые/компактные телефоны) длинная
+   подпись кнопки .go с white-space:nowrap задавала min-content колонки
+   1fr шире, чем доступно, и вся строка вылезала за экран — горизонтальный
+   скролл на /recommendations/ и главной. Разрешаем перенос только здесь:
+   на 360px+ места хватает и кнопка остаётся однострочной.
+   ⚠️ Блок должен стоять ПОСЛЕ базовых .recrow .go правил выше —
+   media-запрос не повышает специфичность (та же история, что в v48). */
+@media(max-width:400px){
+  .recrow .go{white-space:normal;}
+}
+
 /* ---------- manifesto ---------- */
 .manifesto-item{
   display:grid;grid-template-columns:64px 1fr;gap:24px;padding:34px 0;border-top:1px solid var(--line);
@@ -257,7 +268,25 @@ section.tight{padding:48px 0;}
 .about-grid{display:grid;grid-template-columns:280px 1fr;gap:56px;align-items:start;}
 @media(max-width:760px){.about-grid{grid-template-columns:1fr;}}
 .about-photo{border-radius:2px;overflow:hidden;aspect-ratio:2/3;}
-.about-photo img{width:100%;height:100%;object-fit:cover;}
+.about-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+/* ⚠️ Блок ниже должен идти ПОСЛЕ базового .about-photo{aspect-ratio:2/3}
+   выше, а не до — при равной специфичности более позднее по коду
+   правило побеждает независимо от media-запроса (та же ловушка, что
+   уже была в v47/v48: медиа-запрос не поднимает специфичность сам по
+   себе). Поставь этот блок раньше — и aspect-ratio:2/3 выше молча
+   перебьёт 4/5 на всех экранах, ничего не изменится. */
+@media(max-width:760px){
+  /* На узких экранах about-grid схлопывается в 1 колонку, и фото при
+     соотношении 2/3 (как на десктопе, где оно 280px в узкой боковой
+     колонке) растягивается на всю ширину экрана и по высоте съедает
+     почти весь первый экран целиком — ни имени, ни текста не видно,
+     страница выглядит так, будто на ней вообще нет ничего, кроме
+     фотографии. Только на этой ширине укорачиваем рамку до 4/5 и
+     прижимаем кадр к верху (там лицо и жест — важная часть кадра),
+     обрезая снизу плечи/руку. На десктопе (280px колонка) не трогаем —
+     там это в принципе не проблема.*/
+  .about-photo{aspect-ratio:4/5;}
+}
 .about-copy p{margin-bottom:20px;font-size:16.5px;line-height:1.85;font-weight:300;color:var(--ink);}
 .cv-block{margin-top:12px;}
 .cv-role{padding:22px 0;border-top:1px solid var(--line);}
