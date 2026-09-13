@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Продюсирование и продвижение — Организованная Культурность</title>
-<meta name="description" content="Продюсирование, продвижение и сайты для театральных и арт-проектов. Более 15 лет в индустрии — от концепции до зрителя.">
+<title>Контакты — Организованная Культурность</title>
+<meta name="description" content="Связаться по продюсированию, продвижению и сайтам для театральных и арт-проектов: почта, Telegram, бриф.">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="../assets/icons/favicon-180.png">
 <link rel="icon" href="../assets/icons/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="alternate" type="application/rss+xml" title="Организованная Культурность — Тексты" href="https://orgculture.ru/feed.xml">
-<link rel="canonical" href="https://orgculture.ru/production/">
-<link rel="alternate" hreflang="ru" href="https://orgculture.ru/production/">
-<link rel="alternate" hreflang="en" href="https://orgculture.ru/en/production/">
-<link rel="alternate" hreflang="x-default" href="https://orgculture.ru/production/">
-<meta property="og:title" content="Продюсирование и продвижение — Организованная Культурность">
-<meta property="og:description" content="Продюсирование, продвижение и сайты для театральных и арт-проектов. Более 15 лет в индустрии — от концепции до зрителя.">
+<link rel="canonical" href="https://orgculture.ru/contacts/">
+<link rel="alternate" hreflang="ru" href="https://orgculture.ru/contacts/">
+<link rel="alternate" hreflang="en" href="https://orgculture.ru/en/contacts/">
+<link rel="alternate" hreflang="x-default" href="https://orgculture.ru/contacts/">
+<meta property="og:title" content="Контакты — Организованная Культурность">
+<meta property="og:description" content="Связаться по продюсированию, продвижению и сайтам для театральных и арт-проектов: почта, Telegram, бриф.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://orgculture.ru/production/">
+<meta property="og:url" content="https://orgculture.ru/contacts/">
 <meta property="og:site_name" content="Организованная Культурность">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
@@ -90,8 +90,8 @@
       <a href="../projects/">Проекты</a>
       <a href="../recommendations/">Рекомендации</a>
       <a href="../about/">Автор</a>
-      <a href="../contacts/">Контакты</a>
-      <a href="../en/production/" class="lang-switch" aria-label="Switch to English">EN</a>
+      <a href="../contacts/" class="active">Контакты</a>
+      <a href="../en/contacts/" class="lang-switch" aria-label="Switch to English">EN</a>
     </nav>
     <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
@@ -103,8 +103,8 @@
       <a href="../projects/">Проекты</a>
       <a href="../recommendations/">Рекомендации</a>
       <a href="../about/">Автор</a>
-      <a href="../contacts/">Контакты</a>
-    <a href="../en/production/" class="lang-switch" aria-label="Switch to English">EN</a>
+      <a href="../contacts/" class="active">Контакты</a>
+    <a href="../en/contacts/" class="lang-switch" aria-label="Switch to English">EN</a>
   </nav>
 </header>
 <div id="main"></div>
@@ -120,89 +120,101 @@
   })();
 </script>
 
+<style>
+  /* Плавающий виджет «Написать боту» (position:fixed, слева внизу)
+     на этой странице перекрывает чекбокс согласия и кнопку отправки
+     брифа — поймано на скриншоте рендера, 390px. Здесь он вдобавок
+     избыточен: ссылка на бота и прямые контакты есть в самом тексте
+     страницы. Прячем только на /contacts/, на остальных страницах
+     виджет работает как раньше. */
+  .tg-widget{display:none !important;}
+</style>
 <section style="padding-top:64px;">
   <div class="wrap">
-    <div class="eyebrow">Продюсирование и продвижение</div>
-    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;" data-editable="production_h1">Довожу культурные и арт-проекты от идеи до зрителя</h1>
-    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:12px;" data-editable="production_intro1">
-      Более 15 лет на сцене — в цирке, в театре. Знаю индустрию изнутри и понимаю её механику на каждом уровне: от площадки и логистики до того, как удержать внимание зрителя после анонса.
-    </p>
-    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:640px;margin-bottom:44px;" data-editable="production_intro2">
-      Работаю с театральными и арт-проектами — фестивалями, спектаклями, независимыми командами, которым важна такая же внимательность к деталям, с какой пишутся тексты на этом сайте.
+    <div class="eyebrow">Контакты</div>
+    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">Написать мне</h1>
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:620px;margin-bottom:36px;">
+      Продюсирую, продвигаю и делаю сайты для театральных и арт-проектов.
+      Если есть фестиваль, спектакль или идея, которой нужна организационная часть — расскажите о ней, отвечу.
     </p>
 
-    <div class="oval-divider" style="justify-content:flex-start;margin:0 0 28px;"><div style="width:64px;"><svg viewBox="0 0 200 110" fill="none" stroke="currentColor" stroke-width="10"><ellipse cx="100" cy="55" rx="90" ry="45"/></svg></div></div>
-    <div class="eyebrow" style="margin-bottom:20px;">Что делаю</div>
-    <div class="prod-services">
-      <div class="prod-service">
-        <h3>Продюсирование</h3>
-        <p>От концепции до выпуска: бюджет, площадка, команда, логистика, дедлайны. Беру на себя организационную часть, чтобы у постановки было пространство остаться творческой.</p>
-      </div>
-      <div class="prod-service">
-        <h3>Продвижение</h3>
-        <p>SMM, коммуникация с площадками и партнёрами, работа с прессой и блогерами. Не разовая реклама, а последовательное присутствие — от анонса до архива после показов.</p>
-      </div>
-      <div class="prod-service">
-        <h3>Сайты</h3>
-        <p>Отдельный сайт под проект или фестиваль — когда одной страницы в соцсети недостаточно: программа, билеты, пресс-кит, архив в одном месте.</p>
-      </div>
+    <div class="contact-direct">
+      <a class="btn-line" href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
+      <a class="btn-line" href="https://t.me/orgculture" target="_blank" rel="noopener">Telegram</a>
+      <a class="btn-line btn-line-ghost" href="tel:+79046170188">+7 904 617-01-88</a>
     </div>
 
-    <div class="oval-divider" style="justify-content:flex-start;margin:44px 0 28px;"><div style="width:64px;"><svg viewBox="0 0 200 110" fill="none" stroke="currentColor" stroke-width="10"><ellipse cx="100" cy="55" rx="90" ry="45"/></svg></div></div>
-    <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:560px;margin-bottom:16px;">
-      Полный список услуг, цены и условия сотрудничества — в одном документе.
-    </p>
-    <a class="btn-line btn-line-ghost" href="../documents/orgculture-uslugi-i-ceny.pdf" download>Скачать КП (PDF) →</a>
-
     <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;"><svg viewBox="0 0 200 110" fill="none" stroke="currentColor" stroke-width="10"><ellipse cx="100" cy="55" rx="90" ry="45"/></svg></div></div>
-    <div class="eyebrow" style="margin-bottom:20px;">Как оформляется работа</div>
-    <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:620px;margin-bottom:10px;" data-editable="production_docs1">
-      Договор на оказание услуг с заданием по каждому заказу, акт по завершении этапа или месяца, чек по самозанятости. Самозанятый (НПД) — налог плачу сам, заказчик не удерживает НДФЛ и не начисляет страховые взносы.
+    <div class="eyebrow" style="margin-bottom:16px;">Бриф</div>
+    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:8px;">
+      Если проще ответить на вопросы, чем писать письмо — заполните бриф. Обязательны только два поля: как с вами связаться и что за задача.
     </p>
-    <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:620px;margin-bottom:0;" data-editable="production_docs2">
-      Для театров, фондов и НКО это значит, что расходы закрываются документами и проходят по бухгалтерии без отдельных объяснений.
+    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:28px;">
+      Те же вопросы задаст <a href="https://t.me/orgculture_bot?start=contact" target="_blank" rel="noopener">бот в Telegram</a>, если удобнее там.
     </p>
 
-    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;"><svg viewBox="0 0 200 110" fill="none" stroke="currentColor" stroke-width="10"><ellipse cx="100" cy="55" rx="90" ry="45"/></svg></div></div>
-    <div class="eyebrow" style="margin-bottom:20px;">Примеры</div>
-  </div>
-  <div class="wrap-wide">
-    <div class="grid">
-      <a class="proj-card" href="../projects/aelita-production/">
-      <span class="tag">Сооснователь и продюсер</span>
-      <div class="proj-period">июнь 2025 — н.в.</div>
-      <h3>AELITA PRODUCTION</h3>
-      <p>Продюсерская компания, запущенная с нуля — больше десяти реализованных проектов за неполный год.</p>
-    </a><a class="proj-card" href="../projects/bufest/">
-      <span class="tag">Организатор фестиваля</span>
-      <div class="proj-period">август 2026</div>
-      <h3>БуФест</h3>
-      <p>Петербургский театральный фестиваль имени Юрия Бутусова — три спектакля его учеников за шесть вечеров на площадке «Скороход».</p>
-    </a><a class="proj-card" href="../projects/robot-kostya-project/">
-      <span class="tag">SMM, менеджер проектов</span>
-      <div class="proj-period">май 2021 — н.в.</div>
-      <h3>Робот Костя</h3>
-      <p>Первый в России роботический театр — номинант «Золотой Маски» в разделе «Эксперимент».</p>
-    </a>
+    <div class="brief-form" id="brief-form">
+      <div class="brief-grid">
+        <div class="brief-field">
+          <label for="brief-name">Имя</label>
+          <input type="text" id="brief-name" autocomplete="name" placeholder="Как к вам обращаться">
+        </div>
+        <div class="brief-field">
+          <label for="brief-who">Кто вы</label>
+          <select id="brief-who">
+            <option value="">Выберите…</option>
+            <option>Театр или площадка</option>
+            <option>Независимая команда</option>
+            <option>Фестиваль</option>
+            <option>Режиссёр или артист</option>
+            <option>Фонд или НКО</option>
+            <option>Пресса</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="brief-field full">
+          <label for="brief-contact">Как связаться <span class="req-mark">*</span></label>
+          <input type="text" id="brief-contact" autocomplete="email" placeholder="Почта, телефон или @username в Telegram">
+        </div>
+        <div class="brief-field full">
+          <label for="brief-project">Проект</label>
+          <input type="text" id="brief-project" placeholder="Спектакль, фестиваль, идея — в двух словах">
+        </div>
+        <div class="brief-field">
+          <label for="brief-dates">Сроки</label>
+          <input type="text" id="brief-dates" placeholder="Даты или «пока не знаю»">
+        </div>
+        <div class="brief-field">
+          <label for="brief-budget">Бюджет</label>
+          <input type="text" id="brief-budget" placeholder="Вилка или «обсуждается»">
+        </div>
+        <div class="brief-field full">
+          <label for="brief-task">Задача <span class="req-mark">*</span></label>
+          <textarea id="brief-task" rows="5" placeholder="Что нужно сделать и что уже есть"></textarea>
+        </div>
+      </div>
+      <input type="text" id="brief-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="review-form-consent" for="brief-consent">
+        <input type="checkbox" id="brief-consent">
+        <span>Согласен(на) на обработку указанных данных согласно <a href="../privacy/" target="_blank" rel="noopener">Политике конфиденциальности</a></span>
+      </label>
+      <button type="button" class="btn-line" id="brief-submit" disabled>Отправить</button>
+      <p class="review-form-status" id="brief-status"></p>
+      <noscript>
+        <p style="color:var(--dim);font-size:13.5px;margin-top:10px;">
+          Форма требует JavaScript. Без него напишите на почту или в Telegram — ссылки выше.
+        </p>
+      </noscript>
     </div>
-    <p style="text-align:center;margin-top:28px;"><a class="btn-line" href="../projects/">Все проекты →</a></p>
-  </div>
-  <div class="wrap">
-    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;"><svg viewBox="0 0 200 110" fill="none" stroke="currentColor" stroke-width="10"><ellipse cx="100" cy="55" rx="90" ry="45"/></svg></div></div>
-    <div class="eyebrow" style="margin-bottom:16px;">Кто делает</div>
-    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:20px;">
-      Константин Мошников — продюсер и артист цирка. Соучредитель AELITA PRODUCTION, организатор фестиваля БуФест, автор «Организованной Культурности».
-    </p>
-    <p style="margin-bottom:52px;"><a class="btn-line" href="../about/">Полная биография и CV →</a></p>
 
-    <div class="collab-box" id="collab">
-    <h2>Сотрудничество</h2>
-    <p>Продюсирую, продвигаю и делаю сайты для театральных и арт-проектов. Если есть идея, фестиваль или спектакль, которому нужна такая же внимательность к деталям — пишите, обсудим.</p>
-    <div class="collab-buttons">
-      <a class="btn-line" href="mailto:kostyamoshnikov@gmail.com">Написать на почту</a>
-      <a class="btn-line" href="https://t.me/orgculture" target="_blank" rel="noopener">Написать в Telegram</a>
-    </div>
-  </div>
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;"><svg viewBox="0 0 200 110" fill="none" stroke="currentColor" stroke-width="10"><ellipse cx="100" cy="55" rx="90" ry="45"/></svg></div></div>
+    <div class="eyebrow" style="margin-bottom:16px;">Реквизиты</div>
+    <p style="color:var(--dim);font-size:15px;line-height:1.9;margin-bottom:0;">
+      Мошников Константин Алексеевич<br>
+      Самозанятый (НПД) · ИНН 471508674254<br>
+      г. Санкт-Петербург
+    </p>
+    <p style="margin-top:28px;"><a class="btn-line btn-line-ghost" href="../production/">Что именно я делаю →</a></p>
   </div>
 </section>
 <footer>
@@ -282,4 +294,48 @@
 </script>
 </body>
 </html>
-<script src="../site-content.js"></script>
+<script>
+(function(){
+  var API = "https://orgculture-bot.\u0417\u0410\u041c\u0415\u041d\u0418-\u041d\u0410-\u0421\u0412\u041e\u0419-\u0410\u041a\u041a\u0410\u0423\u041d\u0422.workers.dev";
+  var submitBtn = document.getElementById('brief-submit');
+  var consentEl = document.getElementById('brief-consent');
+  var statusEl = document.getElementById('brief-status');
+  var formEl = document.getElementById('brief-form');
+  function val(id) { return (document.getElementById(id).value || '').trim(); }
+  // Согласие — отдельное явное действие (ст. 9 152-ФЗ), не выводится из
+  // факта отправки формы; проверка продублирована в обработчике на
+  // случай снятия disabled через devtools.
+  consentEl.addEventListener('change', function() {
+    submitBtn.disabled = !consentEl.checked;
+  });
+  submitBtn.addEventListener('click', function() {
+    var contact = val('brief-contact'), task = val('brief-task');
+    if (!contact) { statusEl.textContent = 'Укажите, как с вами связаться.'; return; }
+    if (!task) { statusEl.textContent = 'Опишите задачу — хотя бы в двух словах.'; return; }
+    if (!consentEl.checked) { statusEl.textContent = 'Отметьте согласие на обработку данных.'; return; }
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Отправляю…';
+    fetch(API + '/submit-brief', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: val('brief-name'), who: val('brief-who'), contact: contact,
+        project: val('brief-project'), dates: val('brief-dates'),
+        budget: val('brief-budget'), task: task,
+        website: val('brief-website'),
+      }),
+    }).then(function(r) { return r.json().catch(function() { return { ok: false }; }); })
+      .then(function(data) {
+        if (data && data.ok) {
+          formEl.innerHTML = '<p class="review-form-status">Спасибо! Заявка отправлена — отвечу, как только смогу.</p>';
+        } else {
+          statusEl.textContent = 'Не получилось отправить — напишите на почту или в Telegram.';
+          submitBtn.disabled = false;
+        }
+      }).catch(function() {
+        statusEl.textContent = 'Не получилось отправить — напишите на почту или в Telegram.';
+        submitBtn.disabled = false;
+      });
+  });
+})();
+</script>

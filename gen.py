@@ -755,7 +755,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 54
+SITE_VERSION = 56
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -1012,7 +1012,8 @@ def header(depth=0, active="", relpath="", lang="ru"):
       {navlink('texts/', 'Тексты', 'texts')}
       {navlink('projects/', 'Проекты', 'projects')}
       {navlink('recommendations/', 'Рекомендации', 'recommendations')}
-      {navlink('about/', 'Автор', 'about')}'''
+      {navlink('about/', 'Автор', 'about')}
+      {navlink('contacts/', 'Контакты', 'contacts')}'''
         alt_href = root + "en/" + relpath
         alt_label, alt_aria = "EN", "Switch to English"
         burger_aria = "Открыть меню"
@@ -1021,7 +1022,8 @@ def header(depth=0, active="", relpath="", lang="ru"):
       {navlink('texts/', 'Texts', 'texts')}
       {navlink('projects/', 'Projects', 'projects')}
       {navlink('recommendations/', 'Recommendations', 'recommendations')}
-      {navlink('about/', 'Author', 'about')}'''
+      {navlink('about/', 'Author', 'about')}
+      {navlink('contacts/', 'Contacts', 'contacts')}'''
         alt_href = root + relpath
         alt_label, alt_aria = "RU", "Switch to Russian"
         burger_aria = "Open menu"
@@ -2028,6 +2030,15 @@ def build_production():
     <a class="btn-line btn-line-ghost" href="../documents/orgculture-uslugi-i-ceny.pdf" download>Скачать КП (PDF) →</a>
 
     <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
+    <div class="eyebrow" style="margin-bottom:20px;">Как оформляется работа</div>
+    <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:620px;margin-bottom:10px;" data-editable="production_docs1">
+      Договор на оказание услуг с заданием по каждому заказу, акт по завершении этапа или месяца, чек по самозанятости. Самозанятый (НПД) — налог плачу сам, заказчик не удерживает НДФЛ и не начисляет страховые взносы.
+    </p>
+    <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:620px;margin-bottom:0;" data-editable="production_docs2">
+      Для театров, фондов и НКО это значит, что расходы закрываются документами и проходят по бухгалтерии без отдельных объяснений.
+    </p>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
     <div class="eyebrow" style="margin-bottom:20px;">Примеры</div>
   </div>
   <div class="wrap-wide">
@@ -2056,6 +2067,182 @@ os.makedirs(os.path.join(ROOT, "production"), exist_ok=True)
 with open(os.path.join(ROOT, "production", "index.html"), "w", encoding="utf-8") as f:
     f.write(build_production())
 print("production/index.html written")
+
+# CONTACTS + бриф
+#
+# До этого контакты были размазаны: блок «Сотрудничество» внизу страниц,
+# подвал, /about/. Отдельная страница нужна как точка входа из поиска и
+# с печатных материалов (QR/визитка), и как место, где стоит форма.
+#
+# Форма («бриф») — по образцу того, как это сделано у AELITA на
+# /collaboration/: два способа подачи (форма на сайте / тот же разговор
+# в боте) и набор полей «кто вы / проект / сроки / бюджет / задача»,
+# чтобы человек не сочинял письмо с нуля. Реализация при этом своя —
+# та же, что у формы отзыва на страницах текстов: POST на собственный
+# воркер бота (WORKER_BASE + /submit-brief), honeypot-поле, отдельный
+# чекбокс согласия, блокирующий отправку. Чужие эндпоинты (Formspree,
+# воркер AELITA) намеренно не переиспользуются — заявки уходили бы не
+# нам.
+#
+# Обязательных полей всего два — как связаться и что за задача.
+# Остальное необязательно: отсекать проект на стадии «пока только идея,
+# бюджета ещё нет» — ровно то, чего делать не надо.
+
+def build_contacts():
+    brief_deep_link = f"https://t.me/{BOT_USERNAME}?start=contact"
+    worker_base_json = json.dumps(WORKER_BASE)
+    body = f'''
+{header(1, "contacts", relpath="contacts/")}
+<style>
+  /* Плавающий виджет «Написать боту» (position:fixed, слева внизу)
+     на этой странице перекрывает чекбокс согласия и кнопку отправки
+     брифа — поймано на скриншоте рендера, 390px. Здесь он вдобавок
+     избыточен: ссылка на бота и прямые контакты есть в самом тексте
+     страницы. Прячем только на /contacts/, на остальных страницах
+     виджет работает как раньше. */
+  .tg-widget{{display:none !important;}}
+</style>
+<section style="padding-top:64px;">
+  <div class="wrap">
+    <div class="eyebrow">Контакты</div>
+    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">Написать мне</h1>
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:620px;margin-bottom:36px;">
+      Продюсирую, продвигаю и делаю сайты для театральных и арт-проектов.
+      Если есть фестиваль, спектакль или идея, которой нужна организационная часть — расскажите о ней, отвечу.
+    </p>
+
+    <div class="contact-direct">
+      <a class="btn-line" href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
+      <a class="btn-line" href="https://t.me/orgculture" target="_blank" rel="noopener">Telegram</a>
+      <a class="btn-line btn-line-ghost" href="tel:+79046170188">+7 904 617-01-88</a>
+    </div>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
+    <div class="eyebrow" style="margin-bottom:16px;">Бриф</div>
+    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:8px;">
+      Если проще ответить на вопросы, чем писать письмо — заполните бриф. Обязательны только два поля: как с вами связаться и что за задача.
+    </p>
+    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:28px;">
+      Те же вопросы задаст <a href="{brief_deep_link}" target="_blank" rel="noopener">бот в Telegram</a>, если удобнее там.
+    </p>
+
+    <div class="brief-form" id="brief-form">
+      <div class="brief-grid">
+        <div class="brief-field">
+          <label for="brief-name">Имя</label>
+          <input type="text" id="brief-name" autocomplete="name" placeholder="Как к вам обращаться">
+        </div>
+        <div class="brief-field">
+          <label for="brief-who">Кто вы</label>
+          <select id="brief-who">
+            <option value="">Выберите…</option>
+            <option>Театр или площадка</option>
+            <option>Независимая команда</option>
+            <option>Фестиваль</option>
+            <option>Режиссёр или артист</option>
+            <option>Фонд или НКО</option>
+            <option>Пресса</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="brief-field full">
+          <label for="brief-contact">Как связаться <span class="req-mark">*</span></label>
+          <input type="text" id="brief-contact" autocomplete="email" placeholder="Почта, телефон или @username в Telegram">
+        </div>
+        <div class="brief-field full">
+          <label for="brief-project">Проект</label>
+          <input type="text" id="brief-project" placeholder="Спектакль, фестиваль, идея — в двух словах">
+        </div>
+        <div class="brief-field">
+          <label for="brief-dates">Сроки</label>
+          <input type="text" id="brief-dates" placeholder="Даты или «пока не знаю»">
+        </div>
+        <div class="brief-field">
+          <label for="brief-budget">Бюджет</label>
+          <input type="text" id="brief-budget" placeholder="Вилка или «обсуждается»">
+        </div>
+        <div class="brief-field full">
+          <label for="brief-task">Задача <span class="req-mark">*</span></label>
+          <textarea id="brief-task" rows="5" placeholder="Что нужно сделать и что уже есть"></textarea>
+        </div>
+      </div>
+      <input type="text" id="brief-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="review-form-consent" for="brief-consent">
+        <input type="checkbox" id="brief-consent">
+        <span>Согласен(на) на обработку указанных данных согласно <a href="../privacy/" target="_blank" rel="noopener">Политике конфиденциальности</a></span>
+      </label>
+      <button type="button" class="btn-line" id="brief-submit" disabled>Отправить</button>
+      <p class="review-form-status" id="brief-status"></p>
+      <noscript>
+        <p style="color:var(--dim);font-size:13.5px;margin-top:10px;">
+          Форма требует JavaScript. Без него напишите на почту или в Telegram — ссылки выше.
+        </p>
+      </noscript>
+    </div>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
+    <div class="eyebrow" style="margin-bottom:16px;">Реквизиты</div>
+    <p style="color:var(--dim);font-size:15px;line-height:1.9;margin-bottom:0;">
+      Мошников Константин Алексеевич<br>
+      Самозанятый (НПД) · ИНН 471508674254<br>
+      г. Санкт-Петербург
+    </p>
+    <p style="margin-top:28px;"><a class="btn-line btn-line-ghost" href="../production/">Что именно я делаю →</a></p>
+  </div>
+</section>
+{footer(1)}
+<script>
+(function(){{
+  var API = {worker_base_json};
+  var submitBtn = document.getElementById('brief-submit');
+  var consentEl = document.getElementById('brief-consent');
+  var statusEl = document.getElementById('brief-status');
+  var formEl = document.getElementById('brief-form');
+  function val(id) {{ return (document.getElementById(id).value || '').trim(); }}
+  // Согласие — отдельное явное действие (ст. 9 152-ФЗ), не выводится из
+  // факта отправки формы; проверка продублирована в обработчике на
+  // случай снятия disabled через devtools.
+  consentEl.addEventListener('change', function() {{
+    submitBtn.disabled = !consentEl.checked;
+  }});
+  submitBtn.addEventListener('click', function() {{
+    var contact = val('brief-contact'), task = val('brief-task');
+    if (!contact) {{ statusEl.textContent = 'Укажите, как с вами связаться.'; return; }}
+    if (!task) {{ statusEl.textContent = 'Опишите задачу — хотя бы в двух словах.'; return; }}
+    if (!consentEl.checked) {{ statusEl.textContent = 'Отметьте согласие на обработку данных.'; return; }}
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Отправляю…';
+    fetch(API + '/submit-brief', {{
+      method: 'POST',
+      headers: {{'Content-Type': 'application/json'}},
+      body: JSON.stringify({{
+        name: val('brief-name'), who: val('brief-who'), contact: contact,
+        project: val('brief-project'), dates: val('brief-dates'),
+        budget: val('brief-budget'), task: task,
+        website: val('brief-website'),
+      }}),
+    }}).then(function(r) {{ return r.json().catch(function() {{ return {{ ok: false }}; }}); }})
+      .then(function(data) {{
+        if (data && data.ok) {{
+          formEl.innerHTML = '<p class="review-form-status">Спасибо! Заявка отправлена — отвечу, как только смогу.</p>';
+        }} else {{
+          statusEl.textContent = 'Не получилось отправить — напишите на почту или в Telegram.';
+          submitBtn.disabled = false;
+        }}
+      }}).catch(function() {{
+        statusEl.textContent = 'Не получилось отправить — напишите на почту или в Telegram.';
+        submitBtn.disabled = false;
+      }});
+  }});
+}})();
+</script>
+'''
+    return page_head("Контакты — Организованная Культурность", "Связаться по продюсированию, продвижению и сайтам для театральных и арт-проектов: почта, Telegram, бриф.", 1, path="contacts/") + body
+
+os.makedirs(os.path.join(ROOT, "contacts"), exist_ok=True)
+with open(os.path.join(ROOT, "contacts", "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_contacts())
+print("contacts/index.html written")
 
 def build_projects_index():
     body = f'''

@@ -386,6 +386,33 @@ footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
 .review-form button:disabled{opacity:.5;cursor:not-allowed;}
 .review-form-status{color:var(--dim);font-size:13px;margin-top:10px;text-align:center;}
 
+/* ---------- contacts + бриф ---------- */
+/* Форма брифа переиспользует .review-form-honeypot / -consent / -status
+   с формы отзыва выше — намеренно, чтобы honeypot и согласие вели себя
+   одинаково в обоих местах и правились в одном месте. Своё здесь —
+   только сетка полей и подписи. */
+.contact-direct{display:flex;gap:14px;flex-wrap:wrap;}
+.brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.brief-field{display:flex;flex-direction:column;}
+.brief-field.full{grid-column:1/-1;}
+.brief-field label{font-size:13px;color:var(--dim);margin-bottom:7px;}
+.brief-field input,.brief-field select,.brief-field textarea{
+  width:100%;background:var(--panel);border:1px solid var(--line);border-radius:2px;
+  color:var(--ink);font-family:inherit;font-size:14.5px;padding:11px 14px;
+}
+.brief-field textarea{resize:vertical;min-height:110px;}
+.brief-field input::placeholder,.brief-field textarea::placeholder{color:var(--dim2);}
+.brief-field input:focus,.brief-field select:focus,.brief-field textarea:focus{outline:none;border-color:var(--accent);}
+.brief-field .req-mark{color:var(--accent);}
+.brief-form button:disabled{opacity:.5;cursor:not-allowed;}
+.brief-form>button{margin-top:18px;}
+/* ⚠️ Медиа-блок — ПОСЛЕ базовых правил выше (см. историю v47/v48/v52/v54:
+   при равной специфичности побеждает более позднее по коду правило,
+   media-запрос сам по себе специфичность не поднимает). */
+@media(max-width:600px){
+  .brief-grid{grid-template-columns:1fr;}
+}
+
 /* ---------- legal doc pages ---------- */
 .doc-meta{color:var(--dim2);font-size:13px;margin-top:14px;}
 .doc-body h2{font-size:19px;font-weight:400;color:var(--ink);margin:34px 0 12px;}

@@ -282,6 +282,15 @@ def build_production_en():
     <a class="btn-line btn-line-ghost" href="../../documents/orgculture-services-and-prices.pdf" download>Download the offer (PDF) \u2192</a>
 
     <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
+    <div class="eyebrow" style="margin-bottom:20px;">How the paperwork works</div>
+    <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:620px;margin-bottom:10px;">
+      A service contract with a statement of work for each order, an act of acceptance at the end of each stage or month, and a tax receipt. I am registered as self-employed in Russia and pay the professional income tax myself \u2014 the client withholds nothing and pays no social contributions.
+    </p>
+    <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:620px;margin-bottom:0;">
+      For theatres, foundations and non-profits this means the costs are covered by documents and go through accounting without a separate explanation.
+    </p>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
     <div class="eyebrow" style="margin-bottom:20px;">Examples</div>
   </div>
   <div class="wrap-wide">
@@ -310,6 +319,163 @@ os.makedirs(os.path.join(EN_ROOT, "production"), exist_ok=True)
 with open(os.path.join(EN_ROOT, "production", "index.html"), "w", encoding="utf-8") as f:
     f.write(build_production_en())
 print("en/production/index.html written")
+
+# EN-версия страницы контактов с тем же брифом. Шлёт на тот же
+# /submit-brief того же воркера — заявка приходит одним и тем же
+# форматом, отдельной английской ветки на стороне бота нет намеренно:
+# поля подписаны по-русски уже в самом Telegram-сообщении (BRIEF_LABELS
+# в worker.js), чтобы читать заявки в одном виде независимо от языка
+# страницы, с которой их отправили.
+
+def build_contacts_en():
+    brief_deep_link = f"https://t.me/{BOT_USERNAME}?start=contact"
+    worker_base_json = json.dumps(WORKER_BASE)
+    body = f'''
+{header(2, "contacts", relpath="contacts/", lang="en")}
+<style>
+  /* См. комментарий в build_contacts() (gen.py): плавающий виджет
+     перекрывает согласие и кнопку отправки брифа, и на этой странице
+     он избыточен. Прячем только здесь. */
+  .tg-widget{{display:none !important;}}
+</style>
+<section style="padding-top:64px;">
+  <div class="wrap">
+    <div class="eyebrow">Contacts</div>
+    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">Get in touch</h1>
+    <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:620px;margin-bottom:36px;">
+      I produce, promote and build websites for theatre and arts projects.
+      If you have a festival, a production or an idea that needs its organisational side handled — tell me about it.
+    </p>
+
+    <div class="contact-direct">
+      <a class="btn-line" href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
+      <a class="btn-line" href="https://t.me/orgculture" target="_blank" rel="noopener">Telegram</a>
+      <a class="btn-line btn-line-ghost" href="tel:+79046170188">+7 904 617-01-88</a>
+    </div>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
+    <div class="eyebrow" style="margin-bottom:16px;">Brief</div>
+    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:8px;">
+      If answering questions is easier than writing a letter, fill in the brief. Only two fields are required: how to reach you and what the task is.
+    </p>
+    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:28px;">
+      The <a href="{brief_deep_link}" target="_blank" rel="noopener">Telegram bot</a> asks the same questions, if that's more convenient.
+    </p>
+
+    <div class="brief-form" id="brief-form">
+      <div class="brief-grid">
+        <div class="brief-field">
+          <label for="brief-name">Name</label>
+          <input type="text" id="brief-name" autocomplete="name" placeholder="What to call you">
+        </div>
+        <div class="brief-field">
+          <label for="brief-who">Who you are</label>
+          <select id="brief-who">
+            <option value="">Choose…</option>
+            <option>Theatre or venue</option>
+            <option>Independent company</option>
+            <option>Festival</option>
+            <option>Director or performer</option>
+            <option>Foundation or NGO</option>
+            <option>Press</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="brief-field full">
+          <label for="brief-contact">How to reach you <span class="req-mark">*</span></label>
+          <input type="text" id="brief-contact" autocomplete="email" placeholder="Email, phone or @username on Telegram">
+        </div>
+        <div class="brief-field full">
+          <label for="brief-project">Project</label>
+          <input type="text" id="brief-project" placeholder="Production, festival, idea — in a few words">
+        </div>
+        <div class="brief-field">
+          <label for="brief-dates">Timing</label>
+          <input type="text" id="brief-dates" placeholder="Dates, or \u201cnot sure yet\u201d">
+        </div>
+        <div class="brief-field">
+          <label for="brief-budget">Budget</label>
+          <input type="text" id="brief-budget" placeholder="A range, or \u201cto be discussed\u201d">
+        </div>
+        <div class="brief-field full">
+          <label for="brief-task">Task <span class="req-mark">*</span></label>
+          <textarea id="brief-task" rows="5" placeholder="What needs doing and what already exists"></textarea>
+        </div>
+      </div>
+      <input type="text" id="brief-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="review-form-consent" for="brief-consent">
+        <input type="checkbox" id="brief-consent">
+        <span>I consent to the processing of the data provided in line with the <a href="../privacy/" target="_blank" rel="noopener">Privacy Policy</a></span>
+      </label>
+      <button type="button" class="btn-line" id="brief-submit" disabled>Send</button>
+      <p class="review-form-status" id="brief-status"></p>
+      <noscript>
+        <p style="color:var(--dim);font-size:13.5px;margin-top:10px;">
+          The form needs JavaScript. Without it, use the email or Telegram links above.
+        </p>
+      </noscript>
+    </div>
+
+    <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
+    <div class="eyebrow" style="margin-bottom:16px;">Details</div>
+    <p style="color:var(--dim);font-size:15px;line-height:1.9;margin-bottom:0;">
+      Konstantin Moshnikov<br>
+      Self-employed (NPD) · INN 471508674254<br>
+      St. Petersburg, Russia
+    </p>
+    <p style="margin-top:28px;"><a class="btn-line btn-line-ghost" href="../production/">What exactly I do \u2192</a></p>
+  </div>
+</section>
+{footer(2, lang="en")}
+<script>
+(function(){{
+  var API = {worker_base_json};
+  var submitBtn = document.getElementById('brief-submit');
+  var consentEl = document.getElementById('brief-consent');
+  var statusEl = document.getElementById('brief-status');
+  var formEl = document.getElementById('brief-form');
+  function val(id) {{ return (document.getElementById(id).value || '').trim(); }}
+  consentEl.addEventListener('change', function() {{
+    submitBtn.disabled = !consentEl.checked;
+  }});
+  submitBtn.addEventListener('click', function() {{
+    var contact = val('brief-contact'), task = val('brief-task');
+    if (!contact) {{ statusEl.textContent = 'Please say how to reach you.'; return; }}
+    if (!task) {{ statusEl.textContent = 'Describe the task — even briefly.'; return; }}
+    if (!consentEl.checked) {{ statusEl.textContent = 'Please tick the consent box.'; return; }}
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Sending…';
+    fetch(API + '/submit-brief', {{
+      method: 'POST',
+      headers: {{'Content-Type': 'application/json'}},
+      body: JSON.stringify({{
+        name: val('brief-name'), who: val('brief-who'), contact: contact,
+        project: val('brief-project'), dates: val('brief-dates'),
+        budget: val('brief-budget'), task: task,
+        website: val('brief-website'),
+      }}),
+    }}).then(function(r) {{ return r.json().catch(function() {{ return {{ ok: false }}; }}); }})
+      .then(function(data) {{
+        if (data && data.ok) {{
+          formEl.innerHTML = '<p class="review-form-status">Thank you — your enquiry has been sent. I’ll reply as soon as I can.</p>';
+        }} else {{
+          statusEl.textContent = 'Couldn’t send — please use email or Telegram instead.';
+          submitBtn.disabled = false;
+        }}
+      }}).catch(function() {{
+        statusEl.textContent = 'Couldn’t send — please use email or Telegram instead.';
+        submitBtn.disabled = false;
+      }});
+  }});
+}})();
+</script>
+'''
+    return page_head("Contacts — Organized Culturality", "Get in touch about production, promotion and websites for theatre and arts projects: email, Telegram, brief.", 2, path="en/contacts/", lang="en") + body
+
+os.makedirs(os.path.join(EN_ROOT, "contacts"), exist_ok=True)
+with open(os.path.join(EN_ROOT, "contacts", "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_contacts_en())
+print("en/contacts/index.html written")
 
 def build_search_index_en():
     idx = []
