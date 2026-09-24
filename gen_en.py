@@ -492,8 +492,10 @@ def build_search_index_en():
 # INDEX (home)
 # ---------------------------------------------------------------
 def build_index_en():
-    latest = TEXTS_EN[:3]   # v62: три, как на русской главной
-    rec_with_link = [t for t in TEXTS_EN if t["link"]][:3]
+    # Как на русской главной (v64): последние три текста с картинкой,
+    # в рекомендациях — не они же.
+    latest = [t for t in TEXTS_EN if t["image"]][:3]
+    rec_with_link = [t for t in TEXTS_EN if t["link"] and t not in latest][:3]
 
     index_schema_en = {
         "@context": "https://schema.org",
@@ -546,7 +548,7 @@ def build_index_en():
   <div class="mark">{LOGO_MARK_SVG}</div>
   <div class="word">{WORDMARK_SVG}</div>
   <div class="slogan" data-editable="home_slogan_en">* Without aggression, but with expression</div>
-  <p class="lede" data-editable="home_lede_en">A space where meanings get made. Texts about culture \u2014 not to recommend, but to think something through. Alongside \u2014 production and promotion for arts projects.</p>
+  <p class="lede" data-editable="home_lede_en">A space where meanings get made. Texts about culture, as well as production and promotion for arts projects.</p>
   <div class="hero-ctas">
     <a class="btn-line" href="texts/">Read the texts</a>
     <a class="btn-line btn-line-ghost" href="production/">Production &amp; promotion</a>

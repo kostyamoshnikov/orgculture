@@ -770,7 +770,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 63
+SITE_VERSION = 64
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -1362,7 +1362,6 @@ print("chrome ready")
 # ---------------------------------------------------------------
 HOME_PROD_TEXT = {
     "ru": {
-        "eyebrow": "Вторая часть — работа",
         "h2": "Продюсирование и продвижение",
         "lede": "Довожу театральные и арт-проекты от идеи до зрителя: беру на себя организацию, продвижение и сайт, чтобы у постановки было пространство остаться творческой.",
         "services": [
@@ -1376,7 +1375,6 @@ HOME_PROD_TEXT = {
         "faq": "Частые вопросы",
     },
     "en": {
-        "eyebrow": "The other half — work",
         "h2": "Production & promotion",
         "lede": "I take theatre and arts projects from idea to audience, handling the organisation, promotion and website so the production has room to stay creative.",
         "services": [
@@ -1401,7 +1399,6 @@ def home_production_block(lang, projects):
     return f"""<section class="tight">
   <div class="wrap-wide">
     <div class="home-prod">
-      <div class="eyebrow">{html.escape(T['eyebrow'])}</div>
       <h2 class="home-prod-h">{html.escape(T['h2'])}</h2>
       <p class="home-prod-lede">{html.escape(T['lede'])}</p>
       <div class="prod-services">{services}</div>
@@ -1418,8 +1415,11 @@ def home_production_block(lang, projects):
 def build_index():
     # v62: три последних текста вместо шести — вторая половина главной
     # отдана блоку «Продюсирование и продвижение».
-    latest = TEXTS[:3]
-    rec_with_link = [t for t in TEXTS if t["link"]][:3]
+    # v64: в «Последних текстах» — только тексты с картинкой (без неё
+    # карточка на главной — большой пустой знак), в «Рекомендациях» — не
+    # те же тексты, что выше: раньше оба блока показывали одно и то же.
+    latest = [t for t in TEXTS if t["image"]][:3]
+    rec_with_link = [t for t in TEXTS if t["link"] and t not in latest][:3]
 
     index_schema = {
         "@context": "https://schema.org",
@@ -1472,7 +1472,7 @@ def build_index():
   <div class="mark">{LOGO_MARK_SVG}</div>
   <div class="word">{WORDMARK_SVG}</div>
   <div class="slogan" data-editable="home_slogan">* Без агрессии, но с экспрессией</div>
-  <p class="lede" data-editable="home_lede">Пространство для рождения смыслов и новых значений. Тексты о культуре — не чтобы порекомендовать, а чтобы отрефлексировать. Рядом — продюсирование и продвижение арт-проектов.</p>
+  <p class="lede" data-editable="home_lede">Пространство для рождения смыслов и новых значений. Тексты о культуре, а также продюсирование и продвижение арт-проектов.</p>
   <div class="hero-ctas">
     <a class="btn-line" href="texts/">Читать тексты</a>
     <a class="btn-line btn-line-ghost" href="production/">Продюсирование и продвижение</a>
