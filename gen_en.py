@@ -88,7 +88,7 @@ CV_ROLES_EN = [
         "period": "June 2025 \u2014 present",
         "bullets": [
             "Built a production company from nothing; 10+ projects delivered in under a year",
-            "Producer of the Tochka Kyuri festival (Stary Oskol, October 2026)",
+            "Producer of the Tochka Cuire festival (Stary Oskol, October 2026)",
             "Built the brand identity, the website and the Telegram bot; runs social media across four platforms",
         ],
     },
@@ -134,7 +134,7 @@ PROJECTS_EN = [
     "facts": [("10+", "projects in a year"), ("2025", "founded")],
     "paragraphs": [
       "AELITA PRODUCTION is a production company I started in June 2025. In under a year: more than ten completed projects, from festivals to brand identities and websites for theatre companies.",
-      "The work includes producing the Tochka Kyuri festival in Stary Oskol, building brand identities and full websites with Telegram bots, and running social media for several projects at once.",
+      "The work includes producing the Tochka Cuire festival in Stary Oskol, building brand identities and full websites with Telegram bots, and running social media for several projects at once.",
       "AELITA also works with the dance company Koroche \u2014 organising performances, touring and promotion.",
     ],
     "link": "https://aelita-production.ru", "link_label": "aelita-production.ru",
@@ -166,13 +166,15 @@ PROJECTS_EN = [
   },
   {
     "slug": "tochka-kyuri", "role": "Festival Producer", "period": "October 2026",
-    "title": "Tochka Kyuri",
-    "kicker": "A festival in Stary Oskol, produced by AELITA PRODUCTION.",
-    "facts": [("Stary Oskol", "city"), ("Oct 2026", "dates")],
+    "title": "Tochka Cuire",
+    "kicker": "AELITA PRODUCTION\u2019s contemporary arts festival \u2014 22\u201325 October 2026, Stary Oskol, CSI \u201cByl\u201d.",
+    "facts": [("Stary Oskol", "city"), ("22\u201325.10.2026", "dates"), ("CSI \u201cByl\u201d", "venue")],
     "paragraphs": [
-      "Tochka Kyuri is a festival in Stary Oskol produced by AELITA PRODUCTION. The full programme will appear here nearer the time; this page is being updated as material becomes ready.",
+      "Tochka Cuire is an annual contemporary arts festival produced by AELITA PRODUCTION. The first edition takes place on 22\u201325 October 2026 in Stary Oskol, at CSI \u201cByl\u201d.",
+      "Four days of performances, physical theatre and dance, exhibitions, a children\u2019s programme, markets and a talks programme \u2014 lectures and a workshop.",
+      "I am the festival\u2019s producer. The full programme, schedule and tickets are on the AELITA PRODUCTION website.",
     ],
-    "link": None, "link_label": None,
+    "link": "https://aelita-production.ru/en/tochkacuire/", "link_label": "Programme and tickets \u2014 aelita-production.ru",
   },
   {
     "slug": "komnata-sveta", "role": "Social Media", "period": "January 2022 \u2014 present",
@@ -457,6 +459,7 @@ def build_contacts_en():
     }}).then(function(r) {{ return r.json().catch(function() {{ return {{ ok: false }}; }}); }})
       .then(function(data) {{
         if (data && data.ok) {{
+          if (window.okTrack) window.okTrack('brief_submit');
           formEl.innerHTML = '<p class="review-form-status">Thank you — your enquiry has been sent. I’ll reply as soon as I can.</p>';
         }} else {{
           statusEl.textContent = 'Couldn’t send — please use email or Telegram instead.';
@@ -858,6 +861,7 @@ def build_text_page_en(t, idx):
     }}).then(function(r) {{ return r.json().catch(function() {{ return {{ ok: false }}; }}); }})
       .then(function(data) {{
         if (data && data.ok) {{
+          if (window.okTrack) window.okTrack('review_submit');
           formEl.innerHTML = '<p class="review-form-status">Thank you! Your review has been sent for moderation.</p>';
         }} else {{
           statusEl.textContent = "Couldn't send it \u2014 try Telegram instead.";
@@ -1281,8 +1285,16 @@ print("en/cookies/index.html written")
 # ---------------------------------------------------------------
 # COMBINED SITEMAP (RU + EN, with hreflang alternates)
 # ---------------------------------------------------------------
+# /en/press/ — та же разметка, что у RU (build_press в gen.py), тексты —
+# из PRESS_TEXT["en"] там же. Файлы documents/press/ уже скопированы gen.py.
+os.makedirs(os.path.join(ROOT, "en", "press"), exist_ok=True)
+with open(os.path.join(ROOT, "en", "press", "index.html"), "w", encoding="utf-8") as f:
+    f.write(ns["build_press"]("en"))
+print("en/press/index.html written")
+
 def build_combined_sitemap():
-    core = ["", "manifesto/", "texts/", "projects/", "production/", "recommendations/", "about/", "privacy/", "bot-rules/", "cookies/"]
+    # Юр. страницы в sitemap не входят — noindex (NOINDEX_PATHS в gen.py).
+    core = ["", "manifesto/", "texts/", "projects/", "production/", "recommendations/", "about/", "contacts/", "press/"]
     ru_paths = list(core) + [f"texts/{t['slug']}/" for t in TEXTS_RU] + [f"projects/{p['slug']}/" for p in PROJECTS_RU]
     en_paths = list(core) + [f"texts/{t['slug']}/" for t in TEXTS_EN] + [f"projects/{p['slug']}/" for p in PROJECTS_EN]
     entries = []

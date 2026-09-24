@@ -132,9 +132,24 @@ def check_integrity():
         html = open(path, encoding='utf-8').read()
         visible = re.sub(r'<script.*?</script>', '', html, flags=re.S)
         visible = re.sub(r'<!--.*?-->', '', visible, flags=re.S)
+        # <style> — не видимый текст (в en/contacts/ там русский комментарий
+        # к CSS; раньше это ложно считалось кириллицей на странице)
+        visible = re.sub(r'<style.*?</style>', '', visible, flags=re.S)
         if CYRILLIC.search(visible):
             n = len(CYRILLIC.findall(visible))
             issue('integrity', f'{path}: {n} кириллических символов в видимом тексте')
+
+    # 4a2. JSON-LD на EN-страницах — тоже по-английски. Видимый текст
+    # проверяется выше, а <script> вырезается — разметку для поисковиков
+    # никто не смотрел. У AELITA (pack-v488) на 44 EN-страницах JSON-LD
+    # оставался русским именно из-за этого. У нас на v58 чисто — проверка,
+    # чтобы так и оставалось.
+    for path in sorted(glob.glob('en/**/*.html', recursive=True)):
+        html = open(path, encoding='utf-8').read()
+        for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, flags=re.S):
+            if CYRILLIC.search(block):
+                issue('integrity', f'{path}: кириллица в JSON-LD (разметка для поисковиков должна быть на английском)')
+                break
 
     # 4b. сбалансированность тегов (грубая проверка, не полноценный HTML-парсер)
     for path in sorted(glob.glob('en/**/*.html', recursive=True)):
@@ -175,7 +190,7 @@ def check_integrity():
         html = open(path, encoding='utf-8').read()
         base_dir = os.path.dirname(path)
         for href in re.findall(r'href="([^"]+)"', html):
-            if href.startswith(('http', 'mailto:', 'data:', '#')):
+            if href.startswith(('http', 'mailto:', 'tel:', 'data:', '#')):
                 continue
             target = href.split('#')[0].split('?')[0]
             if not target:

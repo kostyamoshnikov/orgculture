@@ -112,6 +112,7 @@ TEXTS = [
     "title": "В поисках вдохновения, или Как жить среди роботов и не сойти с ума",
     "kicker": "О рождении спектакля «Робот Костя» — первого в России роботического театра, где Чеховские страсти оказались подвластны и роботам.",
     "image": "annette-poster.jpg",
+    "og_image": "annette-poster-og.jpg",
     "paragraphs": [
       "Далеко не всякий может оказаться предметом искусства. При этом всё настолько зависит от обстоятельств, что при определённом свете им станет любой.",
       "В этом отчасти и есть творчество — в создании трогающих контекстов и созерцательных решений.",
@@ -275,6 +276,7 @@ TEXTS = [
     "title": "Интервью В, или Времена не выбирают — в них живут",
     "kicker": "Вертинский во плоти на «7-м ярусе» Александринского театра — и вопрос о том, насколько человек беззащитен и ограничен своим телом.",
     "image": "kacheli.jpg",
+    "og_image": "kacheli-og.jpg",
     "paragraphs": [
       "Он медленно надевает свои чулки, и ничто не должно помешать ему закончить.",
       "В спектакле Романа Кагановича «Интервью В» маэстро Вертинский явлен во плоти — в прямом и переносном смысле. Пространство зала, в котором всё происходит, столь невелико, а вымысел почувствовать легко — достаточно приложить нужный объектив.",
@@ -587,6 +589,7 @@ TEXTS = [
     "title": "«За белым кроликом» — терапевтический эффект второго текста об одном спектакле",
     "kicker": "Пишу уже второй пост про один и тот же спектакль Ромы Кагановича — потому что проговаривать однотипные фразы про качество произведения искусства слишком пошло.",
     "image": "za-belym-krolikom.jpg",
+    "og_image": "za-belym-krolikom-og.jpg",
     "paragraphs": [
       "Здесь это происходит впервые: пишу уже второй пост про один и тот же спектакль. Это действие скорее терапевтическое — видимо, не получается держать всё внутри, есть острая необходимость высказаться. Проговаривать, как мантру, однотипные фразы про качество произведения искусства кажется пошлым и абсолютно бессмысленным; гораздо интереснее создать на его основе что-то своё — в моём случае пусть это будет текст.",
       "Я очень хорошо отношусь к малой форме: сжатый формат не даёт художнику особо распространяться и заставляет сосредоточиться на главном. Перед спектаклем «За белым кроликом», уточняя продолжительность, я даже выразил скуку по поводу часового зрелища. И снова не думал, что вплоть до следующего дня меня не будет отпускать тревожное, немного истерическое ощущение от увиденного — точнее, прочувствованного. Каждый видит по-разному, и, возможно, просто для меня открылось то, чего раньше не замечал.",
@@ -687,6 +690,7 @@ TEXTS = [
     "title": "«Маузер» Теодороса Терзопулоса — театр тела в прямом эфире",
     "kicker": "Александринский показал премьеру онлайн — и это на 180 градусов повернуло представление о театре на видео. Понимания хватило процентов на двадцать, но и этого достаточно.",
     "image": "mauzer-terzopulos.jpg",
+    "og_image": "mauzer-terzopulos-og.jpg",
     "paragraphs": [
       "Слава богу, не начал жаловаться, что в трансляциях не хватает погружения и включённости. Сегодня Александринский показал премьеру Теодороса Терзопулоса в прямом эфире и на сто восемьдесят градусов повернул моё представление о театре на видео.",
       "Красивые крупные планы, необычный дыхательный способ существования актёров на сцене — не представляю, как это удалось, но особо не нужно было следить за тем, что они говорят: невидимая сила удерживает внимание на экране.",
@@ -755,7 +759,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 56
+SITE_VERSION = 58
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -763,7 +767,7 @@ SITE_VERSION = 56
 # сборки сайта, а не дата конкретного текста — честнее, чем не иметь
 # lastmod вообще, но не путать одно с другим. Бампать вручную вместе с
 # SITE_VERSION при каждой пересборке.
-BUILD_DATE = "2026-09-13"
+BUILD_DATE = "2026-09-24"
 
 # Натуральные размеры картинок из images/ — только для атрибутов width/height
 # у <img> (чтобы браузер резервировал место и не прыгала вёрстка при
@@ -951,8 +955,94 @@ def build_site_content_js():
 }})();
 '''
 
+# Юридические страницы закрыты от индексации (по образцу AELITA, где
+# /privacy, /cookies, /bot, /oferta закрыты осознанно): их не должно быть
+# в выдаче вместо содержательных страниц, и их нет в sitemap.xml. Сделано
+# через <meta name="robots" content="noindex, follow">, а не через
+# Disallow в robots.txt: Disallow запрещает роботу зайти на страницу —
+# и он не увидит noindex, а уже проиндексированная страница из выдачи
+# так и не уйдёт. Ссылки в футере остаются — страницы доступны людям.
+NOINDEX_PATHS = {"privacy/", "cookies/", "bot-rules/"}
+
+# ---------------------------------------------------------------
+# Цели на ключевые действия — assets/analytics-events.js
+# По образцу AELITA (Site/assets/analytics-events.js, pack-v101): один
+# делегированный обработчик кликов на весь документ + явные вызовы
+# okTrack() из форм. Цель уходит в Метрику (reachGoal) и в наш маячок
+# /track (поле event). Ничего не отправляется без согласия на cookie —
+# то же условие, что у самой Метрики и маячка (ok_cookie_consent === '1').
+# Генерируется, а не лежит статикой: номер счётчика и адрес воркера
+# берутся из тех же констант, что и везде (YANDEX_METRIKA_ID,
+# STATS_ENDPOINT) — не второе место, которое забудут поправить.
+#
+# Список целей — ANALYTICS_GOALS. Тот же список (имена) продублирован в
+# 04-bot/worker.js (TRACK_EVENTS) — воркер принимает только известные
+# имена. Добавляешь цель — правь оба места. В самой Метрике каждую цель
+# нужно один раз завести руками: «Цели» → «JavaScript-событие» →
+# идентификатор = имя из списка (см. 03-website/README.md, «Аналитика»).
+# ---------------------------------------------------------------
+ANALYTICS_GOALS = [
+    ("brief_submit",           "отправлена форма брифа на /contacts/"),
+    ("offer_download",         "скачано КП (orgculture-uslugi-i-ceny.pdf / services-and-prices.pdf)"),
+    ("cv_download",            "скачано CV"),
+    ("press_kit_download",     "скачан файл с /press/ (знак, брендбук, фото)"),
+    ("telegram_channel_click", "переход в Telegram-канал t.me/orgculture"),
+    ("telegram_bot_click",     "переход в бота @orgculture_bot (включая плавающий виджет)"),
+    ("vk_click",               "переход в VK vk.ru/orgculture"),
+    ("email_click",            "клик по почте (mailto:)"),
+    ("review_submit",          "отправлен отзыв на текст с сайта"),
+    ("rss_click",              "клик по RSS-ленте"),
+]
+
+def build_analytics_events_js():
+    names = ", ".join(f"'{n}'" for n, _ in ANALYTICS_GOALS)
+    return f"""// Цели на ключевые действия. Сгенерировано gen.py (build_analytics_events_js) —
+// не редактировать руками. Список целей: ANALYTICS_GOALS в gen.py.
+(function () {{
+  var YM_ID = {YANDEX_METRIKA_ID or 0};
+  var ENDPOINT = '{STATS_ENDPOINT}';
+  var GOALS = [{names}];
+
+  function consented() {{
+    try {{ return localStorage.getItem('ok_cookie_consent') === '1'; }} catch (e) {{ return false; }}
+  }}
+
+  function track(name) {{
+    if (GOALS.indexOf(name) === -1 || !consented()) return;
+    try {{ if (YM_ID && typeof window.ym === 'function') window.ym(YM_ID, 'reachGoal', name); }} catch (e) {{}}
+    try {{
+      var p = location.pathname;
+      var payload = JSON.stringify({{ event: name, path: p, lang: (p.indexOf('/en/') === 0 || p === '/en') ? 'en' : 'ru' }});
+      navigator.sendBeacon(ENDPOINT, new Blob([payload], {{ type: 'text/plain' }}));
+    }} catch (e) {{}}
+  }}
+  window.okTrack = track;
+
+  function classify(href) {{
+    if (/^mailto:/i.test(href)) return 'email_click';
+    if (/t\\.me\\/orgculture_bot/i.test(href)) return 'telegram_bot_click';
+    if (/t\\.me\\/orgculture(?:[\\/?#]|$)/i.test(href)) return 'telegram_channel_click';
+    if (/vk\\.(?:ru|com)\\/orgculture/i.test(href)) return 'vk_click';
+    if (/orgculture-(?:uslugi-i-ceny|services-and-prices)\\.pdf/i.test(href)) return 'offer_download';
+    if (/CV-[^\\/]*\\.pdf/i.test(href)) return 'cv_download';
+    if (/documents\\/press\\//i.test(href)) return 'press_kit_download';
+    if (/feed\\.xml/i.test(href)) return 'rss_click';
+    return null;
+  }}
+
+  document.addEventListener('click', function (e) {{
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var goal = classify(a.getAttribute('href') || '');
+    if (goal) track(goal);
+  }}, true);
+}})();
+"""
+
 def page_head(title, description, depth=0, og_image=None, path="", lang="ru"):
     root = "../" * depth if depth else "./"
+    _bare = path[3:] if path.startswith("en/") else path
+    robots_meta = '<meta name="robots" content="noindex, follow">\n' if _bare in NOINDEX_PATHS else ""
     og = og_image or f"{SITE_DOMAIN}/images/og-default.jpg"
     # hreflang: path всегда без языкового префикса для ru и с "en/" для en —
     # так по одному path вычисляются оба варианта для rel=alternate.
@@ -974,7 +1064,7 @@ def page_head(title, description, depth=0, og_image=None, path="", lang="ru"):
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description)}">
 <meta name="theme-color" content="#0A0A0A">
-<link rel="icon" href="{root}assets/icons/favicon.svg" type="image/svg+xml">
+{robots_meta}<link rel="icon" href="{root}assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="{root}assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="{root}assets/icons/favicon-180.png">
 <link rel="icon" href="{root}assets/icons/favicon-192.png" sizes="192x192" type="image/png">
@@ -995,7 +1085,8 @@ def page_head(title, description, depth=0, og_image=None, path="", lang="ru"):
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/style.css?v={SITE_VERSION}">
 <link rel="manifest" href="{manifest_href}">
-{yandex_metrika_snippet()}{own_stats_snippet()}</head>
+{yandex_metrika_snippet()}{own_stats_snippet()}<script src="{root}assets/analytics-events.js?v={SITE_VERSION}" defer></script>
+</head>
 <body>
 <a href="#main" class="skip-link">{skip_text}</a>
 '''
@@ -1083,6 +1174,11 @@ def footer(depth=0, lang="ru"):
         tg_bubble = "Напишите нам — бот ответит быстро"
         tg_btn_label = "Написать боту"
         tg_aria = "Написать в Telegram"
+        sections = [("texts/", "Тексты"), ("projects/", "Проекты"), ("production/", "Продюсирование"),
+                    ("manifesto/", "Манифест"), ("recommendations/", "Рекомендации"), ("about/", "Автор"),
+                    ("press/", "Для прессы"), ("contacts/", "Контакты")]
+        sections_aria = "Разделы сайта"
+        requisites = "Мошников Константин Алексеевич · самозанятый (НПД) · ИНН 471508674254 · Санкт-Петербург"
     else:
         tag_line = "#OrganizedCulturality"
         slogan = "* Without aggression, but with expression"
@@ -1092,6 +1188,15 @@ def footer(depth=0, lang="ru"):
         tg_bubble = "Message us — the bot replies fast"
         tg_btn_label = "Message the bot"
         tg_aria = "Message on Telegram"
+        sections = [("texts/", "Texts"), ("projects/", "Projects"), ("production/", "Production"),
+                    ("manifesto/", "Manifesto"), ("recommendations/", "Recommendations"), ("about/", "Author"),
+                    ("press/", "Press"), ("contacts/", "Contacts")]
+        sections_aria = "Site sections"
+        requisites = "Konstantin Moshnikov · self-employed (NPD) · INN 471508674254 · St. Petersburg"
+    # Футер по образцу AELITA: разделы + контакт + с кем заказчик имеет
+    # дело. ИНН и так опубликован на /contacts/ и в юр. документах —
+    # новой информации не раскрывается; адреса нет и не будет.
+    sections_html = "\n      ".join(f'<a href="{r}{href}">{label}</a>' for href, label in sections)
     return f'''<footer>
   <div class="wrap-wide foot-inner">
     <div class="foot-tag">{tag_line}</div>
@@ -1100,6 +1205,13 @@ def footer(depth=0, lang="ru"):
       <a href="https://vk.ru/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">VK</a>
     </div>
     <div class="foot-slogan">{slogan}</div>
+  </div>
+  <nav class="wrap-wide foot-nav" aria-label="{sections_aria}">
+      {sections_html}
+  </nav>
+  <div class="wrap-wide foot-req">
+    <a href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
+    <span>{requisites}</span>
   </div>
   <div class="wrap-wide" style="margin-top:20px;display:flex;gap:18px;flex-wrap:wrap;">
     <a href="{r}privacy/" style="font-size:12px;color:var(--dim2);">{priv_label}</a>
@@ -1588,6 +1700,7 @@ def build_text_page(t, idx):
     }}).then(function(r) {{ return r.json().catch(function() {{ return {{ ok: false }}; }}); }})
       .then(function(data) {{
         if (data && data.ok) {{
+          if (window.okTrack) window.okTrack('review_submit');
           formEl.innerHTML = '<p class="review-form-status">Спасибо! Отзыв отправлен на модерацию.</p>';
         }} else {{
           statusEl.textContent = 'Не получилось отправить — попробуйте через Telegram.';
@@ -1795,12 +1908,17 @@ PROJECTS = [
     "role": "Продюсер фестиваля",
     "period": "октябрь 2026",
     "title": "Точка Кюри",
-    "kicker": "Фестиваль в Старом Осколе, продюсируемый AELITA PRODUCTION.",
-    "facts": [("Старый Оскол", "город"), ("окт. 2026", "даты")],
+    # v58: заглушка «описание появится ближе к событию» заменена фактами с
+    # сайта AELITA (aelita-production.ru/tochkacuire/, pack-v491). После
+    # 25.10.2026 — переписать в прошедшем времени (AUDIT-SCHEDULE.md).
+    "kicker": "Фестиваль современного искусства AELITA PRODUCTION — 22–25 октября 2026, Старый Оскол, ЦСИ «Быль».",
+    "facts": [("Старый Оскол", "город"), ("22–25.10.2026", "даты"), ("ЦСИ «Быль»", "площадка")],
     "paragraphs": [
-      "«Точка Кюри» — фестиваль в Старом Осколе, который продюсирует AELITA PRODUCTION. Полное описание программы появится здесь ближе к событию — сейчас страница обновляется по мере готовности материалов.",
+      "«Точка Кюри» — ежегодный фестиваль современного искусства, который продюсирует AELITA PRODUCTION. Первое издание пройдёт 22–25 октября 2026 года в Старом Осколе, в ЦСИ «Быль».",
+      "Четыре дня: спектакли, пластический театр и танец, выставки, детская программа, маркеты и деловая программа — лекции и мастер-класс.",
+      "Я продюсер фестиваля. Полная программа, расписание и билеты — на сайте AELITA PRODUCTION.",
     ],
-    "link": None, "link_label": None,
+    "link": "https://aelita-production.ru/tochkacuire/", "link_label": "Программа и билеты — aelita-production.ru",
   },
   {
     "slug": "komnata-sveta",
@@ -2068,6 +2186,212 @@ with open(os.path.join(ROOT, "production", "index.html"), "w", encoding="utf-8")
     f.write(build_production())
 print("production/index.html written")
 
+# ---------------------------------------------------------------
+# PRESS — пресс-кит (/press/)
+#
+# По образцу /press/ AELITA (о компании · логотип и фирстиль ·
+# пресс-релизы · фото · контакт для прессы). Пресс-релизов у нас нет —
+# раздела нет. Всё остальное уже лежало в архиве: знак (01-logo/final),
+# брендбук (02-brandbook/brandbook2.pdf), фото автора (images/author.jpg).
+#
+# Файлы для скачивания КОПИРУЮТСЯ при сборке в documents/press/ из
+# исходных папок архива (PRESS_KIT_FILES) — источник правды там, а не
+# здесь; руками в documents/press/ ничего не класть. PNG знака в
+# 01-logo/final сохранены без сжатия (~4,6 МБ каждый) — при копировании
+# они пересохраняются без потерь с optimize=True (~25–35 КБ), если
+# установлен Pillow; без Pillow копируются как есть (сборка не падает).
+# Если сборка идёт не из полного архива (нет ../01-logo) — уже лежащие
+# копии остаются, пишется предупреждение.
+# ---------------------------------------------------------------
+PRESS_KIT_FILES = [
+    # (исходник относительно корня архива, имя файла на сайте)
+    ("01-logo/final/logo-final-faint.svg",             "orgculture-logo-dark.svg"),
+    ("01-logo/final/logo-final-faint.png",             "orgculture-logo-dark.png"),
+    ("01-logo/final/logo-final-faint-transparent.svg", "orgculture-logo-transparent.svg"),
+    ("01-logo/final/logo-final-faint-transparent.png", "orgculture-logo-transparent.png"),
+    ("01-logo/final/logo-circle-color-a.svg",          "orgculture-logo-terracotta.svg"),
+    ("01-logo/final/logo-circle-color-a.png",          "orgculture-logo-terracotta.png"),
+    ("01-logo/final/logo-circle-color-b.svg",          "orgculture-logo-light.svg"),
+    ("01-logo/final/logo-circle-color-b.png",          "orgculture-logo-light.png"),
+    ("01-logo/final/logo-mark-vector.pdf",             "orgculture-logo-vector.pdf"),
+    ("02-brandbook/brandbook2.pdf",                    "orgculture-brandbook.pdf"),
+    ("03-website/images/author.jpg",                   "konstantin-moshnikov-photo.jpg"),
+]
+
+def copy_press_kit():
+    import shutil
+    archive_root = os.path.dirname(ROOT)
+    out_dir = os.path.join(ROOT, "documents", "press")
+    os.makedirs(out_dir, exist_ok=True)
+    try:
+        from PIL import Image as _PILImage
+    except ImportError:
+        _PILImage = None
+    for src_rel, dst_name in PRESS_KIT_FILES:
+        src = os.path.join(archive_root, src_rel)
+        dst = os.path.join(out_dir, dst_name)
+        if not os.path.isfile(src):
+            if os.path.isfile(dst):
+                print(f"WARNING: press kit — нет исходника {src_rel}, оставлена прежняя копия")
+            else:
+                print(f"WARNING: press kit — нет исходника {src_rel} и нет копии {dst_name}")
+            continue
+        if dst_name.endswith(".png") and _PILImage is not None:
+            _PILImage.open(src).save(dst, "PNG", optimize=True)
+        else:
+            shutil.copyfile(src, dst)
+    print("documents/press/ updated")
+
+PRESS_LOGO_VARIANTS = [
+    # (базовое имя на сайте, подпись RU, подпись EN, фон превью)
+    ("orgculture-logo-dark",        "Основной — тёмный фон",    "Main — dark background",     "#0A0A0A"),
+    ("orgculture-logo-transparent", "Без фона — для наложения", "Transparent — for overlays", "#2A2825"),
+    ("orgculture-logo-terracotta",  "Акцентный — терракота",    "Accent — terracotta",        "#D97757"),
+    ("orgculture-logo-light",       "Светлый — для печати",     "Light — for print",          "#F5F2ED"),
+]
+
+def press_logo_tiles(depth, lang="ru"):
+    root = "../" * depth
+    tiles = ""
+    for base, ru, en, bg in PRESS_LOGO_VARIANTS:
+        label = ru if lang == "ru" else en
+        tiles += (f'<div class="press-tile">\n'
+                  f'        <div class="press-tile-img" style="background:{bg};"><img src="{root}documents/press/{base}.svg" alt="{html.escape(label)}" width="160" height="160" loading="lazy"></div>\n'
+                  f'        <div class="press-tile-label">{html.escape(label)}</div>\n'
+                  f'        <div class="press-tile-links"><a href="{root}documents/press/{base}.svg" download>SVG</a> · <a href="{root}documents/press/{base}.png" download>PNG 1080</a></div>\n'
+                  f'      </div>\n      ')
+    return tiles
+
+PRESS_STYLE = """<style>
+  .press-block{margin-top:52px;}
+  .press-block h2{font-family:'Unbounded',sans-serif;font-weight:300;font-size:20px;margin:0 0 18px;}
+  .press-quote{border-left:2px solid var(--accent);padding:4px 0 4px 18px;margin:0 0 18px;color:var(--ink);font-size:16px;line-height:1.75;max-width:680px;}
+  .press-note{color:var(--dim);font-size:14.5px;line-height:1.75;max-width:680px;}
+  .press-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:18px;}
+  .press-tile{background:var(--panel);border:1px solid var(--line);padding:14px;}
+  .press-tile-img{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .press-tile-img img{width:100%;height:auto;}
+  .press-tile-label{margin-top:12px;font-size:13.5px;}
+  .press-tile-links{margin-top:6px;font-size:12.5px;color:var(--dim);}
+  .press-tile-links a{color:var(--accent);}
+  .press-photo{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;}
+  .press-photo img{width:180px;height:auto;border:1px solid var(--line);}
+  .press-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
+</style>"""
+
+# Тексты страницы — словарь на два языка, чтобы gen_en.py собирал EN из
+# той же разметки (build_press(lang="en")), а не из второй копии HTML.
+PRESS_TEXT = {
+    "ru": {
+        "eyebrow": "Для прессы", "h1": "Материалы для публикации",
+        "intro": "Всё, что обычно просят для анонса, интервью или подписи к тексту: короткая справка, фото, знак проекта. Если нужно что-то ещё — напишите.",
+        "short_h": "Коротко",
+        "bio_person": "Константин Мошников — продюсер, продвигает культурные и арт-проекты: от концепции до выпуска, от маркетинга до логистики. Более 15 лет на сцене — в цирке и в театре. Автор «Организованной Культурности».",
+        "bio_project": "«Организованная Культурность» — личное пространство Константина Мошникова: тексты о фильмах, спектаклях, музыке и людях — и продюсирование, продвижение культурных и арт-проектов.",
+        "more": 'Подробная биография и опыт — на странице <a href="{r}about/">«Автор»</a>.',
+        "cv": "Скачать CV (PDF)",
+        "name_h": "Как писать название",
+        "name": "«Организованная Культурность» — оба слова с заглавной. По-английски — Organized Culturality. Хэштег — #ОрганизованнаяКультурность.",
+        "photo_h": "Фото", "photo_alt": "Константин Мошников",
+        "photo_note": "Константин Мошников. JPG, 1600×2400.", "photo_btn": "Скачать фото",
+        "logo_h": "Знак и фирменный стиль",
+        "logo_note": "Знак — не шрифт, а рисунок: эллипс «О» и «К». Пропорции и цвета не менять. Четыре цветовых варианта — SVG (вектор) и PNG.",
+        "vector": "Знак для печати (PDF, вектор)", "brandbook": "Брендбук (PDF)",
+        "contact_h": "Контакт для прессы", "all_contacts": "Все контакты",
+        "title": "Для прессы — Организованная Культурность",
+        "desc": "Пресс-кит: короткая справка о Константине Мошникове и «Организованной Культурности», фото, знак и брендбук для публикаций.",
+    },
+    "en": {
+        "eyebrow": "Press", "h1": "Press kit",
+        "intro": "What is usually needed for an announcement, an interview or a byline: a short bio, a photo, the project mark. If you need anything else, get in touch.",
+        "short_h": "In brief",
+        "bio_person": "Konstantin Moshnikov is a producer who promotes cultural and arts projects, from concept to premiere and from marketing to logistics. He has spent more than 15 years on stage, in circus and theatre. Author of Organized Culturality.",
+        "bio_project": "Organized Culturality is Konstantin Moshnikov's personal space: texts about films, plays, music and people, plus production and promotion for cultural and arts projects.",
+        "more": 'Full biography and experience — on the <a href="{r}about/">Author</a> page.',
+        "cv": "Download CV (PDF)",
+        "name_h": "How to write the name",
+        "name": "Organized Culturality — both words capitalised. The original Russian name also capitalises both words. Hashtag — #OrganizedCulturality.",
+        "photo_h": "Photo", "photo_alt": "Konstantin Moshnikov",
+        "photo_note": "Konstantin Moshnikov. JPG, 1600×2400.", "photo_btn": "Download photo",
+        "logo_h": "Mark and visual identity",
+        "logo_note": "The mark is a drawing, not a typeface: an ellipse “O” and a “K”. Do not change its proportions or colours. Four colour versions, SVG (vector) and PNG.",
+        "vector": "Mark for print (PDF, vector)", "brandbook": "Brand book (PDF, in Russian)",
+        "contact_h": "Press contact", "all_contacts": "All contacts",
+        "title": "Press — Organized Culturality",
+        "desc": "Press kit: a short bio of Konstantin Moshnikov and Organized Culturality, a photo, the mark and the brand book.",
+    },
+}
+
+def build_press(lang="ru"):
+    T = PRESS_TEXT[lang]
+    depth = 1 if lang == "ru" else 2
+    root = "../" * depth                       # корень сайта — для documents/, images/
+    r = root + ("en/" if lang == "en" else "")  # корень языковой версии — для ссылок на страницы
+    path = "press/" if lang == "ru" else "en/press/"
+    body = f"""
+{header(depth, "press", relpath="press/", lang=lang)}
+{PRESS_STYLE}
+<section style="padding-top:64px;">
+  <div class="wrap">
+    <div class="eyebrow">{T['eyebrow']}</div>
+    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">{T['h1']}</h1>
+    <p class="press-note">{T['intro']}</p>
+
+    <div class="press-block">
+      <h2>{T['short_h']}</h2>
+      <p class="press-quote">{T['bio_person']}</p>
+      <p class="press-quote">{T['bio_project']}</p>
+      <p class="press-note">{T['more'].format(r=r)}</p>
+      <div class="press-buttons"><a class="btn-line" href="{root}documents/CV-Konstantin-Moshnikov.pdf" download>{T['cv']}</a></div>
+    </div>
+
+    <div class="press-block">
+      <h2>{T['name_h']}</h2>
+      <p class="press-note">{T['name']}</p>
+    </div>
+
+    <div class="press-block">
+      <h2>{T['photo_h']}</h2>
+      <div class="press-photo">
+        <img src="{root}images/author.jpg" alt="{T['photo_alt']}" width="180" height="270" loading="lazy">
+        <div>
+          <p class="press-note">{T['photo_note']}</p>
+          <div class="press-buttons"><a class="btn-line" href="{root}documents/press/konstantin-moshnikov-photo.jpg" download>{T['photo_btn']}</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="press-block">
+      <h2>{T['logo_h']}</h2>
+      <p class="press-note" style="margin-bottom:22px;">{T['logo_note']}</p>
+      <div class="press-grid">
+      {press_logo_tiles(depth, lang)}</div>
+      <div class="press-buttons">
+        <a class="btn-line" href="{root}documents/press/orgculture-logo-vector.pdf" download>{T['vector']}</a>
+        <a class="btn-line btn-line-ghost" href="{root}documents/press/orgculture-brandbook.pdf" download>{T['brandbook']}</a>
+      </div>
+    </div>
+
+    <div class="press-block">
+      <h2>{T['contact_h']}</h2>
+      <div class="contact-direct">
+        <a class="btn-line" href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
+        <a class="btn-line" href="https://t.me/orgculture" target="_blank" rel="noopener">Telegram</a>
+        <a class="btn-line btn-line-ghost" href="{r}contacts/">{T['all_contacts']}</a>
+      </div>
+    </div>
+  </div>
+</section>
+{footer(depth, lang=lang)}
+"""
+    return page_head(T["title"], T["desc"], depth, path=path, lang=lang) + body
+
+copy_press_kit()
+os.makedirs(os.path.join(ROOT, "press"), exist_ok=True)
+with open(os.path.join(ROOT, "press", "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_press("ru"))
+print("press/index.html written")
+
 # CONTACTS + бриф
 #
 # До этого контакты были размазаны: блок «Сотрудничество» внизу страниц,
@@ -2224,6 +2548,7 @@ def build_contacts():
     }}).then(function(r) {{ return r.json().catch(function() {{ return {{ ok: false }}; }}); }})
       .then(function(data) {{
         if (data && data.ok) {{
+          if (window.okTrack) window.okTrack('brief_submit');
           formEl.innerHTML = '<p class="review-form-status">Спасибо! Заявка отправлена — отвечу, как только смогу.</p>';
         }} else {{
           statusEl.textContent = 'Не получилось отправить — напишите на почту или в Telegram.';
@@ -2570,8 +2895,9 @@ def build_sitemap():
     # обновлялся при добавлении текстов — при следующем тексте список
     # снова придётся дописывать руками. Теперь пересобирается на каждый
     # запуск gen.py из тех же списков, что и сам сайт, плюс lastmod.
+    # Юр. страницы (NOINDEX_PATHS) в sitemap не входят — они noindex.
     core_paths = ["", "manifesto/", "texts/", "projects/", "production/", "recommendations/",
-                  "about/", "privacy/", "bot-rules/", "cookies/"]
+                  "about/", "contacts/", "press/"]
     paths = list(core_paths)
     paths += [f"texts/{t['slug']}/" for t in TEXTS]
     paths += [f"projects/{p['slug']}/" for p in PROJECTS]
@@ -2759,6 +3085,17 @@ with open(os.path.join(ROOT, "site-content.js"), "w", encoding="utf-8") as f:
     f.write(build_site_content_js())
 print("site-content.js written")
 
+with open(os.path.join(ROOT, "assets", "analytics-events.js"), "w", encoding="utf-8") as f:
+    f.write(build_analytics_events_js())
+print("assets/analytics-events.js written")
+
 build_manifest()
 build_offline_page()
 build_service_worker()
+
+# Неразрывные пробелы в русском тексте — ПОСЛЕДНИМ шагом, когда все
+# русские HTML уже записаны (в т.ч. offline.html и 404.html). Подробно —
+# typography.py. Повторный прогон ничего не меняет.
+import typography as _typography
+_tf, _tn = _typography.apply_to_site(ROOT)
+print(f"typography: неразрывные пробелы — {_tn} в {_tf} файлах")

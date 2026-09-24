@@ -303,6 +303,12 @@ footer{border-top:1px solid var(--line);padding:48px 0 60px;margin-top:40px;}
 footer .foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
 footer .foot-tag{color:var(--dim2);font-size:13px;}
 footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
+footer .foot-nav{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:28px;font-size:13.5px;}
+footer .foot-nav a{color:var(--dim);}
+footer .foot-nav a:hover{color:var(--accent);}
+footer .foot-req{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:18px;font-size:12px;color:var(--dim2);line-height:1.5;}
+footer .foot-req a{color:var(--dim);}
+footer .foot-req a:hover{color:var(--accent);}
 
 /* ---------- misc ---------- */
 .btn-line{

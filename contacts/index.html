@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css?v=56">
+<link rel="stylesheet" href="../assets/style.css?v=58">
 <link rel="manifest" href="../manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -71,9 +71,10 @@
   }
 </script>
 <!-- /Own stats beacon -->
+<script src="../assets/analytics-events.js?v=58" defer></script>
 </head>
 <body>
-<a href="#main" class="skip-link">Перейти к содержимому</a>
+<a href="#main" class="skip-link">Перейти к содержимому</a>
 
 <header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
@@ -134,8 +135,8 @@
     <div class="eyebrow">Контакты</div>
     <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">Написать мне</h1>
     <p style="color:var(--dim);font-size:16px;line-height:1.85;max-width:620px;margin-bottom:36px;">
-      Продюсирую, продвигаю и делаю сайты для театральных и арт-проектов.
-      Если есть фестиваль, спектакль или идея, которой нужна организационная часть — расскажите о ней, отвечу.
+      Продюсирую, продвигаю и делаю сайты для театральных и арт-проектов.
+      Если есть фестиваль, спектакль или идея, которой нужна организационная часть — расскажите о ней, отвечу.
     </p>
 
     <div class="contact-direct">
@@ -147,10 +148,10 @@
     <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;"><svg viewBox="0 0 200 110" fill="none" stroke="currentColor" stroke-width="10"><ellipse cx="100" cy="55" rx="90" ry="45"/></svg></div></div>
     <div class="eyebrow" style="margin-bottom:16px;">Бриф</div>
     <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:8px;">
-      Если проще ответить на вопросы, чем писать письмо — заполните бриф. Обязательны только два поля: как с вами связаться и что за задача.
+      Если проще ответить на вопросы, чем писать письмо — заполните бриф. Обязательны только два поля: как с вами связаться и что за задача.
     </p>
     <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;margin-bottom:28px;">
-      Те же вопросы задаст <a href="https://t.me/orgculture_bot?start=contact" target="_blank" rel="noopener">бот в Telegram</a>, если удобнее там.
+      Те же вопросы задаст <a href="https://t.me/orgculture_bot?start=contact" target="_blank" rel="noopener">бот в Telegram</a>, если удобнее там.
     </p>
 
     <div class="brief-form" id="brief-form">
@@ -196,13 +197,13 @@
       <input type="text" id="brief-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label class="review-form-consent" for="brief-consent">
         <input type="checkbox" id="brief-consent">
-        <span>Согласен(на) на обработку указанных данных согласно <a href="../privacy/" target="_blank" rel="noopener">Политике конфиденциальности</a></span>
+        <span>Согласен(на) на обработку указанных данных согласно <a href="../privacy/" target="_blank" rel="noopener">Политике конфиденциальности</a></span>
       </label>
       <button type="button" class="btn-line" id="brief-submit" disabled>Отправить</button>
       <p class="review-form-status" id="brief-status"></p>
       <noscript>
         <p style="color:var(--dim);font-size:13.5px;margin-top:10px;">
-          Форма требует JavaScript. Без него напишите на почту или в Telegram — ссылки выше.
+          Форма требует JavaScript. Без него напишите на почту или в Telegram — ссылки выше.
         </p>
       </noscript>
     </div>
@@ -212,9 +213,9 @@
     <p style="color:var(--dim);font-size:15px;line-height:1.9;margin-bottom:0;">
       Мошников Константин Алексеевич<br>
       Самозанятый (НПД) · ИНН 471508674254<br>
-      г. Санкт-Петербург
+      г. Санкт-Петербург
     </p>
-    <p style="margin-top:28px;"><a class="btn-line btn-line-ghost" href="../production/">Что именно я делаю →</a></p>
+    <p style="margin-top:28px;"><a class="btn-line btn-line-ghost" href="../production/">Что именно я делаю →</a></p>
   </div>
 </section>
 <footer>
@@ -224,7 +225,21 @@
       <a href="https://t.me/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">Telegram</a>
       <a href="https://vk.ru/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">VK</a>
     </div>
-    <div class="foot-slogan">* Без агрессии, но с экспрессией</div>
+    <div class="foot-slogan">* Без агрессии, но с экспрессией</div>
+  </div>
+  <nav class="wrap-wide foot-nav" aria-label="Разделы сайта">
+      <a href="../texts/">Тексты</a>
+      <a href="../projects/">Проекты</a>
+      <a href="../production/">Продюсирование</a>
+      <a href="../manifesto/">Манифест</a>
+      <a href="../recommendations/">Рекомендации</a>
+      <a href="../about/">Автор</a>
+      <a href="../press/">Для прессы</a>
+      <a href="../contacts/">Контакты</a>
+  </nav>
+  <div class="wrap-wide foot-req">
+    <a href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
+    <span>Мошников Константин Алексеевич · самозанятый (НПД) · ИНН 471508674254 · Санкт-Петербург</span>
   </div>
   <div class="wrap-wide" style="margin-top:20px;display:flex;gap:18px;flex-wrap:wrap;">
     <a href="../privacy/" style="font-size:12px;color:var(--dim2);">Политика конфиденциальности</a>
@@ -235,7 +250,7 @@
 </footer>
 
 <div class="tg-widget" id="tg-widget">
-  <div class="tg-bubble" id="tg-bubble">Напишите нам — бот ответит быстро</div>
+  <div class="tg-bubble" id="tg-bubble">Напишите нам — бот ответит быстро</div>
   <a class="tg-btn" href="https://t.me/orgculture_bot" target="_blank" rel="noopener" aria-label="Написать в Telegram">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.093 13.68l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.88h.219z"/></svg>
     Написать боту
@@ -271,7 +286,7 @@
   <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
 </svg></div>
   <div class="cb-text">
-    <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="../cookies/">в соглашении об использовании cookie</a>.</p>
+    <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="../cookies/">в соглашении об использовании cookie</a>.</p>
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Отклонить</button>
@@ -327,6 +342,7 @@
     }).then(function(r) { return r.json().catch(function() { return { ok: false }; }); })
       .then(function(data) {
         if (data && data.ok) {
+          if (window.okTrack) window.okTrack('brief_submit');
           formEl.innerHTML = '<p class="review-form-status">Спасибо! Заявка отправлена — отвечу, как только смогу.</p>';
         } else {
           statusEl.textContent = 'Не получилось отправить — напишите на почту или в Telegram.';
