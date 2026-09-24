@@ -298,17 +298,36 @@ section.tight{padding:48px 0;}
 .cv-role ul{margin-top:10px;padding-left:18px;color:var(--dim);font-size:14.5px;line-height:1.8;}
 
 /* ---------- footer ---------- */
-footer{border-top:1px solid var(--line);padding:48px 0 60px;margin-top:40px;}
-@media(max-width:760px){ footer{padding-bottom:160px;} }
-footer .foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
-footer .foot-tag{color:var(--dim2);font-size:13px;}
-footer .foot-slogan{color:var(--dim);font-size:13px;font-style:italic;}
-footer .foot-nav{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:28px;font-size:13.5px;}
-footer .foot-nav a{color:var(--dim);}
-footer .foot-nav a:hover{color:var(--accent);}
-footer .foot-req{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:18px;font-size:12px;color:var(--dim2);line-height:1.5;}
+footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:40px;}
+/* v62: три уровня — бренд + колонки ссылок + нижняя строка. Плавающая
+   кнопка бота над футером прячется (скрипт в footer()), поэтому
+   прежний запас снизу 160px на телефоне больше не нужен. */
+footer .foot-top{display:grid;grid-template-columns:minmax(220px,1fr) 2fr;gap:40px;}
+footer .foot-mark{display:inline-block;width:52px;color:var(--ink);}
+footer .foot-mark svg{width:100%;height:auto;display:block;}
+footer .foot-tag{color:var(--dim);font-size:13px;margin-top:16px;}
+footer .foot-slogan{color:var(--accent);font-size:13px;font-style:italic;margin-top:6px;}
+footer .foot-social{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;font-size:14px;}
+footer .foot-social a{color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:2px;}
+footer .foot-social a:hover{color:var(--accent);border-color:var(--accent);}
+footer .foot-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+footer .foot-h{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim2);margin-bottom:12px;}
+footer .foot-col a{display:block;color:var(--dim);font-size:14px;line-height:1.5;padding:4px 0;}
+footer .foot-col a:hover{color:var(--accent);}
+footer .foot-bottom{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px 32px;
+  margin-top:40px;padding-top:22px;border-top:1px solid var(--line);font-size:12px;color:var(--dim2);line-height:1.6;}
+footer .foot-req{display:flex;flex-direction:column;gap:2px;}
 footer .foot-req a{color:var(--dim);}
-footer .foot-req a:hover{color:var(--accent);}
+footer .foot-legal{display:flex;flex-wrap:wrap;gap:4px 18px;}
+footer .foot-legal a{color:var(--dim2);}
+footer .foot-bottom a:hover{color:var(--accent);}
+@media(max-width:760px){
+  footer{padding:44px 0 32px;}
+  footer .foot-top{grid-template-columns:1fr;gap:32px;}
+  footer .foot-cols{grid-template-columns:1fr 1fr;gap:24px 20px;}
+  footer .foot-col a{padding:6px 0;}   /* палец, не курсор: высота ссылки ≥ 32px */
+  footer .foot-bottom{flex-direction:column;margin-top:32px;}
+}
 
 /* ---------- misc ---------- */
 .btn-line{
@@ -364,6 +383,20 @@ footer .foot-req a:hover{color:var(--accent);}
 .prod-service h3{font-size:17px;font-weight:400;color:var(--ink);margin-bottom:10px;}
 .prod-service p{color:var(--dim);font-size:14.5px;line-height:1.75;}
 @media (max-width:760px){.prod-services{grid-template-columns:1fr;gap:32px;}}
+/* блок «Продюсирование и продвижение» на главной (v62) */
+.home-prod{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);padding:44px 44px 40px;}
+.home-prod-h{font-family:'Unbounded',sans-serif;font-weight:300;font-size:28px;line-height:1.3;margin:14px 0 16px;}
+.home-prod-lede{color:var(--dim);font-size:16px;line-height:1.8;max-width:680px;margin-bottom:34px;}
+.home-prod-projects{margin-top:32px;font-size:14px;line-height:2;color:var(--dim2);}
+.home-prod-projects a{color:var(--dim);margin-right:14px;white-space:nowrap;border-bottom:1px solid var(--line);}
+.home-prod-projects a:hover{color:var(--accent);border-color:var(--accent);}
+.home-prod-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:14px 16px;margin-top:30px;}
+.home-prod-faq{color:var(--accent);font-size:14.5px;margin-left:6px;}
+@media(max-width:760px){
+  .home-prod{padding:30px 22px 28px;}
+  .home-prod-h{font-size:22px;}
+  .home-prod .prod-services{gap:22px;}
+}
 
 /* ---------- отзывы на тексты ---------- */
 .reviews-block{margin-top:8px;}

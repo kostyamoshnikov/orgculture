@@ -1,0 +1,54 @@
+{
+  "_readme": "Упоминания: кто и где написал о тебе, «Организованной Культурности» и твоих проектах, где вышли твои тексты. Один источник — из него gen.py/gen_en.py собирают /mentions/ и /en/mentions/. Пока нет ни одной записи с publish: true, страницы нет вовсе (и ссылки на неё нет) — пустую страницу «Упоминания» лучше не показывать. Схема полей и порядок работы — 03-website/README.md, раздел «Упоминания». Проверка — python3 mentions_tool.py.",
+  "updated": "2026-09-24",
+  "queries": [
+    "\"Организованная Культурность\"",
+    "orgculture.ru",
+    "\"Константин Мошников\" продюсер",
+    "\"Константин Мошников\" цирк",
+    "\"Мошников\" \"Робот Костя\"",
+    "\"Мошников\" \"Комната Света\"",
+    "\"Мошников\" БуФест",
+    "\"Мошников\" \"Точка Кюри\"",
+    "\"Мошников\" \"Принцесса цирка\""
+  ],
+  "queries_useless": [],
+  "mentions": [
+    {
+      "id": "OKM-001",
+      "date": "2021-10-15",
+      "kind": "press",
+      "subject_ru": "«Робот Костя» — спектакль Научно-технологического театра",
+      "subject_en": "“Robot Kostya” — a Science and Technology Theatre production",
+      "source_ru": "«Театръ» (oteatre.info)",
+      "source_en": "Teatr. (oteatre.info)",
+      "author_ru": "Анастасия Казьмина",
+      "author_en": "Anastasia Kazmina",
+      "title_ru": "«В „Чайке“ Чехова Костю Треплева сыграет робот» — анонс показа «Робота Кости» в Люмьер Холле",
+      "title_en": "“A robot will play Kostya Treplev in Chekhov’s The Seagull” — a preview of the Robot Kostya show at Lumière Hall",
+      "url": "https://oteatre.info/v-chajke-chehova-sygraet-robot/",
+      "checked": "2026-09-24",
+      "publish": true,
+      "note_ru": "Найдено поиском 24.09.2026. Роли в проекте уточнены автором 24.09.2026: перформер, SMM, менеджер проекта. В самой статье он назван среди волонтёров — поэтому заголовок на сайте роль не пересказывает, только о чём материал. Опубликовано 24.09.2026.",
+      "note_en": "Found by search on 24.09.2026. The author confirmed his roles on 24.09.2026: performer, social media, project manager. The article lists him among volunteers, so the site title does not restate the role. Published 24.09.2026."
+    },
+    {
+      "id": "OKM-002",
+      "date": "",
+      "kind": "venue",
+      "subject_ru": "«Комната Света» — театральная компания",
+      "subject_en": "Komnata Sveta — theatre company",
+      "source_ru": "Сайт «Комнаты Света» (komnata-sveta.ru)",
+      "source_en": "Komnata Sveta website (komnata-sveta.ru)",
+      "author_ru": "",
+      "author_en": "",
+      "title_ru": "Страница «О нас»: Константин Мошников в команде как SMM",
+      "title_en": "“About” page: Konstantin Moshnikov in the team as social media manager",
+      "url": "https://komnata-sveta.ru/about",
+      "checked": "2026-09-24",
+      "publish": false,
+      "note_ru": "Найдено поиском 24.09.2026. Страница заказчика, не пресса: как подтверждение работы полезна, как «упоминание» на сайте — слабовата. Даты у страницы нет — date оставлен пустым намеренно.",
+      "note_en": "Found by search on 24.09.2026. A client’s page, not press: useful as proof of work, weak as a ‘mention’. The page has no date, so date is left empty on purpose."
+    }
+  ]
+}

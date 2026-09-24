@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 import html, os, subprocess
 
+# С v76 это русская ЧАСТЬ документа (07-documents/site-pdf-parts/). На
+# сайт она попадает только склеенной с английской — build_bilingual_pdfs.py.
+HERE = os.path.dirname(os.path.abspath(__file__))
+PARTS_DIR = os.path.join(os.path.dirname(HERE), "07-documents", "site-pdf-parts")
+os.makedirs(PARTS_DIR, exist_ok=True)
+
 SECTIONS = [
   ("1. Что такое файлы cookie", [
     "Cookie — небольшие текстовые файлы, которые сайт сохраняет в браузере пользователя для распознавания при повторных посещениях и сбора статистики использования сайта.",
@@ -86,8 +92,8 @@ subprocess.run([
     "wkhtmltopdf", "--page-size", "A4",
     "--margin-top", "0", "--margin-bottom", "0", "--margin-left", "0", "--margin-right", "0",
     "--enable-local-file-access",
-    tmp_path, "documents/cookies-policy.pdf"
+    tmp_path, os.path.join(PARTS_DIR, "cookies-policy_ru.pdf")
 ])
 os.remove(tmp_path)
 
-print("cookies-policy.pdf written")
+print("site-pdf-parts/cookies-policy_ru.pdf written — на сайт: python3 build_bilingual_pdfs.py")

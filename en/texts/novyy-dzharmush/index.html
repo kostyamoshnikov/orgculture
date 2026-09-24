@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../assets/style.css?v=58">
+<link rel="stylesheet" href="../../../assets/style.css?v=63">
 <link rel="manifest" href="../../../en/manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -71,7 +71,7 @@
   }
 </script>
 <!-- /Own stats beacon -->
-<script src="../../../assets/analytics-events.js?v=58" defer></script>
+<script src="../../../assets/analytics-events.js?v=63" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -282,33 +282,37 @@
       <a href="../../../en/texts/gamlet-kolyada-teatr/">Nikolai Kolyada&#x27;s &quot;Hamlet&quot; — Physically … →</a>
     </div></div>
 <footer>
-  <div class="wrap-wide foot-inner">
-    <div class="foot-tag">#OrganizedCulturality</div>
-    <div style="display:flex;gap:18px;flex-wrap:wrap;">
-      <a href="https://t.me/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">Telegram</a>
-      <a href="https://vk.ru/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">VK</a>
+  <div class="wrap-wide foot-top">
+    <div class="foot-brand">
+      <a class="foot-mark" href="../../../en/" aria-label="Organized Culturality — home"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="364" cy="540" rx="200" ry="110"/>
+  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
+</svg></a>
+      <div class="foot-tag">#OrganizedCulturality</div>
+      <div class="foot-slogan">* Without aggression, but with expression</div>
+      <div class="foot-social">
+        <a href="https://t.me/orgculture" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://vk.ru/orgculture" target="_blank" rel="noopener">VK</a>
+        <a href="https://t.me/orgculture_bot" target="_blank" rel="noopener">Bot</a>
+      </div>
     </div>
-    <div class="foot-slogan">* Without aggression, but with expression</div>
+    <nav class="foot-cols" aria-label="Site sections">
+      <div class="foot-col"><div class="foot-h">Read</div><a href="../../../en/texts/">Texts</a><a href="../../../en/recommendations/">Recommendations</a><a href="../../../en/manifesto/">Manifesto</a></div>
+      <div class="foot-col"><div class="foot-h">Work</div><a href="../../../en/production/">Production</a><a href="../../../en/projects/">Projects</a><a href="../../../en/faq/">FAQ</a><a href="../../../en/contacts/">Contacts</a></div>
+      <div class="foot-col"><div class="foot-h">Author</div><a href="../../../en/about/">About</a><a href="../../../en/press/">Press</a><a href="../../../en/mentions/">Mentions</a></div>
+    </nav>
   </div>
-  <nav class="wrap-wide foot-nav" aria-label="Site sections">
-      <a href="../../../en/texts/">Texts</a>
-      <a href="../../../en/projects/">Projects</a>
-      <a href="../../../en/production/">Production</a>
-      <a href="../../../en/manifesto/">Manifesto</a>
-      <a href="../../../en/recommendations/">Recommendations</a>
-      <a href="../../../en/about/">Author</a>
-      <a href="../../../en/press/">Press</a>
-      <a href="../../../en/contacts/">Contacts</a>
-  </nav>
-  <div class="wrap-wide foot-req">
-    <a href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
-    <span>Konstantin Moshnikov · self-employed (NPD) · INN 471508674254 · St. Petersburg</span>
-  </div>
-  <div class="wrap-wide" style="margin-top:20px;display:flex;gap:18px;flex-wrap:wrap;">
-    <a href="../../../en/privacy/" style="font-size:12px;color:var(--dim2);">Privacy Policy</a>
-    <a href="../../../en/cookies/" style="font-size:12px;color:var(--dim2);">Cookies</a>
-    <a href="../../../en/bot-rules/" style="font-size:12px;color:var(--dim2);">Bot Usage Rules</a>
-    <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;" style="font-size:12px;color:var(--dim2);">Cookie settings</a>
+  <div class="wrap-wide foot-bottom">
+    <div class="foot-req">
+      <a href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
+      <span>Konstantin Moshnikov · self-employed (NPD) · INN 471508674254 · St. Petersburg</span>
+    </div>
+    <div class="foot-legal">
+      <a href="../../../en/privacy/">Privacy Policy</a>
+      <a href="../../../en/cookies/">Cookies</a>
+      <a href="../../../en/bot-rules/">Bot Usage Rules</a>
+      <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Cookie settings</a>
+    </div>
   </div>
 </footer>
 
@@ -324,7 +328,7 @@
     var widget = document.getElementById('tg-widget');
     var bubble = document.getElementById('tg-bubble');
     function update(){
-      if (window.scrollY > 400) {
+      if (window.scrollY > 400 && !footerVisible) {
         if (!widget.classList.contains('visible')) {
           widget.classList.add('visible');
           if (!bubble.dataset.shown) {
@@ -338,6 +342,16 @@
       } else {
         widget.classList.remove('visible');
       }
+    }
+    // Над футером кнопка не нужна: в футере есть ссылка «Бот», а на
+    // телефоне кнопка закрывала юр. ссылки (v62).
+    var footerEl = document.querySelector('footer');
+    var footerVisible = false;
+    if (footerEl && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function(entries){
+        footerVisible = entries[0].isIntersecting;
+        update();
+      }).observe(footerEl);
     }
     window.addEventListener('scroll', update);
     update();

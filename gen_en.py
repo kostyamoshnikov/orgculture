@@ -103,10 +103,10 @@ CV_ROLES_EN = [
         ],
     },
     {
-        "role": "Social Media, Project Manager", "org": "Scientific-Technological Theatre",
+        "role": "Performer, Social Media, Project Manager", "org": "Scientific-Technological Theatre",
         "period": "May 2021 \u2014 present",
         "bullets": [
-            "Social media for Russia\u2019s first robotic theatre, nominated for a Golden Mask in the Experiment category",
+            "Performer in the show, plus social media and project management for Russia\u2019s first robotic theatre, nominated for a Golden Mask in the Experiment category",
             "Performances at the New Stage of the Alexandrinsky Theatre, Sevkabel Port, Planetarium No. 1, MMOMA and elsewhere",
             "Set up collaborations with state and commercial venues across Moscow and St. Petersburg",
         ],
@@ -189,14 +189,14 @@ PROJECTS_EN = [
     "link": "https://t.me/lightroom_theatre", "link_label": "Komnata Sveta on Telegram",
   },
   {
-    "slug": "robot-kostya-project", "role": "Social Media, Project Manager", "period": "May 2021 \u2014 present",
+    "slug": "robot-kostya-project", "role": "Performer, Social Media, Project Manager", "period": "May 2021 \u2014 present",
     "title": "Robot Kostya",
     "kicker": "Russia's first robotic theatre \u2014 nominated for a Golden Mask in the Experiment category.",
     "facts": [("2021", "launched"), ("Golden Mask", "nomination")],
     "paragraphs": [
       "Robot Kostya is a project of the Scientific-Technological Theatre, the first theatre in Russia to put a robot performer on stage. It's built on Chekhov's \u201cSeagull,\u201d with the robot in one of the central roles.",
       "Nominated for a Golden Mask in the Experiment category. It has played the New Stage of the Alexandrinsky Theatre, Sevkabel Port, Planetarium No. 1 and MMOMA, as well as the Tochka Dostupa festival at Lumi\u00e8re Hall in St. Petersburg.",
-      "I've run the project's social media and management since May 2021 \u2014 from announcements through to setting up collaborations with state and commercial venues in Moscow and St. Petersburg.",
+      "Since May 2021 I've been a performer in the show, and off stage I run the project's social media and management \u2014 from announcements through to setting up collaborations with state and commercial venues in Moscow and St. Petersburg.",
     ],
     "link": "https://www.instagram.com/robot.kostya/", "link_label": "Robot Kostya on Instagram",
   },
@@ -291,6 +291,7 @@ def build_production_en():
     <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:620px;margin-bottom:0;">
       For theatres, foundations and non-profits this means the costs are covered by documents and go through accounting without a separate explanation.
     </p>
+    <p style="font-size:15px;margin:14px 0 0;"><a href="../faq/" style="color:var(--accent);">FAQ: prices, timelines, who owns the site →</a></p>
 
     <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
     <div class="eyebrow" style="margin-bottom:20px;">Examples</div>
@@ -491,7 +492,7 @@ def build_search_index_en():
 # INDEX (home)
 # ---------------------------------------------------------------
 def build_index_en():
-    latest = TEXTS_EN[:6]
+    latest = TEXTS_EN[:3]   # v62: три, как на русской главной
     rec_with_link = [t for t in TEXTS_EN if t["link"]][:3]
 
     index_schema_en = {
@@ -567,6 +568,8 @@ def build_index_en():
     </div>
   </div>
 </section>
+
+{ns["home_production_block"]("en", PROJECTS_EN)}
 
 <section class="tight">
   <div class="wrap-wide">
@@ -735,9 +738,12 @@ def build_text_page_en(t, idx):
 
     prev_t = TEXTS_EN[idx-1] if idx > 0 else TEXTS_EN[-1]
     next_t = TEXTS_EN[idx+1] if idx < len(TEXTS_EN)-1 else TEXTS_EN[0]
+    # \u041e\u0431\u0440\u0430\u0442\u043d\u044b\u0439 \u0441\u043b\u044d\u0448 \u0432\u043d\u0443\u0442\u0440\u0438 {\u2026} f-\u0441\u0442\u0440\u043e\u043a\u0438 \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c \u0442\u043e\u043b\u044c\u043a\u043e \u0441 Python 3.12 \u2014
+    # \u043d\u0430 3.10/3.11 (Termux, \u0441\u0442\u0430\u0440\u044b\u0435 \u0441\u0438\u0441\u0442\u0435\u043c\u044b) \u0444\u0430\u0439\u043b \u043d\u0435 \u0437\u0430\u043f\u0443\u0441\u043a\u0430\u043b\u0441\u044f \u0432\u043e\u0432\u0441\u0435 (v59).
+    ELLIPSIS = "\u2026"
     nav_html = f'''<div class="wrap"><div class="text-nav">
-      <a href="{root}en/texts/{prev_t['slug']}/">\u2190 {html.escape(prev_t['title'][:40])}{'\u2026' if len(prev_t['title'])>40 else ''}</a>
-      <a href="{root}en/texts/{next_t['slug']}/">{html.escape(next_t['title'][:40])}{'\u2026' if len(next_t['title'])>40 else ''} \u2192</a>
+      <a href="{root}en/texts/{prev_t['slug']}/">\u2190 {html.escape(prev_t['title'][:40])}{ELLIPSIS if len(prev_t['title'])>40 else ''}</a>
+      <a href="{root}en/texts/{next_t['slug']}/">{html.escape(next_t['title'][:40])}{ELLIPSIS if len(next_t['title'])>40 else ''} \u2192</a>
     </div></div>'''
 
     same_tag = [x for x in TEXTS_EN if x["tag"] == t["tag"] and x["slug"] != t["slug"]]
@@ -1048,7 +1054,7 @@ def build_about_en():
         <a href="https://t.me/orgculture" target="_blank" rel="noopener" style="color:var(--accent);">\u201cOrganized Culturality\u201d on Telegram</a> \u00b7
         <a href="https://vk.ru/orgculture" target="_blank" rel="noopener" style="color:var(--accent);">VK</a>
       </p>
-      <div style="margin-top:22px;"><a class="btn-line" href="../../documents/CV-Konstantin-Moshnikov.pdf" download>Download CV</a></div>
+      <div style="margin-top:22px;"><a class="btn-line" href="../../documents/CV-Konstantin-Moshnikov-en.pdf" download>Download CV</a></div>
 
       <div class="oval-divider" style="justify-content:flex-start;margin:40px 0 8px;"><div style="width:64px;">{ns['OVAL_DIVIDER_SVG']}</div></div>
       <div class="eyebrow" style="margin-bottom:8px;">Experience</div>
@@ -1148,6 +1154,11 @@ print(f"{len(PROJECTS_EN)} en project pages written")
 # ---------------------------------------------------------------
 # LEGAL PAGES
 # ---------------------------------------------------------------
+# Оговорка на английских юр. страницах и в английских PDF (v60, по образцу
+# З-11 пака AELITA): документы составлены по-русски, английский — перевод.
+LEGAL_EN_NOTE = ("This is an English translation provided for convenience. "
+                 "The Russian version is the governing text and prevails in case of any discrepancy.")
+
 def legal_page_en(title_ru_equiv, h1, doc_meta, sections, extra_links, path, description):
     sections_html = ""
     for stitle, paras in sections:
@@ -1160,6 +1171,7 @@ def legal_page_en(title_ru_equiv, h1, doc_meta, sections, extra_links, path, des
     <div class="eyebrow">Document</div>
     <h1 style="font-size:30px;font-weight:300;margin:14px 0 4px;">{h1}</h1>
     <div class="doc-meta">{doc_meta}</div>
+    <div class="doc-meta" style="margin-top:8px;">{LEGAL_EN_NOTE}</div>
     <div class="doc-body" style="margin-top:36px;">
       {sections_html}
       <div class="doc-requisites">
@@ -1178,44 +1190,48 @@ def legal_page_en(title_ru_equiv, h1, doc_meta, sections, extra_links, path, des
 '''
     return page_head(title_ru_equiv, description, 2, path=f"en/{path}", lang="en") + body
 
+# Разделы вынесены на уровень модуля (v60): их же читает gen_legal_pdf_en.py,
+# чтобы английский PDF собирался из того же текста, что страница, а не из копии.
+PRIVACY_SECTIONS_EN = [
+  ("1. General Provisions", [
+    "1.1. The personal data controller is Konstantin Alekseevich Moshnikov, self-employed (payer of professional income tax), INN 471508674254, St. Petersburg, Russia.",
+    "1.2. This Policy is drafted in accordance with Federal Law No. 152-FZ \u201cOn Personal Data\u201d of 27.07.2006 and sets out how personal data of orgculture.ru users and its related communication channels (Telegram, email) is processed.",
+    "1.3. Using the site, contacting the Telegram bot, or using any other channel listed on the site constitutes agreement with the terms of this Policy.",
+  ]),
+  ("2. Purposes of Processing", [
+    "Responding to users, including replies to inquiries and collaboration requests; concluding and performing paid-service agreements (production, promotion, website development, and other services provided by the Controller outside the site, by direct arrangement); improving the site; complying with the requirements of Russian law.",
+  ]),
+  ("3. Categories of Data Processed", [
+    "Name; phone number; email address; Telegram ID and username; message content \u2014 to the extent voluntarily provided by the user when making contact.",
+    "Anonymized technical data about site visits (cookies, click and on-page activity statistics) is also processed automatically via Yandex Metrica \u2014 see the Cookie Policy for details.",
+  ]),
+  ("4. Legal Grounds for Processing", [
+    "Consent of the data subject; performance of a contract to which the data subject is a party or beneficiary; fulfillment of obligations under Russian law.",
+  ]),
+  ("5. Terms and Conditions of Processing", [
+    "5.1. The Controller takes the necessary organizational and technical measures to protect personal data from unlawful or accidental access, destruction, alteration, blocking, copying, or dissemination.",
+    "5.2. Data is not transferred to third parties, except where expressly required by Russian law, for anonymized statistics processed by Yandex Metrica (Yandex LLC), or with the data subject's separate consent. Once the purpose of processing is achieved, or consent is withdrawn, data is destroyed or anonymized.",
+  ]),
+  ("6. Rights of Data Subjects", [
+    "6.1. Users are entitled to: receive information regarding the processing of their personal data; request correction, blocking, or deletion of data that is incomplete, outdated, or inaccurate; withdraw consent to processing.",
+    "6.2. Requests should be sent to kostyamoshnikov@gmail.com and must include the requester's full name, the email address used when contacting the site or bot, and the substance of the request. The Controller may ask for additional information needed to verify the requester's identity.",
+    "6.3. The Controller reviews the request and responds within 10 working days of receipt; this period may be extended by no more than 5 working days if the Controller sends the requester a reasoned notice stating the grounds for the extension (Article 20 of Federal Law No. 152-FZ). If a request does not include the information specified in clause 6.2, the Controller may decline to process it, notifying the requester of the reason.",
+  ]),
+  ("7. Liability", [
+    "The Controller is liable for violations of personal data processing procedures in accordance with Russian law. Users are responsible for the accuracy of the data they provide.",
+  ]),
+  ("8. Changes to This Policy", [
+    "The Controller may amend this Policy. The new version takes effect once published on the site.",
+  ]),
+]
+
 def build_privacy_en():
-    sections = [
-      ("1. General Provisions", [
-        "1.1. The personal data controller is Konstantin Alekseevich Moshnikov, self-employed (payer of professional income tax), INN 471508674254, St. Petersburg, Russia.",
-        "1.2. This Policy is drafted in accordance with Federal Law No. 152-FZ \u201cOn Personal Data\u201d of 27.07.2006 and sets out how personal data of orgculture.ru users and its related communication channels (Telegram, email) is processed.",
-        "1.3. Using the site, contacting the Telegram bot, or using any other channel listed on the site constitutes agreement with the terms of this Policy.",
-      ]),
-      ("2. Purposes of Processing", [
-        "Responding to users, including replies to inquiries and collaboration requests; concluding and performing paid-service agreements (production, promotion, website development, and other services provided by the Controller outside the site, by direct arrangement); improving the site; complying with the requirements of Russian law.",
-      ]),
-      ("3. Categories of Data Processed", [
-        "Name; phone number; email address; Telegram ID and username; message content \u2014 to the extent voluntarily provided by the user when making contact.",
-        "Anonymized technical data about site visits (cookies, click and on-page activity statistics) is also processed automatically via Yandex Metrica \u2014 see the Cookie Policy for details.",
-      ]),
-      ("4. Legal Grounds for Processing", [
-        "Consent of the data subject; performance of a contract to which the data subject is a party or beneficiary; fulfillment of obligations under Russian law.",
-      ]),
-      ("5. Terms and Conditions of Processing", [
-        "5.1. The Controller takes the necessary organizational and technical measures to protect personal data from unlawful or accidental access, destruction, alteration, blocking, copying, or dissemination.",
-        "5.2. Data is not transferred to third parties, except where expressly required by Russian law, for anonymized statistics processed by Yandex Metrica (Yandex LLC), or with the data subject's separate consent. Once the purpose of processing is achieved, or consent is withdrawn, data is destroyed or anonymized.",
-      ]),
-      ("6. Rights of Data Subjects", [
-        "6.1. Users are entitled to: receive information regarding the processing of their personal data; request correction, blocking, or deletion of data that is incomplete, outdated, or inaccurate; withdraw consent to processing.",
-        "6.2. Requests should be sent to kostyamoshnikov@gmail.com and must include the requester's full name, the email address used when contacting the site or bot, and the substance of the request. The Controller may ask for additional information needed to verify the requester's identity.",
-        "6.3. The Controller reviews the request and responds within 30 days of receipt. If a request does not include the information specified in clause 6.2, the Controller may decline to process it, notifying the requester of the reason.",
-      ]),
-      ("7. Liability", [
-        "The Controller is liable for violations of personal data processing procedures in accordance with Russian law. Users are responsible for the accuracy of the data they provide.",
-      ]),
-      ("8. Changes to This Policy", [
-        "The Controller may amend this Policy. The new version takes effect once published on the site.",
-      ]),
-    ]
+    sections = PRIVACY_SECTIONS_EN
     extra_links = [
       ("../../", "\u2190 Home", ""),
-      ("../../documents/privacy-policy.pdf", "Download PDF", " download"),
+      ("../../documents/privacy-policy-en.pdf", "Download PDF", " download"),
     ]
-    return legal_page_en("Privacy Policy \u2014 Organized Culturality", "Privacy Policy", "orgculture.ru \u00b7 revised 11.09.2026", sections, extra_links, "privacy/", "Privacy policy for orgculture.ru.")
+    return legal_page_en("Privacy Policy \u2014 Organized Culturality", "Privacy Policy", "orgculture.ru \u00b7 revised 24.09.2026", sections, extra_links, "privacy/", "Privacy policy for orgculture.ru.")
 
 os.makedirs(os.path.join(EN_ROOT, "privacy"), exist_ok=True)
 with open(os.path.join(EN_ROOT, "privacy", "index.html"), "w", encoding="utf-8") as f:
@@ -1253,27 +1269,31 @@ with open(os.path.join(EN_ROOT, "bot-rules", "index.html"), "w", encoding="utf-8
     f.write(build_bot_rules_en())
 print("en/bot-rules/index.html written")
 
+# Разделы вынесены на уровень модуля (v60): их же читает gen_legal_pdf_en.py,
+# чтобы английский PDF собирался из того же текста, что страница, а не из копии.
+COOKIES_SECTIONS_EN = [
+  ("1. What Cookies Are", [
+    "Cookies are small text files a site saves in the user's browser to recognize them on return visits and to gather usage statistics.",
+  ]),
+  ("2. What Cookies This Site Uses", [
+    "orgculture.ru uses cookies from Yandex Metrica for anonymized visit statistics (pageviews, click activity, general navigation patterns). No advertising or cross-site tracking cookies are used.",
+  ]),
+  ("3. Consent", [
+    "Yandex Metrica only starts once you click \u201cAccept\u201d in the cookie banner, or if you already gave consent on a previous visit. Declining doesn't restrict access to the site \u2014 it simply means visit statistics aren't collected.",
+  ]),
+  ("4. Managing Cookies", [
+    "You can withdraw consent at any time via \u201cCookie settings\u201d in the site footer, or by clearing cookies in your browser settings. Browsers can also usually be configured to block cookies entirely.",
+  ]),
+  ("5. Changes to This Policy", [
+    "The Operator may amend this Policy. The new version takes effect once published on the site.",
+  ]),
+]
+
 def build_cookies_en():
-    sections = [
-      ("1. What Cookies Are", [
-        "Cookies are small text files a site saves in the user's browser to recognize them on return visits and to gather usage statistics.",
-      ]),
-      ("2. What Cookies This Site Uses", [
-        "orgculture.ru uses cookies from Yandex Metrica for anonymized visit statistics (pageviews, click activity, general navigation patterns). No advertising or cross-site tracking cookies are used.",
-      ]),
-      ("3. Consent", [
-        "Yandex Metrica only starts once you click \u201cAccept\u201d in the cookie banner, or if you already gave consent on a previous visit. Declining doesn't restrict access to the site \u2014 it simply means visit statistics aren't collected.",
-      ]),
-      ("4. Managing Cookies", [
-        "You can withdraw consent at any time via \u201cCookie settings\u201d in the site footer, or by clearing cookies in your browser settings. Browsers can also usually be configured to block cookies entirely.",
-      ]),
-      ("5. Changes to This Policy", [
-        "The Operator may amend this Policy. The new version takes effect once published on the site.",
-      ]),
-    ]
+    sections = COOKIES_SECTIONS_EN
     extra_links = [
       ("../../", "\u2190 Home", ""),
-      ("../../documents/cookies-policy.pdf", "Download PDF", " download"),
+      ("../../documents/cookies-policy-en.pdf", "Download PDF", " download"),
     ]
     return legal_page_en("Cookie Policy \u2014 Organized Culturality", "Cookie Policy", "orgculture.ru \u00b7 revised 30.07.2026", sections, extra_links, "cookies/", "Cookie usage policy for orgculture.ru.")
 
@@ -1292,9 +1312,21 @@ with open(os.path.join(ROOT, "en", "press", "index.html"), "w", encoding="utf-8"
     f.write(ns["build_press"]("en"))
 print("en/press/index.html written")
 
+# /en/mentions/ — только если есть публикуемые упоминания (см. gen.py,
+# MENTIONS_PUBLISHED); иначе папка удаляется.
+ns["write_mentions_page"]("en")
+
+# /en/faq/ — та же разметка и те же вопросы, что RU (build_faq, FAQ_ITEMS в gen.py)
+os.makedirs(os.path.join(ROOT, "en", "faq"), exist_ok=True)
+with open(os.path.join(ROOT, "en", "faq", "index.html"), "w", encoding="utf-8") as f:
+    f.write(ns["build_faq"]("en"))
+print("en/faq/index.html written")
+
 def build_combined_sitemap():
     # Юр. страницы в sitemap не входят — noindex (NOINDEX_PATHS в gen.py).
-    core = ["", "manifesto/", "texts/", "projects/", "production/", "recommendations/", "about/", "contacts/", "press/"]
+    core = ["", "manifesto/", "texts/", "projects/", "production/", "recommendations/", "about/", "contacts/", "press/", "faq/"]
+    if ns["MENTIONS_PUBLISHED"]:
+        core.append("mentions/")
     ru_paths = list(core) + [f"texts/{t['slug']}/" for t in TEXTS_RU] + [f"projects/{p['slug']}/" for p in PROJECTS_RU]
     en_paths = list(core) + [f"texts/{t['slug']}/" for t in TEXTS_EN] + [f"projects/{p['slug']}/" for p in PROJECTS_EN]
     entries = []

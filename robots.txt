@@ -6,5 +6,8 @@ Allow: /
 # HTML-двойника.
 Disallow: /documents/privacy-policy.pdf
 Disallow: /documents/cookies-policy.pdf
+# английские версии (с v60) — дубли /en/privacy/ и /en/cookies/, та же логика
+Disallow: /documents/privacy-policy-en.pdf
+Disallow: /documents/cookies-policy-en.pdf
 
 Sitemap: https://orgculture.ru/sitemap.xml

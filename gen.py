@@ -753,13 +753,24 @@ REVIEWS = json.load(open(REVIEWS_PATH, encoding="utf-8")) if os.path.isfile(REVI
 # дополнять поиском, не трогая авторский голос.
 CONTEXT_PATH = os.path.join(ROOT, "context.json")
 CONTEXT = json.load(open(CONTEXT_PATH, encoding="utf-8")) if os.path.isfile(CONTEXT_PATH) else {}
+
+# Упоминания (v59) — mentions.json, по образцу _tools/Mentions/ пака
+# AELITA. Страница /mentions/ собирается, ТОЛЬКО если есть хотя бы одна
+# запись с publish: true; иначе её нет вовсе — ни файла, ни ссылки в
+# футере, ни строки в sitemap. Пустая страница «Упоминания» работает
+# против автора. Проверка данных — mentions_tool.py и check_archive.py.
+MENTIONS_PATH = os.path.join(ROOT, "mentions.json")
+MENTIONS_DATA = json.load(open(MENTIONS_PATH, encoding="utf-8")) if os.path.isfile(MENTIONS_PATH) else {"mentions": []}
+MENTIONS_PUBLISHED = sorted(
+    [m for m in MENTIONS_DATA.get("mentions", []) if m.get("publish")],
+    key=lambda m: (m.get("date") or "0000", m.get("id", "")), reverse=True)
 CONTEXT.pop("_comment", None)
 
 # Номер версии сайта для кэш-бастинга статики (style.css) и service worker.
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 58
+SITE_VERSION = 63
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -767,7 +778,7 @@ SITE_VERSION = 58
 # сборки сайта, а не дата конкретного текста — честнее, чем не иметь
 # lastmod вообще, но не путать одно с другим. Бампать вручную вместе с
 # SITE_VERSION при каждой пересборке.
-BUILD_DATE = "2026-09-24"
+BUILD_DATE = "2026-09-25"
 
 # Натуральные размеры картинок из images/ — только для атрибутов width/height
 # у <img> (чтобы браузер резервировал место и не прыгала вёрстка при
@@ -1174,9 +1185,15 @@ def footer(depth=0, lang="ru"):
         tg_bubble = "Напишите нам — бот ответит быстро"
         tg_btn_label = "Написать боту"
         tg_aria = "Написать в Telegram"
-        sections = [("texts/", "Тексты"), ("projects/", "Проекты"), ("production/", "Продюсирование"),
-                    ("manifesto/", "Манифест"), ("recommendations/", "Рекомендации"), ("about/", "Автор"),
-                    ("press/", "Для прессы"), ("contacts/", "Контакты")]
+        # Три колонки вместо одной строки из девяти ссылок (v62: на телефоне
+        # футер читался как «каша» — всё одинаковым кеглем подряд).
+        cols = [
+            ("Читать", [("texts/", "Тексты"), ("recommendations/", "Рекомендации"), ("manifesto/", "Манифест")]),
+            ("Работа", [("production/", "Продюсирование"), ("projects/", "Проекты"), ("faq/", "Частые вопросы"), ("contacts/", "Контакты")]),
+            ("Автор", [("about/", "Об авторе"), ("press/", "Для прессы")] + ([("mentions/", "Упоминания")] if MENTIONS_PUBLISHED else [])),
+        ]
+        bot_link_label = "Бот"
+        home_aria = "Организованная Культурность — на главную"
         sections_aria = "Разделы сайта"
         requisites = "Мошников Константин Алексеевич · самозанятый (НПД) · ИНН 471508674254 · Санкт-Петербург"
     else:
@@ -1188,36 +1205,54 @@ def footer(depth=0, lang="ru"):
         tg_bubble = "Message us — the bot replies fast"
         tg_btn_label = "Message the bot"
         tg_aria = "Message on Telegram"
-        sections = [("texts/", "Texts"), ("projects/", "Projects"), ("production/", "Production"),
-                    ("manifesto/", "Manifesto"), ("recommendations/", "Recommendations"), ("about/", "Author"),
-                    ("press/", "Press"), ("contacts/", "Contacts")]
+        cols = [
+            ("Read", [("texts/", "Texts"), ("recommendations/", "Recommendations"), ("manifesto/", "Manifesto")]),
+            ("Work", [("production/", "Production"), ("projects/", "Projects"), ("faq/", "FAQ"), ("contacts/", "Contacts")]),
+            ("Author", [("about/", "About"), ("press/", "Press")] + ([("mentions/", "Mentions")] if MENTIONS_PUBLISHED else [])),
+        ]
+        bot_link_label = "Bot"
+        home_aria = "Organized Culturality — home"
         sections_aria = "Site sections"
         requisites = "Konstantin Moshnikov · self-employed (NPD) · INN 471508674254 · St. Petersburg"
-    # Футер по образцу AELITA: разделы + контакт + с кем заказчик имеет
-    # дело. ИНН и так опубликован на /contacts/ и в юр. документах —
-    # новой информации не раскрывается; адреса нет и не будет.
-    sections_html = "\n      ".join(f'<a href="{r}{href}">{label}</a>' for href, label in sections)
+    # Футер (v62, переделан по скриншоту с телефона): три уровня вместо
+    # одного потока — (1) знак, слоган и соцсети; (2) три колонки ссылок
+    # с подписями; (3) тонкая нижняя строка: почта и реквизиты, юр. ссылки.
+    # ИНН и так опубликован на /contacts/ и в юр. документах — новой
+    # информации не раскрывается; адреса нет и не будет. Хэштег
+    # #ОрганизованнаяКультурность — под знаком, над слоганом (в v62 был
+    # убран, по просьбе автора возвращён в v63).
+    cols_html = "\n      ".join(
+        f'<div class="foot-col"><div class="foot-h">{h}</div>'
+        + "".join(f'<a href="{r}{href}">{label}</a>' for href, label in links)
+        + "</div>"
+        for h, links in cols)
     return f'''<footer>
-  <div class="wrap-wide foot-inner">
-    <div class="foot-tag">{tag_line}</div>
-    <div style="display:flex;gap:18px;flex-wrap:wrap;">
-      <a href="https://t.me/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">Telegram</a>
-      <a href="https://vk.ru/orgculture" target="_blank" rel="noopener" class="btn-line" style="padding:8px 16px;font-size:13px;">VK</a>
+  <div class="wrap-wide foot-top">
+    <div class="foot-brand">
+      <a class="foot-mark" href="{r}" aria-label="{home_aria}">{LOGO_MARK_SVG}</a>
+      <div class="foot-tag">{tag_line}</div>
+      <div class="foot-slogan">{slogan}</div>
+      <div class="foot-social">
+        <a href="https://t.me/orgculture" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://vk.ru/orgculture" target="_blank" rel="noopener">VK</a>
+        <a href="{BOT_URL}" target="_blank" rel="noopener">{bot_link_label}</a>
+      </div>
     </div>
-    <div class="foot-slogan">{slogan}</div>
+    <nav class="foot-cols" aria-label="{sections_aria}">
+      {cols_html}
+    </nav>
   </div>
-  <nav class="wrap-wide foot-nav" aria-label="{sections_aria}">
-      {sections_html}
-  </nav>
-  <div class="wrap-wide foot-req">
-    <a href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
-    <span>{requisites}</span>
-  </div>
-  <div class="wrap-wide" style="margin-top:20px;display:flex;gap:18px;flex-wrap:wrap;">
-    <a href="{r}privacy/" style="font-size:12px;color:var(--dim2);">{priv_label}</a>
-    <a href="{r}cookies/" style="font-size:12px;color:var(--dim2);">{cookie_label}</a>
-    <a href="{r}bot-rules/" style="font-size:12px;color:var(--dim2);">{bot_label}</a>
-    <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;" style="font-size:12px;color:var(--dim2);">{cookie_settings_label}</a>
+  <div class="wrap-wide foot-bottom">
+    <div class="foot-req">
+      <a href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
+      <span>{requisites}</span>
+    </div>
+    <div class="foot-legal">
+      <a href="{r}privacy/">{priv_label}</a>
+      <a href="{r}cookies/">{cookie_label}</a>
+      <a href="{r}bot-rules/">{bot_label}</a>
+      <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">{cookie_settings_label}</a>
+    </div>
   </div>
 </footer>
 
@@ -1233,7 +1268,7 @@ def footer(depth=0, lang="ru"):
     var widget = document.getElementById('tg-widget');
     var bubble = document.getElementById('tg-bubble');
     function update(){{
-      if (window.scrollY > 400) {{
+      if (window.scrollY > 400 && !footerVisible) {{
         if (!widget.classList.contains('visible')) {{
           widget.classList.add('visible');
           if (!bubble.dataset.shown) {{
@@ -1247,6 +1282,16 @@ def footer(depth=0, lang="ru"):
       }} else {{
         widget.classList.remove('visible');
       }}
+    }}
+    // Над футером кнопка не нужна: в футере есть ссылка «Бот», а на
+    // телефоне кнопка закрывала юр. ссылки (v62).
+    var footerEl = document.querySelector('footer');
+    var footerVisible = false;
+    if (footerEl && 'IntersectionObserver' in window) {{
+      new IntersectionObserver(function(entries){{
+        footerVisible = entries[0].isIntersecting;
+        update();
+      }}).observe(footerEl);
     }}
     window.addEventListener('scroll', update);
     update();
@@ -1305,8 +1350,75 @@ print("chrome ready")
 # INDEX
 # ---------------------------------------------------------------
 
+# ---------------------------------------------------------------
+# Блок «Продюсирование и продвижение» на главной (v62)
+#
+# Вторая часть деятельности автора — на главной до v62 была только
+# кнопкой в hero. Блок стоит сразу после трёх последних текстов, до
+# рекомендаций: читатель видит обе части сайта, не прокручивая до конца.
+# Тексты — короткие версии услуг со страницы /production/ и из КП; список
+# проектов — из PROJECTS (RU) / PROJECTS_EN (EN), те же ссылки, что в
+# разделе «Проекты». Одна функция на оба языка.
+# ---------------------------------------------------------------
+HOME_PROD_TEXT = {
+    "ru": {
+        "eyebrow": "Вторая часть — работа",
+        "h2": "Продюсирование и продвижение",
+        "lede": "Довожу театральные и арт-проекты от идеи до зрителя: беру на себя организацию, продвижение и сайт, чтобы у постановки было пространство остаться творческой.",
+        "services": [
+            ("Продюсирование", "Бюджет, площадка, команда, логистика, дедлайны — от концепции до выпуска."),
+            ("Продвижение", "SMM, площадки и партнёры, пресса — последовательное присутствие от анонса до архива."),
+            ("Сайты и боты", "Сайт проекта или фестиваля, боты для заявок и отзывов, своя аналитика."),
+        ],
+        "projects_label": "Проекты",
+        "more": "Подробнее о работе",
+        "brief": "Заполнить бриф",
+        "faq": "Частые вопросы",
+    },
+    "en": {
+        "eyebrow": "The other half — work",
+        "h2": "Production & promotion",
+        "lede": "I take theatre and arts projects from idea to audience, handling the organisation, promotion and website so the production has room to stay creative.",
+        "services": [
+            ("Production", "Budget, venue, team, logistics, deadlines, from concept to opening night."),
+            ("Promotion", "Social media, venues and partners, press: a steady presence from announcement to archive."),
+            ("Websites & bots", "A site for the project or festival, bots for requests and reviews, your own analytics."),
+        ],
+        "projects_label": "Projects",
+        "more": "More about the work",
+        "brief": "Fill in the brief",
+        "faq": "FAQ",
+    },
+}
+
+def home_production_block(lang, projects):
+    T = HOME_PROD_TEXT[lang]
+    services = "".join(
+        f'<div class="prod-service"><h3>{html.escape(h)}</h3><p>{html.escape(p)}</p></div>'
+        for h, p in T["services"])
+    projects_html = " ".join(
+        f'<a href="projects/{p["slug"]}/">{html.escape(p["title"])}</a>' for p in projects)
+    return f"""<section class="tight">
+  <div class="wrap-wide">
+    <div class="home-prod">
+      <div class="eyebrow">{html.escape(T['eyebrow'])}</div>
+      <h2 class="home-prod-h">{html.escape(T['h2'])}</h2>
+      <p class="home-prod-lede">{html.escape(T['lede'])}</p>
+      <div class="prod-services">{services}</div>
+      <div class="home-prod-projects"><span>{html.escape(T['projects_label'])}:</span> {projects_html}</div>
+      <div class="home-prod-ctas">
+        <a class="btn-line" href="production/">{html.escape(T['more'])} →</a>
+        <a class="btn-line btn-line-ghost" href="contacts/">{html.escape(T['brief'])}</a>
+        <a class="home-prod-faq" href="faq/">{html.escape(T['faq'])} →</a>
+      </div>
+    </div>
+  </div>
+</section>"""
+
 def build_index():
-    latest = TEXTS[:6]
+    # v62: три последних текста вместо шести — вторая половина главной
+    # отдана блоку «Продюсирование и продвижение».
+    latest = TEXTS[:3]
     rec_with_link = [t for t in TEXTS if t["link"]][:3]
 
     index_schema = {
@@ -1383,6 +1495,8 @@ def build_index():
   </div>
 </section>
 
+{home_production_block("ru", PROJECTS)}
+
 <section class="tight">
   <div class="wrap-wide">
     <div class="sec-head">
@@ -1410,9 +1524,8 @@ def build_index():
 '''
     return page_head("Организованная Культурность", "Тексты о фильмах, спектаклях, музыке и людях — и продюсирование, продвижение культурных и арт-проектов.", 0, path="") + body
 
-with open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8") as f:
-    f.write(build_index())
-print("index.html written")
+# index.html записывается в конце сборки (см. ниже, перед site-content.js):
+# с v62 на главной блок с проектами, а PROJECTS объявлен дальше по файлу.
 
 # ---------------------------------------------------------------
 # TEXTS INDEX
@@ -1936,7 +2049,7 @@ PROJECTS = [
   },
   {
     "slug": "robot-kostya-project",
-    "role": "SMM, менеджер проектов",
+    "role": "Перформер, SMM, менеджер проекта",
     "period": "май 2021 — н.в.",
     "title": "Робот Костя",
     "kicker": "Первый в России роботический театр — номинант «Золотой Маски» в разделе «Эксперимент».",
@@ -1944,7 +2057,7 @@ PROJECTS = [
     "paragraphs": [
       "«Робот Костя» — проект Научно-технологического театра, первого в России театра с участием робота на сцене. Спектакль по мотивам чеховской «Чайки», где робот играет одну из ключевых ролей.",
       "Номинант «Золотой Маски» в разделе «Эксперимент». Показы проходили на Новой сцене Александринского театра, в Севкабель Порту, Планетарии №1 и ММОМА, а также на фестивале «Точка доступа» в Петербургском Люмьер-Холле.",
-      "Веду SMM и менеджмент проекта с мая 2021 года — от анонсов показов до координации инновационных коллабораций с государственными и коммерческими площадками Москвы и Петербурга.",
+      "С мая 2021 года — перформер в спектакле, а вне сцены веду SMM и менеджмент проекта: от анонсов показов до координации инновационных коллабораций с государственными и коммерческими площадками Москвы и Петербурга.",
     ],
     "link": "https://www.instagram.com/robot.kostya/", "link_label": "Instagram «Робота Кости»",
   },
@@ -1971,10 +2084,10 @@ CV_ROLES = [
         ],
     },
     {
-        "role": "SMM, менеджер проектов", "org": "Научно-технологический театр",
+        "role": "Перформер, SMM, менеджер проекта", "org": "Научно-технологический театр",
         "period": "май 2021 — н.в.",
         "bullets": [
-            "SMM первого в России роботического театра — номинант «Золотой Маски» (раздел «Эксперимент»)",
+            "Перформер в спектакле, SMM и менеджмент проекта первого в России роботического театра — номинант «Золотой Маски» (раздел «Эксперимент»)",
             "Показы на Новой сцене Александринского театра, Севкабеле, Планетарии №1, ММОМА и других площадках",
             "Инновационные проекты совместно с государственными и коммерческими площадками Москвы и Петербурга",
         ],
@@ -2155,6 +2268,7 @@ def build_production():
     <p style="color:var(--dim);font-size:15px;line-height:1.8;max-width:620px;margin-bottom:0;" data-editable="production_docs2">
       Для театров, фондов и НКО это значит, что расходы закрываются документами и проходят по бухгалтерии без отдельных объяснений.
     </p>
+    <p style="font-size:15px;margin:14px 0 0;"><a href="../faq/" style="color:var(--accent);">Частые вопросы: цены, сроки, права на сайт →</a></p>
 
     <div class="oval-divider" style="justify-content:flex-start;margin:52px 0 28px;"><div style="width:64px;">{OVAL_DIVIDER_SVG}</div></div>
     <div class="eyebrow" style="margin-bottom:20px;">Примеры</div>
@@ -2214,7 +2328,9 @@ PRESS_KIT_FILES = [
     ("01-logo/final/logo-circle-color-b.svg",          "orgculture-logo-light.svg"),
     ("01-logo/final/logo-circle-color-b.png",          "orgculture-logo-light.png"),
     ("01-logo/final/logo-mark-vector.pdf",             "orgculture-logo-vector.pdf"),
-    ("02-brandbook/brandbook2.pdf",                    "orgculture-brandbook.pdf"),
+    # Брендбук сюда НЕ копируется с v61: на сайте он двуязычный
+    # (orgculture-brandbook.pdf RU→EN, orgculture-brandbook-en.pdf EN→RU) —
+    # его собирает build_bilingual_pdfs.py из 02-brandbook/brandbook2(-en).pdf.
     ("03-website/images/author.jpg",                   "konstantin-moshnikov-photo.jpg"),
 ]
 
@@ -2315,7 +2431,7 @@ PRESS_TEXT = {
         "photo_note": "Konstantin Moshnikov. JPG, 1600×2400.", "photo_btn": "Download photo",
         "logo_h": "Mark and visual identity",
         "logo_note": "The mark is a drawing, not a typeface: an ellipse “O” and a “K”. Do not change its proportions or colours. Four colour versions, SVG (vector) and PNG.",
-        "vector": "Mark for print (PDF, vector)", "brandbook": "Brand book (PDF, in Russian)",
+        "vector": "Mark for print (PDF, vector)", "brandbook": "Brand book (PDF)",
         "contact_h": "Press contact", "all_contacts": "All contacts",
         "title": "Press — Organized Culturality",
         "desc": "Press kit: a short bio of Konstantin Moshnikov and Organized Culturality, a photo, the mark and the brand book.",
@@ -2328,6 +2444,8 @@ def build_press(lang="ru"):
     root = "../" * depth                       # корень сайта — для documents/, images/
     r = root + ("en/" if lang == "en" else "")  # корень языковой версии — для ссылок на страницы
     path = "press/" if lang == "ru" else "en/press/"
+    # PDF двуязычные (v61): с английской страницы — файл, где английская часть первая
+    pdf_sfx = "" if lang == "ru" else "-en"
     body = f"""
 {header(depth, "press", relpath="press/", lang=lang)}
 {PRESS_STYLE}
@@ -2342,7 +2460,7 @@ def build_press(lang="ru"):
       <p class="press-quote">{T['bio_person']}</p>
       <p class="press-quote">{T['bio_project']}</p>
       <p class="press-note">{T['more'].format(r=r)}</p>
-      <div class="press-buttons"><a class="btn-line" href="{root}documents/CV-Konstantin-Moshnikov.pdf" download>{T['cv']}</a></div>
+      <div class="press-buttons"><a class="btn-line" href="{root}documents/CV-Konstantin-Moshnikov{pdf_sfx}.pdf" download>{T['cv']}</a></div>
     </div>
 
     <div class="press-block">
@@ -2368,7 +2486,7 @@ def build_press(lang="ru"):
       {press_logo_tiles(depth, lang)}</div>
       <div class="press-buttons">
         <a class="btn-line" href="{root}documents/press/orgculture-logo-vector.pdf" download>{T['vector']}</a>
-        <a class="btn-line btn-line-ghost" href="{root}documents/press/orgculture-brandbook.pdf" download>{T['brandbook']}</a>
+        <a class="btn-line btn-line-ghost" href="{root}documents/press/orgculture-brandbook{pdf_sfx}.pdf" download>{T['brandbook']}</a>
       </div>
     </div>
 
@@ -2391,6 +2509,340 @@ os.makedirs(os.path.join(ROOT, "press"), exist_ok=True)
 with open(os.path.join(ROOT, "press", "index.html"), "w", encoding="utf-8") as f:
     f.write(build_press("ru"))
 print("press/index.html written")
+
+# ---------------------------------------------------------------
+# MENTIONS — упоминания (/mentions/), v59
+# Данные — mentions.json (см. MENTIONS_PUBLISHED выше). Одна функция на
+# оба языка, как build_press. Нет публикуемых записей — страница и её
+# папка удаляются (чтобы не остался устаревший файл от прошлой сборки).
+# ---------------------------------------------------------------
+MENTION_KINDS = {
+    # kind: (RU, EN)
+    "press":       ("Пресса", "Press"),
+    "interview":   ("Интервью", "Interview"),
+    "publication": ("Мой текст в другом издании", "My text elsewhere"),
+    "channel":     ("Канал / блог", "Channel / blog"),
+    "podcast":     ("Подкаст / эфир", "Podcast / broadcast"),
+    "venue":       ("Площадка / организатор", "Venue / organiser"),
+}
+MONTHS_RU_GEN = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля",
+                 "августа", "сентября", "октября", "ноября", "декабря"]
+MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July",
+             "August", "September", "October", "November", "December"]
+
+def _mention_date(iso, lang):
+    if not iso:
+        return ""
+    y, m, d = iso.split("-")
+    if lang == "ru":
+        return f"{int(d)} {MONTHS_RU_GEN[int(m) - 1]} {y}"
+    return f"{int(d)} {MONTHS_EN[int(m) - 1]} {y}"
+
+MENTIONS_TEXT = {
+    "ru": {"h1": "Упоминания",
+           "intro": "Где писали об «Организованной Культурности» и моих проектах и где выходили мои тексты.",
+           "title": "Упоминания — Организованная Культурность",
+           "desc": "Публикации, интервью и упоминания Константина Мошникова и «Организованной Культурности».",
+           "undated": "Без даты"},
+    "en": {"h1": "Mentions",
+           "intro": "Where Organized Culturality and my projects have been written about, and where my texts have appeared.",
+           "title": "Mentions — Organized Culturality",
+           "desc": "Publications, interviews and mentions of Konstantin Moshnikov and Organized Culturality.",
+           "undated": "Undated"},
+}
+
+def build_mentions(lang="ru"):
+    T = MENTIONS_TEXT[lang]
+    sfx = "_ru" if lang == "ru" else "_en"
+    depth = 1 if lang == "ru" else 2
+    path = "mentions/" if lang == "ru" else "en/mentions/"
+    parts = []
+    year = None
+    for m in MENTIONS_PUBLISHED:
+        y = (m.get("date") or "")[:4] or T["undated"]
+        if y != year:
+            parts.append(f'<h2 class="mention-year">{html.escape(y)}</h2>')
+            year = y
+        kind = MENTION_KINDS.get(m.get("kind"), ("", ""))[0 if lang == "ru" else 1]
+        meta = " · ".join(x for x in [
+            _mention_date(m.get("date"), lang), html.escape(m.get("source" + sfx, "")),
+            html.escape(m.get("author" + sfx, "")), html.escape(kind)] if x)
+        subject = m.get("subject" + sfx, "")
+        subject_html = f'<div class="mention-subject">{html.escape(subject)}</div>' if subject else ""
+        title = html.escape(m.get("title" + sfx, ""))
+        parts.append(
+            '<article class="mention">'
+            f'<div class="mention-meta">{meta}</div>'
+            f'<a class="mention-title" href="{html.escape(m["url"])}" target="_blank" rel="noopener">{title} →</a>'
+            f'{subject_html}'
+            '</article>')
+    items_html = "\n    ".join(parts)
+    body = f"""
+{header(depth, "mentions", relpath="mentions/", lang=lang)}
+<style>
+  .mention-year{{font-family:'Unbounded',sans-serif;font-weight:300;font-size:20px;margin:44px 0 8px;color:var(--dim);}}
+  .mention{{padding:18px 0;border-bottom:1px solid var(--line);}}
+  .mention-meta{{font-size:13px;color:var(--dim);margin-bottom:6px;}}
+  .mention-title{{font-size:17px;line-height:1.5;color:var(--ink);}}
+  .mention-title:hover{{color:var(--accent);}}
+  .mention-subject{{font-size:14px;color:var(--dim);margin-top:6px;}}
+</style>
+<section style="padding-top:64px;">
+  <div class="wrap">
+    <div class="eyebrow">{T['h1']}</div>
+    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">{T['h1']}</h1>
+    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;">{T['intro']}</p>
+    {items_html}
+  </div>
+</section>
+{footer(depth, lang=lang)}
+"""
+    return page_head(T["title"], T["desc"], depth, path=path, lang=lang) + body
+
+def write_mentions_page(lang="ru"):
+    d = os.path.join(ROOT, "mentions") if lang == "ru" else os.path.join(ROOT, "en", "mentions")
+    if not MENTIONS_PUBLISHED:
+        if os.path.isdir(d):
+            import shutil
+            shutil.rmtree(d)
+            print(f"{os.path.relpath(d, ROOT)}/ removed — нет публикуемых упоминаний")
+        return
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
+        f.write(build_mentions(lang))
+    print(f"{os.path.relpath(d, ROOT)}/index.html written ({len(MENTIONS_PUBLISHED)})")
+
+write_mentions_page("ru")
+
+# ---------------------------------------------------------------
+# FAQ — частые вопросы заказчиков (/faq/), v60
+#
+# Формат — как у AELITA после их v489: первая фраза ответа — прямой
+# ответ (.faq-lead), уточнения — отдельными пунктами (.faq-points).
+# Сплошные абзацы по 300–500 знаков на телефоне не читались.
+# Разметка FAQPage (JSON-LD) собирается из ТОГО ЖЕ текста, что виден на
+# странице (их v487): вопрос, ответ = lead + пункты + подпись ссылки.
+#
+# ⚠️ Только факты, которые уже есть в архиве: КП (commercial-offers/
+# site-general, «действует до конца декабря 2026»), блок «Как
+# оформляется работа» на /production/, профили договора
+# (deal-documents/_client-types.js). Цены здесь НАМЕРЕННО не повторяются
+# — ссылка на КП: вторая копия цен устаревала бы молча. Меняются условия
+# в КП — сверь ответы здесь (AUDIT-SCHEDULE.md, раз в месяц).
+# ---------------------------------------------------------------
+KP_RU = "documents/orgculture-uslugi-i-ceny.pdf"
+KP_EN = "documents/orgculture-services-and-prices.pdf"
+
+FAQ_ITEMS = [
+    {
+        "q_ru": "Что именно вы делаете?",
+        "lead_ru": "Продюсирование, продвижение и сайты для театральных и арт-проектов.",
+        "points_ru": [
+            "Сайт на основе ваших материалов — вместе с документами для сайта и бота: политика конфиденциальности, cookie, правила бота, оферта.",
+            "Боты в Telegram и VK — заявки и отзывы в одном месте, а не в разрозненных сообщениях.",
+            "Автопостинг по расписанию и собственная аналитика рядом с Яндекс.Метрикой.",
+            "Ведение и продвижение проекта помесячно — публикации, контент, рекламные кабинеты по согласованному плану.",
+        ],
+        "link_ru": ("production/", "Подробнее — на странице «Продюсирование»"),
+        "q_en": "What exactly do you do?",
+        "lead_en": "Production, promotion and websites for theatre and arts projects.",
+        "points_en": [
+            "A website built from your materials, together with the documents the site and bot need: privacy policy, cookie policy, bot rules, public offer.",
+            "Telegram and VK bots, so requests and reviews arrive in one place instead of scattered messages.",
+            "Scheduled autoposting and your own analytics alongside Yandex Metrica.",
+            "Monthly management and promotion: posts, content and ad accounts, following an agreed plan.",
+        ],
+        "link_en": ("production/", "More on the Production page"),
+    },
+    {
+        "q_ru": "Сколько это стоит?",
+        "lead_ru": "Актуальные цены и условия — в коммерческом предложении, оно действует до конца декабря 2026 года.",
+        "points_ru": [
+            "Окончательные состав работ, стоимость и сроки фиксируются в договоре и задании — по итогам брифа.",
+            "Отдельно от гонорара — сервисы, без которых проект не собрать: домен, подписки, при продвижении — рекламный бюджет. Каждый согласуется до оплаты.",
+        ],
+        "link_ru": (KP_RU, "Скачать КП (PDF)"),
+        "q_en": "How much does it cost?",
+        "lead_en": "Current prices and terms are in the commercial offer, valid through the end of December 2026.",
+        "points_en": [
+            "The final scope, price and timeline are fixed in the contract and statement of work after the brief.",
+            "Separately from the fee: the services a project cannot run without, such as a domain, subscriptions and, for promotion, an ad budget. Each is agreed before payment.",
+        ],
+        "link_en": (KP_EN, "Download the offer (PDF)"),
+    },
+    {
+        "q_ru": "Сколько времени занимает сайт?",
+        "lead_ru": "До месяца — по договорённости и в зависимости от сложности задания.",
+        "points_ru": [
+            "Бриф: что показывать в первую очередь, какие материалы уже есть, бюджет и сроки.",
+            "Структура и черновой дизайн — один раздел согласуется как образец.",
+            "Сборка по согласованной структуре — с промежуточными показами.",
+            "Запуск и передача: рабочий сайт, исходники и инструкция по поддержке.",
+        ],
+        "q_en": "How long does a website take?",
+        "lead_en": "Up to a month, by agreement and depending on how complex the brief is.",
+        "points_en": [
+            "Brief: what to show first, which materials already exist, budget and timeline.",
+            "Structure and a first draft: one section is agreed as a sample.",
+            "Build to the agreed structure, with interim reviews.",
+            "Launch and handover: a working site, source files and a maintenance guide.",
+        ],
+    },
+    {
+        "q_ru": "С чего начать?",
+        "lead_ru": "С брифа — на странице «Контакты» или в разговоре с ботом в Telegram.",
+        "points_ru": [
+            "Обязательны только два поля: как с вами связаться и что за задача.",
+            "Сроки, бюджет и «кто вы» — по желанию: проект на стадии «есть идея, бюджета пока нет» тоже стоит прислать.",
+        ],
+        "link_ru": ("contacts/", "Заполнить бриф"),
+        "q_en": "Where do we start?",
+        "lead_en": "With the brief, on the Contacts page or in a chat with the Telegram bot.",
+        "points_en": [
+            "Only two fields are required: how to reach you and what the task is.",
+            "Timeline, budget and who you are are optional: a project that is still at the idea stage, with no budget yet, is worth sending too.",
+        ],
+        "link_en": ("contacts/", "Fill in the brief"),
+    },
+    {
+        "q_ru": "Как оформляется работа и оплата?",
+        "lead_ru": "Договор с заданием по каждому заказу, акт по этапу или месяцу, чек по самозанятости.",
+        "points_ru": [
+            "Я самозанятый (НПД) и плачу налог сам: заказчик не удерживает НДФЛ и не начисляет страховые взносы.",
+            "Разовые услуги — 50% предоплата и 50% по факту; помесячное ведение — 50% в начале месяца и 50% в конце.",
+            "Правки принимаются в течение 14 дней после показа результата, дальше — по отдельной договорённости.",
+        ],
+        "q_en": "How are the paperwork and payment handled?",
+        "lead_en": "A contract with a statement of work for each order, an acceptance act per stage or month, and a self-employed tax receipt.",
+        "points_en": [
+            "I am self-employed under the professional income tax regime (NPD) and pay the tax myself: the client withholds no personal income tax and pays no social contributions.",
+            "One-off services: 50% upfront and 50% on completion; monthly management: 50% at the start of the month and 50% at the end.",
+            "Revisions are accepted within 14 days of presenting the result; after that, by separate arrangement.",
+        ],
+    },
+    {
+        "q_ru": "Вы работаете с частными лицами и с государственными учреждениями?",
+        "lead_ru": "Да: договор собирается под тип заказчика — частное лицо, самозанятый, ИП, организация или государственное (муниципальное) учреждение.",
+        "points_ru": [
+            "С учреждением — как правило, по его форме контракта; без аванса, оплата после приёмки.",
+            "С частным лицом — с учётом закона о защите прав потребителей.",
+        ],
+        "q_en": "Do you work with private individuals and with state institutions?",
+        "lead_en": "Yes. The contract is built for the type of client: a private individual, a self-employed person, a sole trader, a company or a state (municipal) institution.",
+        "points_en": [
+            "With an institution, usually on its own contract form, with no advance payment and payment after acceptance.",
+            "With a private individual, in line with consumer protection law.",
+        ],
+    },
+    {
+        "q_ru": "Кому принадлежат сайт и код?",
+        "lead_ru": "Вам — права на код и дизайн переходят заказчику после полной оплаты.",
+        "points_ru": [
+            "За мной остаётся право показывать выполненную работу в портфолио и кейсах.",
+            "Рабочие аккаунты проекта (Google, Яндекс, GitHub, регистратор домена, Bitwarden) заводятся на проект, доступы — у вас.",
+        ],
+        "q_en": "Who owns the website and the code?",
+        "lead_en": "You do: the rights to the code and design pass to the client on full payment.",
+        "points_en": [
+            "I keep the right to show the finished work in my portfolio and case studies.",
+            "The project's working accounts (Google, Yandex, GitHub, the domain registrar, Bitwarden) are created for the project, and you hold the access.",
+        ],
+    },
+    {
+        "q_ru": "Вы работаете только в Петербурге?",
+        "lead_ru": "Живу и работаю в Петербурге, но проекты — не только здесь.",
+        "points_ru": [
+            "Например, фестиваль «Точка Кюри» в Старом Осколе и площадки Москвы у «Робота Кости».",
+            "При регулярной работе — минимум одна очная встреча в месяц; по отдельной услуге — очная встреча по ней.",
+            "По каждому проекту заводится рабочий чат в Telegram.",
+        ],
+        "q_en": "Do you only work in St. Petersburg?",
+        "lead_en": "I live and work in St. Petersburg, but my projects are not limited to it.",
+        "points_en": [
+            "For example, the Tochka Cuire festival in Stary Oskol, and Moscow venues for Robot Kostya.",
+            "For ongoing work, at least one in-person meeting a month; for a one-off service, an in-person meeting about it.",
+            "Every project gets a working Telegram chat.",
+        ],
+    },
+    {
+        "q_ru": "Когда вы на связи?",
+        "lead_ru": "График свободный и согласуется с заказчиком; суббота и воскресенье — выходные.",
+        "points_ru": [],
+        "q_en": "When are you available?",
+        "lead_en": "Working hours are flexible and agreed with the client; Saturday and Sunday are days off.",
+        "points_en": [],
+    },
+]
+
+FAQ_TEXT = {
+    "ru": {"eyebrow": "Вопросы и ответы", "h1": "Частые вопросы",
+           "intro": "Коротко о том, как устроена работа: что я делаю, сколько это стоит и занимает, как оформляется. Не нашли ответа — напишите.",
+           "title": "Частые вопросы — Организованная Культурность",
+           "desc": "Как устроена работа с Константином Мошниковым: услуги, цены, сроки, договор и оплата, права на сайт и код.",
+           "ask": "Задать вопрос"},
+    "en": {"eyebrow": "Questions and answers", "h1": "FAQ",
+           "intro": "A short guide to how the work is set up: what I do, what it costs and how long it takes, and how it is formalised. Didn't find your answer? Get in touch.",
+           "title": "FAQ — Organized Culturality",
+           "desc": "How working with Konstantin Moshnikov is set up: services, prices, timelines, contract and payment, ownership of the site and code.",
+           "ask": "Ask a question"},
+}
+
+FAQ_STYLE = """<style>
+  .faq-item{padding:26px 0;border-bottom:1px solid var(--line);}
+  .faq-item h2{font-family:'Unbounded',sans-serif;font-weight:300;font-size:18px;line-height:1.45;margin:0 0 12px;}
+  .faq-lead{font-size:16px;line-height:1.75;color:var(--ink);margin:0;}
+  .faq-points{list-style:none;margin:12px 0 0;padding:0;}
+  .faq-points li{border-left:1px solid var(--accent);padding:2px 0 2px 14px;margin:0 0 10px;color:var(--dim);font-size:15px;line-height:1.7;}
+  .faq-link{display:inline-block;margin-top:10px;font-size:14.5px;color:var(--accent);}
+</style>"""
+
+def build_faq(lang="ru"):
+    T = FAQ_TEXT[lang]
+    depth = 1 if lang == "ru" else 2
+    root = "../" * depth
+    r = root + ("en/" if lang == "en" else "")
+    path = "faq/" if lang == "ru" else "en/faq/"
+    items_html = []
+    ld_items = []
+    for it in FAQ_ITEMS:
+        q, lead, points = it["q_" + lang], it["lead_" + lang], it["points_" + lang]
+        link = it.get("link_" + lang)
+        link_html = ""
+        if link:
+            href, label = link
+            # Ссылки на documents/ — от корня сайта, на страницы — от корня языка
+            full = (root if href.startswith("documents/") else r) + href
+            dl = " download" if href.endswith(".pdf") else ""
+            link_html = f'<a class="faq-link" href="{full}"{dl}>{html.escape(label)} →</a>'
+        pts = "".join(f"<li>{html.escape(p)}</li>" for p in points)
+        pts_html = f'<ul class="faq-points">{pts}</ul>' if points else ""
+        items_html.append(f'<div class="faq-item"><h2>{html.escape(q)}</h2><p class="faq-lead">{html.escape(lead)}</p>{pts_html}{link_html}</div>')
+        answer = " ".join([lead] + points + ([link[1]] if link else []))
+        ld_items.append({"@type": "Question", "name": q,
+                         "acceptedAnswer": {"@type": "Answer", "text": answer}})
+    ld = {"@context": "https://schema.org", "@type": "FAQPage",
+          "inLanguage": lang, "mainEntity": ld_items}
+    body = f"""
+<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
+{header(depth, "faq", relpath="faq/", lang=lang)}
+{FAQ_STYLE}
+<section style="padding-top:64px;">
+  <div class="wrap">
+    <div class="eyebrow">{T['eyebrow']}</div>
+    <h1 style="font-size:32px;font-weight:300;margin:14px 0 20px;">{T['h1']}</h1>
+    <p style="color:var(--dim);font-size:15.5px;line-height:1.8;max-width:620px;">{T['intro']}</p>
+    {''.join(items_html)}
+    <div style="margin-top:36px;"><a class="btn-line" href="{r}contacts/">{T['ask']}</a></div>
+  </div>
+</section>
+{footer(depth, lang=lang)}
+"""
+    return page_head(T["title"], T["desc"], depth, path=path, lang=lang) + body
+
+os.makedirs(os.path.join(ROOT, "faq"), exist_ok=True)
+with open(os.path.join(ROOT, "faq", "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_faq("ru"))
+print("faq/index.html written")
 
 # CONTACTS + бриф
 #
@@ -2669,7 +3121,7 @@ def build_privacy():
       ("6. Права субъектов персональных данных", [
         "6.1. Пользователь вправе: получать информацию, касающуюся обработки его персональных данных; требовать уточнения, блокирования или уничтожения данных в случае их неполноты, устаревания, неточности; отзывать согласие на обработку персональных данных.",
         "6.2. Запрос направляется на email: kostyamoshnikov@gmail.com и должен содержать ФИО заявителя, адрес электронной почты, использованный при обращении на сайт или в бот, и суть требования. Оператор вправе запросить дополнительные сведения, необходимые для идентификации заявителя.",
-        "6.3. Оператор рассматривает запрос и направляет ответ в течение 30 дней с момента получения. Запрос, не содержащий сведений, указанных в п. 6.2, Оператор вправе оставить без рассмотрения, уведомив заявителя о причине отказа.",
+        "6.3. Оператор рассматривает запрос и направляет ответ в течение 10 рабочих дней с момента получения; срок может быть продлён не более чем на 5 рабочих дней, если Оператор направит заявителю мотивированное уведомление с указанием причин продления (ст. 20 Федерального закона № 152-ФЗ). Запрос, не содержащий сведений, указанных в п. 6.2, Оператор вправе оставить без рассмотрения, уведомив заявителя о причине отказа.",
       ]),
       ("7. Ответственность", [
         "Оператор несёт ответственность за нарушение порядка обработки персональных данных в соответствии с законодательством РФ. Пользователь несёт ответственность за достоверность предоставленных им данных.",
@@ -2689,7 +3141,7 @@ def build_privacy():
   <div class="wrap">
     <div class="eyebrow">Документ</div>
     <h1 style="font-size:30px;font-weight:300;margin:14px 0 4px;">Политика обработки персональных данных</h1>
-    <div class="doc-meta">orgculture.ru · редакция от 11.09.2026</div>
+    <div class="doc-meta">orgculture.ru · редакция от 24.09.2026</div>
     <div class="doc-body" style="margin-top:36px;">
       {sections_html}
       <div class="doc-requisites">
@@ -2897,8 +3349,10 @@ def build_sitemap():
     # запуск gen.py из тех же списков, что и сам сайт, плюс lastmod.
     # Юр. страницы (NOINDEX_PATHS) в sitemap не входят — они noindex.
     core_paths = ["", "manifesto/", "texts/", "projects/", "production/", "recommendations/",
-                  "about/", "contacts/", "press/"]
+                  "about/", "contacts/", "press/", "faq/"]
     paths = list(core_paths)
+    if MENTIONS_PUBLISHED:
+        paths.append("mentions/")
     paths += [f"texts/{t['slug']}/" for t in TEXTS]
     paths += [f"projects/{p['slug']}/" for p in PROJECTS]
     urls = "\n".join(
@@ -3080,6 +3534,10 @@ async function cacheFirst(request) {{
     with open(os.path.join(ROOT, "sw.js"), "w", encoding="utf-8") as f:
         f.write(sw)
     print("sw.js written")
+
+with open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8") as f:
+    f.write(build_index())
+print("index.html written")
 
 with open(os.path.join(ROOT, "site-content.js"), "w", encoding="utf-8") as f:
     f.write(build_site_content_js())
