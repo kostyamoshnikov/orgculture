@@ -770,7 +770,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 64
+SITE_VERSION = 65
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -778,7 +778,7 @@ SITE_VERSION = 64
 # сборки сайта, а не дата конкретного текста — честнее, чем не иметь
 # lastmod вообще, но не путать одно с другим. Бампать вручную вместе с
 # SITE_VERSION при каждой пересборке.
-BUILD_DATE = "2026-09-25"
+BUILD_DATE = "2026-09-30"
 
 # Натуральные размеры картинок из images/ — только для атрибутов width/height
 # у <img> (чтобы браузер резервировал место и не прыгала вёрстка при
@@ -1251,11 +1251,22 @@ def footer(depth=0, lang="ru"):
       <a href="{r}privacy/">{priv_label}</a>
       <a href="{r}cookies/">{cookie_label}</a>
       <a href="{r}bot-rules/">{bot_label}</a>
-      <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">{cookie_settings_label}</a>
+      <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">{cookie_settings_label}</a>
     </div>
   </div>
 </footer>
 
+<script>
+/* Отзыв согласия на cookie стирает и то, что форма брифа запомнила
+   (имя и контакт). Функция живёт на каждой странице, а не только на
+   /contacts/: отозвать согласие можно из подвала любой страницы, и
+   если чистить только там, где стоит форма, данные пережили бы отзыв
+   согласия — ровно то, что наша же политика запрещает. */
+function okForgetBrief(){{
+  try {{ localStorage.removeItem('ok_brief_name'); localStorage.removeItem('ok_brief_contact'); }}
+  catch (e) {{}}
+}}
+</script>
 <div class="tg-widget" id="tg-widget">
   <div class="tg-bubble" id="tg-bubble">{tg_bubble}</div>
   <a class="tg-btn" href="{BOT_URL}" target="_blank" rel="noopener" aria-label="{tg_aria}">
@@ -1303,7 +1314,7 @@ def footer(depth=0, lang="ru"):
     <p>{cookie_banner_text}</p>
   </div>
   <div class="cb-buttons">
-    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">{decline_label}</button>
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">{decline_label}</button>
     <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">{accept_label}</button>
   </div>
 </div>
@@ -2975,6 +2986,50 @@ def build_contacts():
   var statusEl = document.getElementById('brief-status');
   var formEl = document.getElementById('brief-form');
   function val(id) {{ return (document.getElementById(id).value || '').trim(); }}
+
+  // ─── Форма помнит, что человек уже вводил ────────────────────────
+  // Заказчик, который написал, передумал и вернулся через неделю, не
+  // заполняет всё заново: имя и контакт подставляются из прошлого раза
+  // на этом же устройстве. Перенесено из пака AELITA v538 (pack-v536,
+  // формулировка их заказчика — «чтобы не приходилось лишний раз
+  // заполнять»), но с важным отличием.
+  //
+  // ⚠️ ОТЛИЧИЕ ОТ AELITA: пишем ТОЛЬКО при согласии на cookie.
+  // У них согласие устроено иначе; у нас в политике и в cookie-баннере
+  // сказано, что без согласия ничего в браузере не храним, кроме самого
+  // флага согласия. Хранить имя и контакт в обход собственной политики
+  // нельзя — это ровно те данные, о которых она и написана. Поэтому:
+  // нет согласия → не читаем и не пишем; согласие отозвали → ключи
+  // удаляются (см. обработчик отзыва в cookie-баннере).
+  var MEM_KEYS = {{ name: 'ok_brief_name', contact: 'ok_brief_contact' }};
+  function memAllowed() {{
+    try {{ return localStorage.getItem('ok_cookie_consent') === '1'; }}
+    catch (e) {{ return false; }}
+  }}
+  function memRestore() {{
+    if (!memAllowed()) return;
+    try {{
+      Object.keys(MEM_KEYS).forEach(function(k) {{
+        var el = document.getElementById('brief-' + k);
+        var saved = localStorage.getItem(MEM_KEYS[k]);
+        if (el && saved && !el.value) el.value = saved;
+      }});
+    }} catch (e) {{}}
+  }}
+  function memSave() {{
+    if (!memAllowed()) return;
+    try {{
+      Object.keys(MEM_KEYS).forEach(function(k) {{
+        var v = val('brief-' + k);
+        if (v) localStorage.setItem(MEM_KEYS[k], v);
+      }});
+    }} catch (e) {{}}
+  }}
+  memRestore();
+  ['brief-name', 'brief-contact'].forEach(function(id) {{
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('change', memSave);
+  }});
   // Согласие — отдельное явное действие (ст. 9 152-ФЗ), не выводится из
   // факта отправки формы; проверка продублирована в обработчике на
   // случай снятия disabled через devtools.
@@ -3000,6 +3055,7 @@ def build_contacts():
     }}).then(function(r) {{ return r.json().catch(function() {{ return {{ ok: false }}; }}); }})
       .then(function(data) {{
         if (data && data.ok) {{
+          memSave();
           if (window.okTrack) window.okTrack('brief_submit');
           formEl.innerHTML = '<p class="review-form-status">Спасибо! Заявка отправлена — отвечу, как только смогу.</p>';
         }} else {{

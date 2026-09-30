@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../assets/style.css?v=64">
+<link rel="stylesheet" href="../../../assets/style.css?v=65">
 <link rel="manifest" href="../../../en/manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -71,7 +71,7 @@
   }
 </script>
 <!-- /Own stats beacon -->
-<script src="../../../assets/analytics-events.js?v=64" defer></script>
+<script src="../../../assets/analytics-events.js?v=65" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -310,11 +310,22 @@
       <a href="../../../en/privacy/">Privacy Policy</a>
       <a href="../../../en/cookies/">Cookies</a>
       <a href="../../../en/bot-rules/">Bot Usage Rules</a>
-      <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Cookie settings</a>
+      <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Cookie settings</a>
     </div>
   </div>
 </footer>
 
+<script>
+/* Отзыв согласия на cookie стирает и то, что форма брифа запомнила
+   (имя и контакт). Функция живёт на каждой странице, а не только на
+   /contacts/: отозвать согласие можно из подвала любой страницы, и
+   если чистить только там, где стоит форма, данные пережили бы отзыв
+   согласия — ровно то, что наша же политика запрещает. */
+function okForgetBrief(){
+  try { localStorage.removeItem('ok_brief_name'); localStorage.removeItem('ok_brief_contact'); }
+  catch (e) {}
+}
+</script>
 <div class="tg-widget" id="tg-widget">
   <div class="tg-bubble" id="tg-bubble">Message us — the bot replies fast</div>
   <a class="tg-btn" href="https://t.me/orgculture_bot" target="_blank" rel="noopener" aria-label="Message on Telegram">
@@ -365,7 +376,7 @@
     <p>This site uses cookies for visit statistics. Details — <a href="../../../en/cookies/">in the cookie policy</a>.</p>
   </div>
   <div class="cb-buttons">
-    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Decline</button>
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Decline</button>
     <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Accept</button>
   </div>
 </div>

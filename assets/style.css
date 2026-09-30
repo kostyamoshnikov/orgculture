@@ -145,9 +145,17 @@ section.tight{padding:48px 0;}
 
 /* ---------- search ---------- */
 .search-row{margin-bottom:20px;}
+/* ⚠️ Поля ввода — не меньше 16px (сейчас 17px). Safari на iOS
+   увеличивает всю страницу, когда фокус попадает в поле с кеглем
+   меньше 16px: человек начинает заполнять бриф с телефона и получает
+   скачок масштаба, дальше листает разъехавшуюся страницу. Это не
+   вкусовщина и не «крупно» — это единственный способ запретить iOS
+   зумить. Кегль полей уменьшать нельзя; если поле кажется большим,
+   уменьшать padding, а не font-size. Найдено 30.09.2026 при сверке с
+   паком AELITA v538 (у них то же чинилось в pack-v533). */
 .search-input{
   width:100%;max-width:420px;background:var(--panel);border:1px solid var(--line);
-  border-radius:999px;padding:12px 20px;color:var(--ink);font-size:14.5px;
+  border-radius:999px;padding:12px 20px;color:var(--ink);font-size:17px;
   font-family:'Manrope',sans-serif;transition:border-color .2s;
 }
 .search-input::placeholder{color:var(--dim2);}
@@ -322,7 +330,16 @@ footer .foot-legal{display:flex;flex-wrap:wrap;gap:4px 18px;}
 footer .foot-legal a{color:var(--dim2);}
 footer .foot-bottom a:hover{color:var(--accent);}
 @media(max-width:760px){
-  footer{padding:44px 0 32px;}
+  /* ⚠️ Нижний отступ 140px, а не 32px — это запас под плавающую кнопку
+     бота, а не «воздух». На телефоне .tg-widget стоит bottom:80px, сама
+     кнопка ~44px высотой: без запаса она накрывает последние строки
+     подвала — реквизиты и ссылки на юридические документы, — и
+     докрутить до них нельзя, потому что дальше страница кончается.
+     Если меняешь bottom у .tg-widget — меняй и это число
+     (bottom + высота кнопки + 16px). Найдено 30.09.2026 при сверке с
+     паком AELITA v538: у них та же поломка чинилась дважды, в
+     pack-v538 — уже после первой правки. */
+  footer{padding:44px 0 140px;}
   footer .foot-top{grid-template-columns:1fr;gap:32px;}
   footer .foot-cols{grid-template-columns:1fr 1fr;gap:24px 20px;}
   footer .foot-col a{padding:6px 0;}   /* палец, не курсор: высота ссылки ≥ 32px */
@@ -412,7 +429,7 @@ footer .foot-bottom a:hover{color:var(--accent);}
 .review-form{max-width:480px;margin:20px auto 0;text-align:left;}
 .review-form-input,.review-form-textarea{
   width:100%;background:var(--panel);border:1px solid var(--line);border-radius:2px;
-  color:var(--ink);font-family:inherit;font-size:14.5px;padding:11px 14px;margin-bottom:10px;
+  color:var(--ink);font-family:inherit;font-size:17px;padding:11px 14px;margin-bottom:10px;
 }
 .review-form-textarea{resize:vertical;min-height:90px;}
 .review-form-input::placeholder,.review-form-textarea::placeholder{color:var(--dim2);}
@@ -437,7 +454,7 @@ footer .foot-bottom a:hover{color:var(--accent);}
 .brief-field label{font-size:13px;color:var(--dim);margin-bottom:7px;}
 .brief-field input,.brief-field select,.brief-field textarea{
   width:100%;background:var(--panel);border:1px solid var(--line);border-radius:2px;
-  color:var(--ink);font-family:inherit;font-size:14.5px;padding:11px 14px;
+  color:var(--ink);font-family:inherit;font-size:17px;padding:11px 14px;
 }
 .brief-field textarea{resize:vertical;min-height:110px;}
 .brief-field input::placeholder,.brief-field textarea::placeholder{color:var(--dim2);}

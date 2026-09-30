@@ -438,6 +438,43 @@ def build_contacts_en():
   var statusEl = document.getElementById('brief-status');
   var formEl = document.getElementById('brief-form');
   function val(id) {{ return (document.getElementById(id).value || '').trim(); }}
+
+  // Same "remember what was typed" as on the RU page — see gen.py for
+  // the reasoning and, importantly, for why this is gated on cookie
+  // consent: our own policy says nothing but the consent flag itself is
+  // stored without consent, and a name with a contact is exactly the
+  // data that policy is about. Keys are shared with the RU form on
+  // purpose: it is one person and one browser, language is not a reason
+  // to ask twice.
+  var MEM_KEYS = {{ name: 'ok_brief_name', contact: 'ok_brief_contact' }};
+  function memAllowed() {{
+    try {{ return localStorage.getItem('ok_cookie_consent') === '1'; }}
+    catch (e) {{ return false; }}
+  }}
+  function memRestore() {{
+    if (!memAllowed()) return;
+    try {{
+      Object.keys(MEM_KEYS).forEach(function(k) {{
+        var el = document.getElementById('brief-' + k);
+        var saved = localStorage.getItem(MEM_KEYS[k]);
+        if (el && saved && !el.value) el.value = saved;
+      }});
+    }} catch (e) {{}}
+  }}
+  function memSave() {{
+    if (!memAllowed()) return;
+    try {{
+      Object.keys(MEM_KEYS).forEach(function(k) {{
+        var v = val('brief-' + k);
+        if (v) localStorage.setItem(MEM_KEYS[k], v);
+      }});
+    }} catch (e) {{}}
+  }}
+  memRestore();
+  ['brief-name', 'brief-contact'].forEach(function(id) {{
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('change', memSave);
+  }});
   consentEl.addEventListener('change', function() {{
     submitBtn.disabled = !consentEl.checked;
   }});
@@ -460,6 +497,7 @@ def build_contacts_en():
     }}).then(function(r) {{ return r.json().catch(function() {{ return {{ ok: false }}; }}); }})
       .then(function(data) {{
         if (data && data.ok) {{
+          memSave();
           if (window.okTrack) window.okTrack('brief_submit');
           formEl.innerHTML = '<p class="review-form-status">Thank you — your enquiry has been sent. I’ll reply as soon as I can.</p>';
         }} else {{

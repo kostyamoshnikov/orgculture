@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/style.css?v=64">
+<link rel="stylesheet" href="../../assets/style.css?v=65">
 <link rel="manifest" href="../../en/manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -71,7 +71,7 @@
   }
 </script>
 <!-- /Own stats beacon -->
-<script src="../../assets/analytics-events.js?v=64" defer></script>
+<script src="../../assets/analytics-events.js?v=65" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -245,11 +245,22 @@
       <a href="../../en/privacy/">Privacy Policy</a>
       <a href="../../en/cookies/">Cookies</a>
       <a href="../../en/bot-rules/">Bot Usage Rules</a>
-      <a href="#" onclick="localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Cookie settings</a>
+      <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Cookie settings</a>
     </div>
   </div>
 </footer>
 
+<script>
+/* Отзыв согласия на cookie стирает и то, что форма брифа запомнила
+   (имя и контакт). Функция живёт на каждой странице, а не только на
+   /contacts/: отозвать согласие можно из подвала любой страницы, и
+   если чистить только там, где стоит форма, данные пережили бы отзыв
+   согласия — ровно то, что наша же политика запрещает. */
+function okForgetBrief(){
+  try { localStorage.removeItem('ok_brief_name'); localStorage.removeItem('ok_brief_contact'); }
+  catch (e) {}
+}
+</script>
 <div class="tg-widget" id="tg-widget">
   <div class="tg-bubble" id="tg-bubble">Message us — the bot replies fast</div>
   <a class="tg-btn" href="https://t.me/orgculture_bot" target="_blank" rel="noopener" aria-label="Message on Telegram">
@@ -300,7 +311,7 @@
     <p>This site uses cookies for visit statistics. Details — <a href="../../en/cookies/">in the cookie policy</a>.</p>
   </div>
   <div class="cb-buttons">
-    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');">Decline</button>
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Decline</button>
     <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Accept</button>
   </div>
 </div>
@@ -328,6 +339,43 @@
   var statusEl = document.getElementById('brief-status');
   var formEl = document.getElementById('brief-form');
   function val(id) { return (document.getElementById(id).value || '').trim(); }
+
+  // Same "remember what was typed" as on the RU page — see gen.py for
+  // the reasoning and, importantly, for why this is gated on cookie
+  // consent: our own policy says nothing but the consent flag itself is
+  // stored without consent, and a name with a contact is exactly the
+  // data that policy is about. Keys are shared with the RU form on
+  // purpose: it is one person and one browser, language is not a reason
+  // to ask twice.
+  var MEM_KEYS = { name: 'ok_brief_name', contact: 'ok_brief_contact' };
+  function memAllowed() {
+    try { return localStorage.getItem('ok_cookie_consent') === '1'; }
+    catch (e) { return false; }
+  }
+  function memRestore() {
+    if (!memAllowed()) return;
+    try {
+      Object.keys(MEM_KEYS).forEach(function(k) {
+        var el = document.getElementById('brief-' + k);
+        var saved = localStorage.getItem(MEM_KEYS[k]);
+        if (el && saved && !el.value) el.value = saved;
+      });
+    } catch (e) {}
+  }
+  function memSave() {
+    if (!memAllowed()) return;
+    try {
+      Object.keys(MEM_KEYS).forEach(function(k) {
+        var v = val('brief-' + k);
+        if (v) localStorage.setItem(MEM_KEYS[k], v);
+      });
+    } catch (e) {}
+  }
+  memRestore();
+  ['brief-name', 'brief-contact'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('change', memSave);
+  });
   consentEl.addEventListener('change', function() {
     submitBtn.disabled = !consentEl.checked;
   });
@@ -350,6 +398,7 @@
     }).then(function(r) { return r.json().catch(function() { return { ok: false }; }); })
       .then(function(data) {
         if (data && data.ok) {
+          memSave();
           if (window.okTrack) window.okTrack('brief_submit');
           formEl.innerHTML = '<p class="review-form-status">Thank you — your enquiry has been sent. I’ll reply as soon as I can.</p>';
         } else {
