@@ -31,5 +31,36 @@
     <a href="/">На главную</a>
     <a href="/texts/">К текстам</a>
   </div>
+<!-- Счётчики. Страница самодостаточная (свой <style>, без assets/),
+     поэтому сниппеты вписаны сюда вручную, а не подключены файлом.
+     Зачем счётчик на 404: это единственный способ узнать, по каким
+     адресам к нам приходят и не попадают — битые внешние ссылки,
+     опечатки в напечатанных QR-кодах, старые пути после переименования
+     страниц. Без него такие заходы не видно вообще: человек упёрся в
+     «не найдено» и ушёл молча.
+     Как и везде, запускается только после согласия на cookie; своего
+     баннера здесь нет, поэтому если согласия ещё не было — счётчик
+     просто не грузится.
+     ⚠️ Номер счётчика и адрес маячка продублированы здесь из gen.py —
+     это зарегистрированные факты, см. registry/facts.json. Меняешь там —
+     меняй и тут. -->
+<script type="text/javascript">
+  if (localStorage.getItem('ok_cookie_consent') === '1') {
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111176053', 'ym');
+    ym(111176053, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    try {
+      var payload = JSON.stringify({
+        path: '/404', requested: location.pathname, lang: 'ru',
+        ref: document.referrer || ''
+      });
+      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track',
+                           new Blob([payload], {type: 'text/plain'}));
+    } catch (e) {}
+  }
+</script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 (function () {
   var YM_ID = 111176053;
   var ENDPOINT = 'https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track';
-  var GOALS = ['brief_submit', 'offer_download', 'cv_download', 'press_kit_download', 'telegram_channel_click', 'telegram_bot_click', 'vk_click', 'email_click', 'review_submit', 'rss_click'];
+  var GOALS = ['brief_start', 'brief_submit', 'offer_download', 'cv_download', 'press_kit_download', 'telegram_channel_click', 'telegram_bot_click', 'vk_click', 'email_click', 'review_submit', 'rss_click'];
 
   function consented() {
     try { return localStorage.getItem('ok_cookie_consent') === '1'; } catch (e) { return false; }
@@ -14,7 +14,20 @@
     try { if (YM_ID && typeof window.ym === 'function') window.ym(YM_ID, 'reachGoal', name); } catch (e) {}
     try {
       var p = location.pathname;
-      var payload = JSON.stringify({ event: name, path: p, lang: (p.indexOf('/en/') === 0 || p === '/en') ? 'en' : 'ru' });
+      // UTM-метки в событие кладутся так же, как в маячок просмотра
+      // страницы. Без них в собственной статистике видно «заявка была»,
+      // но не видно, с какого QR-кода или поста человек пришёл: метки
+      // живут в location.search, а не в pathname. Это ровно та дыра,
+      // которую уже чинили у маячка просмотров, — у целей она оставалась.
+      var qs = new URLSearchParams(location.search);
+      var payload = JSON.stringify({
+        event: name, path: p,
+        lang: (p.indexOf('/en/') === 0 || p === '/en') ? 'en' : 'ru',
+        utm_source: qs.get('utm_source') || '',
+        utm_medium: qs.get('utm_medium') || '',
+        utm_campaign: qs.get('utm_campaign') || '',
+        utm_content: qs.get('utm_content') || ''
+      });
       navigator.sendBeacon(ENDPOINT, new Blob([payload], { type: 'text/plain' }));
     } catch (e) {}
   }

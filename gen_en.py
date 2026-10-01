@@ -369,11 +369,11 @@ def build_contacts_en():
       <div class="brief-grid">
         <div class="brief-field">
           <label for="brief-name">Name</label>
-          <input type="text" id="brief-name" autocomplete="name" placeholder="What to call you">
+          <input class="ym-disable-keys" type="text" id="brief-name" autocomplete="name" placeholder="What to call you">
         </div>
         <div class="brief-field">
           <label for="brief-who">Who you are</label>
-          <select id="brief-who">
+          <select class="ym-disable-keys" id="brief-who">
             <option value="">Choose…</option>
             <option>Theatre or venue</option>
             <option>Independent company</option>
@@ -386,28 +386,28 @@ def build_contacts_en():
         </div>
         <div class="brief-field full">
           <label for="brief-contact">How to reach you <span class="req-mark">*</span></label>
-          <input type="text" id="brief-contact" autocomplete="email" placeholder="Email, phone or @username on Telegram">
+          <input class="ym-disable-keys" type="text" id="brief-contact" autocomplete="email" placeholder="Email, phone or @username on Telegram">
         </div>
         <div class="brief-field full">
           <label for="brief-project">Project</label>
-          <input type="text" id="brief-project" placeholder="Production, festival, idea — in a few words">
+          <input class="ym-disable-keys" type="text" id="brief-project" placeholder="Production, festival, idea — in a few words">
         </div>
         <div class="brief-field">
           <label for="brief-dates">Timing</label>
-          <input type="text" id="brief-dates" placeholder="Dates, or \u201cnot sure yet\u201d">
+          <input class="ym-disable-keys" type="text" id="brief-dates" placeholder="Dates, or \u201cnot sure yet\u201d">
         </div>
         <div class="brief-field">
           <label for="brief-budget">Budget</label>
-          <input type="text" id="brief-budget" placeholder="A range, or \u201cto be discussed\u201d">
+          <input class="ym-disable-keys" type="text" id="brief-budget" placeholder="A range, or \u201cto be discussed\u201d">
         </div>
         <div class="brief-field full">
           <label for="brief-task">Task <span class="req-mark">*</span></label>
-          <textarea id="brief-task" rows="5" placeholder="What needs doing and what already exists"></textarea>
+          <textarea class="ym-disable-keys" id="brief-task" rows="5" placeholder="What needs doing and what already exists"></textarea>
         </div>
       </div>
-      <input type="text" id="brief-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <input type="text" id="brief-website" class="ym-disable-keys review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label class="review-form-consent" for="brief-consent">
-        <input type="checkbox" id="brief-consent">
+        <input class="ym-disable-keys" type="checkbox" id="brief-consent">
         <span>I consent to the processing of the data provided in line with the <a href="../privacy/" target="_blank" rel="noopener">Privacy Policy</a></span>
       </label>
       <button type="button" class="btn-line" id="brief-submit" disabled>Send</button>
@@ -470,6 +470,21 @@ def build_contacts_en():
       }});
     }} catch (e) {{}}
   }}
+  // Цель «начато заполнение»: без неё воронка брифа состоит из одной
+  // точки — «отправил». Непонятно, люди не доходят до формы или
+  // бросают её на середине, а это разные проблемы и разные решения.
+  // Срабатывает один раз за загрузку страницы, на первый ввод в любое
+  // поле формы.
+  var briefStarted = false;
+  var briefForm = document.getElementById('brief-form');
+  if (briefForm) {{
+    briefForm.addEventListener('input', function () {{
+      if (briefStarted) return;
+      briefStarted = true;
+      if (window.okTrack) window.okTrack('brief_start');
+    }}, true);
+  }}
+
   memRestore();
   ['brief-name', 'brief-contact'].forEach(function(id) {{
     var el = document.getElementById(id);
@@ -837,11 +852,11 @@ def build_text_page_en(t, idx):
         <p style="color:var(--dim);font-size:13.5px;margin-top:10px;">The on-site review form needs JavaScript \u2014 but the \u201con Telegram\u201d button next to it works without it.</p>
       </noscript>
       <div class="review-form" id="review-form" hidden>
-        <input type="text" id="review-name" class="review-form-input" placeholder="Name (optional)">
-        <textarea id="review-text" class="review-form-textarea" placeholder="Your review\u2026" rows="4"></textarea>
-        <input type="text" id="review-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="text" id="review-name" class="ym-disable-keys review-form-input" placeholder="Name (optional)">
+        <textarea id="review-text" class="ym-disable-keys review-form-textarea" placeholder="Your review\u2026" rows="4"></textarea>
+        <input type="text" id="review-website" class="ym-disable-keys review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
         <label class="review-form-consent" for="review-consent">
-          <input type="checkbox" id="review-consent">
+          <input class="ym-disable-keys" type="checkbox" id="review-consent">
           <span>I consent to this review being published on the site and to the data above being processed per the <a href="{root}en/privacy/" target="_blank" rel="noopener">Privacy Policy</a></span>
         </label>
         <button type="button" class="btn-line" id="review-submit" disabled>Send</button>
@@ -1316,7 +1331,8 @@ COOKIES_SECTIONS_EN = [
     "Cookies are small text files a site saves in the user's browser to recognize them on return visits and to gather usage statistics.",
   ]),
   ("2. What Cookies This Site Uses", [
-    "orgculture.ru uses cookies from Yandex Metrica for anonymized visit statistics (pageviews, click activity, general navigation patterns). No advertising or cross-site tracking cookies are used.",
+    "orgculture.ru uses cookies from Yandex Metrica for anonymized visit statistics (pageviews, click activity, general navigation patterns) and, with the Session Replay feature enabled, anonymized recordings of on-page activity (clicks, cursor movement, scrolling, typing into form fields). No advertising or cross-site tracking cookies are used.",
+    "The contents of form fields (brief, review) are excluded from those recordings: every input is marked on the site side with the ym-disable-keys class, which replaces its content with asterisks before the data leaves the browser.",
   ]),
   ("3. Consent", [
     "Yandex Metrica only starts once you click \u201cAccept\u201d in the cookie banner, or if you already gave consent on a previous visit. Declining doesn't restrict access to the site \u2014 it simply means visit statistics aren't collected.",
@@ -1335,7 +1351,7 @@ def build_cookies_en():
       ("../../", "\u2190 Home", ""),
       ("../../documents/cookies-policy-en.pdf", "Download PDF", " download"),
     ]
-    return legal_page_en("Cookie Policy \u2014 Organized Culturality", "Cookie Policy", "orgculture.ru \u00b7 revised 30.07.2026", sections, extra_links, "cookies/", "Cookie usage policy for orgculture.ru.")
+    return legal_page_en("Cookie Policy \u2014 Organized Culturality", "Cookie Policy", "orgculture.ru \u00b7 revised 30.09.2026", sections, extra_links, "cookies/", "Cookie usage policy for orgculture.ru.")
 
 os.makedirs(os.path.join(EN_ROOT, "cookies"), exist_ok=True)
 with open(os.path.join(EN_ROOT, "cookies", "index.html"), "w", encoding="utf-8") as f:

@@ -770,7 +770,7 @@ CONTEXT.pop("_comment", None)
 # ⚠️ Бампать вместе с версией в README.md при каждой правке — иначе
 # вернувшиеся пользователи будут сколько угодно долго видеть старые стили
 # из-за cache-first стратегии service worker'а (см. sw.js).
-SITE_VERSION = 65
+SITE_VERSION = 67
 
 # Дата последней пересборки — используется как lastmod в sitemap.xml и
 # lastBuildDate в feed.xml. Отдельные даты публикации у текстов не
@@ -778,7 +778,7 @@ SITE_VERSION = 65
 # сборки сайта, а не дата конкретного текста — честнее, чем не иметь
 # lastmod вообще, но не путать одно с другим. Бампать вручную вместе с
 # SITE_VERSION при каждой пересборке.
-BUILD_DATE = "2026-09-30"
+BUILD_DATE = "2026-10-01"
 
 # Натуральные размеры картинок из images/ — только для атрибутов width/height
 # у <img> (чтобы браузер резервировал место и не прыгала вёрстка при
@@ -856,6 +856,16 @@ def yandex_metrika_snippet():
     # было дано в прошлый визит (localStorage). Без этого счётчик работал бы
     # до того, как пользователь на него согласился — это и есть тот самый
     # декоративный cookie-баннер, который мы чинили.
+    # ⚠️ Вебвизор включён (webvisor:true) — он записывает сеансы, в том
+    # числе ввод в формы. Метрика маскирует «звёздочками» только те поля,
+    # которые СЧИТАЕТ конфиденциальными, угадывая по имени поля и формату
+    # данных; ответственность за правильную маскировку по условиям
+    # использования Метрики лежит на владельце сайта. У нас свободные поля
+    # («Спектакль, фестиваль, идея», «Ваш отзыв…») угадать нельзя, а люди
+    # пишут туда и контакты, и подробности проекта. Поэтому все поля форм
+    # брифа и отзыва помечены классом ym-disable-keys — их содержимое не
+    # попадает в запись вообще. Добавляешь новое поле — добавь и класс;
+    # проверка 4.23 за этим следит.
     return f'''<!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
   window.__loadYandexMetrika = function() {{
@@ -867,7 +877,7 @@ def yandex_metrika_snippet():
         for (var j = 0; j < document.scripts.length; j++) {{if (document.scripts[j].src === r) {{ return; }}}}
         k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
     }})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id={mid}', 'ym');
-    ym({mid}, 'init', {{ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true}});
+    ym({mid}, 'init', {{ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true}});
   }};
   if (localStorage.getItem('ok_cookie_consent') === '1') {{
     window.__loadYandexMetrika();
@@ -993,6 +1003,7 @@ NOINDEX_PATHS = {"privacy/", "cookies/", "bot-rules/"}
 # идентификатор = имя из списка (см. 03-website/README.md, «Аналитика»).
 # ---------------------------------------------------------------
 ANALYTICS_GOALS = [
+    ("brief_start",            "начато заполнение формы брифа (первый ввод в любое поле)"),
     ("brief_submit",           "отправлена форма брифа на /contacts/"),
     ("offer_download",         "скачано КП (orgculture-uslugi-i-ceny.pdf / services-and-prices.pdf)"),
     ("cv_download",            "скачано CV"),
@@ -1023,7 +1034,20 @@ def build_analytics_events_js():
     try {{ if (YM_ID && typeof window.ym === 'function') window.ym(YM_ID, 'reachGoal', name); }} catch (e) {{}}
     try {{
       var p = location.pathname;
-      var payload = JSON.stringify({{ event: name, path: p, lang: (p.indexOf('/en/') === 0 || p === '/en') ? 'en' : 'ru' }});
+      // UTM-метки в событие кладутся так же, как в маячок просмотра
+      // страницы. Без них в собственной статистике видно «заявка была»,
+      // но не видно, с какого QR-кода или поста человек пришёл: метки
+      // живут в location.search, а не в pathname. Это ровно та дыра,
+      // которую уже чинили у маячка просмотров, — у целей она оставалась.
+      var qs = new URLSearchParams(location.search);
+      var payload = JSON.stringify({{
+        event: name, path: p,
+        lang: (p.indexOf('/en/') === 0 || p === '/en') ? 'en' : 'ru',
+        utm_source: qs.get('utm_source') || '',
+        utm_medium: qs.get('utm_medium') || '',
+        utm_campaign: qs.get('utm_campaign') || '',
+        utm_content: qs.get('utm_content') || ''
+      }});
       navigator.sendBeacon(ENDPOINT, new Blob([payload], {{ type: 'text/plain' }}));
     }} catch (e) {{}}
   }}
@@ -1750,11 +1774,11 @@ def build_text_page(t, idx):
         <p style="color:var(--dim);font-size:13.5px;margin-top:10px;">Форма отзыва на сайте требует JavaScript — но кнопка «через Telegram» рядом работает и без него.</p>
       </noscript>
       <div class="review-form" id="review-form" hidden>
-        <input type="text" id="review-name" class="review-form-input" placeholder="Имя (необязательно)">
-        <textarea id="review-text" class="review-form-textarea" placeholder="Ваш отзыв…" rows="4"></textarea>
-        <input type="text" id="review-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="text" id="review-name" class="ym-disable-keys review-form-input" placeholder="Имя (необязательно)">
+        <textarea id="review-text" class="ym-disable-keys review-form-textarea" placeholder="Ваш отзыв…" rows="4"></textarea>
+        <input type="text" id="review-website" class="ym-disable-keys review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
         <label class="review-form-consent" for="review-consent">
-          <input type="checkbox" id="review-consent">
+          <input class="ym-disable-keys" type="checkbox" id="review-consent">
           <span>Согласен(на) на публикацию отзыва на сайте и обработку указанных данных согласно <a href="{root}privacy/" target="_blank" rel="noopener">Политике конфиденциальности</a></span>
         </label>
         <button type="button" class="btn-line" id="review-submit" disabled>Отправить</button>
@@ -2917,11 +2941,11 @@ def build_contacts():
       <div class="brief-grid">
         <div class="brief-field">
           <label for="brief-name">Имя</label>
-          <input type="text" id="brief-name" autocomplete="name" placeholder="Как к вам обращаться">
+          <input class="ym-disable-keys" type="text" id="brief-name" autocomplete="name" placeholder="Как к вам обращаться">
         </div>
         <div class="brief-field">
           <label for="brief-who">Кто вы</label>
-          <select id="brief-who">
+          <select class="ym-disable-keys" id="brief-who">
             <option value="">Выберите…</option>
             <option>Театр или площадка</option>
             <option>Независимая команда</option>
@@ -2934,28 +2958,28 @@ def build_contacts():
         </div>
         <div class="brief-field full">
           <label for="brief-contact">Как связаться <span class="req-mark">*</span></label>
-          <input type="text" id="brief-contact" autocomplete="email" placeholder="Почта, телефон или @username в Telegram">
+          <input class="ym-disable-keys" type="text" id="brief-contact" autocomplete="email" placeholder="Почта, телефон или @username в Telegram">
         </div>
         <div class="brief-field full">
           <label for="brief-project">Проект</label>
-          <input type="text" id="brief-project" placeholder="Спектакль, фестиваль, идея — в двух словах">
+          <input class="ym-disable-keys" type="text" id="brief-project" placeholder="Спектакль, фестиваль, идея — в двух словах">
         </div>
         <div class="brief-field">
           <label for="brief-dates">Сроки</label>
-          <input type="text" id="brief-dates" placeholder="Даты или «пока не знаю»">
+          <input class="ym-disable-keys" type="text" id="brief-dates" placeholder="Даты или «пока не знаю»">
         </div>
         <div class="brief-field">
           <label for="brief-budget">Бюджет</label>
-          <input type="text" id="brief-budget" placeholder="Вилка или «обсуждается»">
+          <input class="ym-disable-keys" type="text" id="brief-budget" placeholder="Вилка или «обсуждается»">
         </div>
         <div class="brief-field full">
           <label for="brief-task">Задача <span class="req-mark">*</span></label>
-          <textarea id="brief-task" rows="5" placeholder="Что нужно сделать и что уже есть"></textarea>
+          <textarea class="ym-disable-keys" id="brief-task" rows="5" placeholder="Что нужно сделать и что уже есть"></textarea>
         </div>
       </div>
-      <input type="text" id="brief-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <input type="text" id="brief-website" class="ym-disable-keys review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label class="review-form-consent" for="brief-consent">
-        <input type="checkbox" id="brief-consent">
+        <input class="ym-disable-keys" type="checkbox" id="brief-consent">
         <span>Согласен(на) на обработку указанных данных согласно <a href="../privacy/" target="_blank" rel="noopener">Политике конфиденциальности</a></span>
       </label>
       <button type="button" class="btn-line" id="brief-submit" disabled>Отправить</button>
@@ -3025,6 +3049,21 @@ def build_contacts():
       }});
     }} catch (e) {{}}
   }}
+  // Цель «начато заполнение»: без неё воронка брифа состоит из одной
+  // точки — «отправил». Непонятно, люди не доходят до формы или
+  // бросают её на середине, а это разные проблемы и разные решения.
+  // Срабатывает один раз за загрузку страницы, на первый ввод в любое
+  // поле формы.
+  var briefStarted = false;
+  var briefForm = document.getElementById('brief-form');
+  if (briefForm) {{
+    briefForm.addEventListener('input', function () {{
+      if (briefStarted) return;
+      briefStarted = true;
+      if (window.okTrack) window.okTrack('brief_start');
+    }}, true);
+  }}
+
   memRestore();
   ['brief-name', 'brief-contact'].forEach(function(id) {{
     var el = document.getElementById(id);
@@ -3293,6 +3332,7 @@ def build_cookies():
       ]),
       ("2. Какие cookie используются", [
         "Сайт orgculture.ru использует сервис веб-аналитики Яндекс.Метрика, который устанавливает собственные cookie для сбора обезличенной статистики посещаемости (просмотры страниц, переходы, время на сайте) и, при включённой функции Вебвизор, записи действий пользователя на странице (клики, движения курсора, скролл, ввод в поля форм) в обезличенном виде.",
+        "Содержимое полей форм (бриф, отзыв) в записи Вебвизора не попадает: все поля ввода помечены на стороне сайта классом ym-disable-keys, который заменяет их содержимое звёздочками до отправки данных.",
         "Оператор сайта не устанавливает собственных cookie сверх тех, что необходимы для базовой работы сайта.",
         "Яндекс.Метрика запускается только после согласия, данного через баннер на сайте — до этого момента счётчик не активен и cookie не устанавливаются.",
       ]),
@@ -3317,7 +3357,7 @@ def build_cookies():
   <div class="wrap">
     <div class="eyebrow">Документ</div>
     <h1 style="font-size:30px;font-weight:300;margin:14px 0 4px;">Соглашение об использовании cookie</h1>
-    <div class="doc-meta">orgculture.ru · редакция от 30.07.2026</div>
+    <div class="doc-meta">orgculture.ru · редакция от 30.09.2026</div>
     <div class="doc-body" style="margin-top:36px;">
       {sections_html}
       <div class="doc-requisites">

@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css?v=65">
+<link rel="stylesheet" href="../assets/style.css?v=67">
 <link rel="manifest" href="../manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -39,7 +39,7 @@
         for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
         k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
     })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111176053', 'ym');
-    ym(111176053, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    ym(111176053, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
   };
   if (localStorage.getItem('ok_cookie_consent') === '1') {
     window.__loadYandexMetrika();
@@ -71,7 +71,7 @@
   }
 </script>
 <!-- /Own stats beacon -->
-<script src="../assets/analytics-events.js?v=65" defer></script>
+<script src="../assets/analytics-events.js?v=67" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Перейти к содержимому</a>
@@ -158,11 +158,11 @@
       <div class="brief-grid">
         <div class="brief-field">
           <label for="brief-name">Имя</label>
-          <input type="text" id="brief-name" autocomplete="name" placeholder="Как к вам обращаться">
+          <input class="ym-disable-keys" type="text" id="brief-name" autocomplete="name" placeholder="Как к вам обращаться">
         </div>
         <div class="brief-field">
           <label for="brief-who">Кто вы</label>
-          <select id="brief-who">
+          <select class="ym-disable-keys" id="brief-who">
             <option value="">Выберите…</option>
             <option>Театр или площадка</option>
             <option>Независимая команда</option>
@@ -175,28 +175,28 @@
         </div>
         <div class="brief-field full">
           <label for="brief-contact">Как связаться <span class="req-mark">*</span></label>
-          <input type="text" id="brief-contact" autocomplete="email" placeholder="Почта, телефон или @username в Telegram">
+          <input class="ym-disable-keys" type="text" id="brief-contact" autocomplete="email" placeholder="Почта, телефон или @username в Telegram">
         </div>
         <div class="brief-field full">
           <label for="brief-project">Проект</label>
-          <input type="text" id="brief-project" placeholder="Спектакль, фестиваль, идея — в двух словах">
+          <input class="ym-disable-keys" type="text" id="brief-project" placeholder="Спектакль, фестиваль, идея — в двух словах">
         </div>
         <div class="brief-field">
           <label for="brief-dates">Сроки</label>
-          <input type="text" id="brief-dates" placeholder="Даты или «пока не знаю»">
+          <input class="ym-disable-keys" type="text" id="brief-dates" placeholder="Даты или «пока не знаю»">
         </div>
         <div class="brief-field">
           <label for="brief-budget">Бюджет</label>
-          <input type="text" id="brief-budget" placeholder="Вилка или «обсуждается»">
+          <input class="ym-disable-keys" type="text" id="brief-budget" placeholder="Вилка или «обсуждается»">
         </div>
         <div class="brief-field full">
           <label for="brief-task">Задача <span class="req-mark">*</span></label>
-          <textarea id="brief-task" rows="5" placeholder="Что нужно сделать и что уже есть"></textarea>
+          <textarea class="ym-disable-keys" id="brief-task" rows="5" placeholder="Что нужно сделать и что уже есть"></textarea>
         </div>
       </div>
-      <input type="text" id="brief-website" class="review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <input type="text" id="brief-website" class="ym-disable-keys review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label class="review-form-consent" for="brief-consent">
-        <input type="checkbox" id="brief-consent">
+        <input class="ym-disable-keys" type="checkbox" id="brief-consent">
         <span>Согласен(на) на обработку указанных данных согласно <a href="../privacy/" target="_blank" rel="noopener">Политике конфиденциальности</a></span>
       </label>
       <button type="button" class="btn-line" id="brief-submit" disabled>Отправить</button>
@@ -381,6 +381,21 @@ function okForgetBrief(){
       });
     } catch (e) {}
   }
+  // Цель «начато заполнение»: без неё воронка брифа состоит из одной
+  // точки — «отправил». Непонятно, люди не доходят до формы или
+  // бросают её на середине, а это разные проблемы и разные решения.
+  // Срабатывает один раз за загрузку страницы, на первый ввод в любое
+  // поле формы.
+  var briefStarted = false;
+  var briefForm = document.getElementById('brief-form');
+  if (briefForm) {
+    briefForm.addEventListener('input', function () {
+      if (briefStarted) return;
+      briefStarted = true;
+      if (window.okTrack) window.okTrack('brief_start');
+    }, true);
+  }
+
   memRestore();
   ['brief-name', 'brief-contact'].forEach(function(id) {
     var el = document.getElementById(id);

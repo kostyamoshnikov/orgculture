@@ -5,7 +5,15 @@
   --line:#262523;
   --ink:#F5F2ED;
   --dim:#9A968E;
-  --dim2:#6E6A63;
+  /* Было #6E6A63 — контраст 3.68 к фону, ниже порога читаемости 4.5
+     (WCAG AA для текста мельче 18.66px). Этим цветом набраны подписи
+     11–14px: заголовки колонок подвала, юридические ссылки, периоды в
+     проектах, подписи к документам, переключатель языка и — главное —
+     подсказки в полях форм, где подсказка и есть инструкция («Почта,
+     телефон или @username в Telegram»). Новое значение даёт 4.52 при
+     том же оттенке: отличие от --dim сохранено, иерархия не сломана.
+     Замерено 30.09.2026 при разборе вёрстки. */
+  --dim2:#817C74;
   --accent:#D97757;
   --maxw:920px;
   --wide:1180px;
@@ -13,6 +21,23 @@
 
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
+/* ⚠️ Запас под липкую шапку при переходе по якорю. Шапка —
+   position:sticky;top:0, высотой около 60px, и без этой строки любой
+   переход по «#» прокручивает страницу так, что цель оказывается ПОД
+   шапкой. Это бьёт прежде всего по ссылке «к содержимому» (#main),
+   которая есть на каждой из 116 страниц и нужна тем, кто ходит с
+   клавиатуры и со скринридером: они прыгают — и попадают в закрытый
+   шапкой кусок. Второй случай — буквенная навигация (#L-A, #L-N…).
+   Меняешь высоту шапки (padding в .headbar) — меняй и это число.
+   Найдено 30.09.2026 при разборе вёрстки. */
+html{scroll-padding-top:76px;}
+
+/* Запрет Safari на iOS самовольно увеличивать текст при повороте
+   экрана в альбомную ориентацию (text autosizing). Без этой строки
+   часть абзацев в альбомном режиме оказывается крупнее соседних, и
+   вёрстка «едет» без всякой причины со стороны страницы. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+
 body{
   background:var(--bg);
   color:var(--ink);
@@ -72,8 +97,14 @@ nav.mobile-nav .lang-switch{
 /* burger — hidden on desktop */
 .nav-toggle{display:none;}
 .burger{
-  display:none;flex-direction:column;justify-content:center;gap:5px;
-  width:32px;height:32px;cursor:pointer;flex-shrink:0;
+  display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;
+  /* 44×44 — минимальная область нажатия (Apple HIG 44pt, Material 48dp).
+     Было 32×32: это единственный элемент управления, которым на
+     телефоне пользуется каждый, и он был заметно мельче нормы.
+     Отрицательные поля компенсируют прибавку, чтобы шапка не стала
+     выше, а полоски остались визуально теми же — 22px, см. .burger span. */
+  width:44px;height:44px;margin:-6px;
+  cursor:pointer;flex-shrink:0;
 }
 .burger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:transform .25s,opacity .2s;}
 
@@ -480,7 +511,13 @@ footer .foot-bottom a:hover{color:var(--accent);}
 
 /* ---------- cookie banner ---------- */
 #cookie-banner{
-  position:fixed;left:24px;right:24px;bottom:24px;z-index:100;
+  position:fixed;left:24px;right:24px;z-index:100;
+  /* Безопасная зона снизу: на айфонах с жестовой навигацией
+     нижние 34px — область системного жеста «домой». Баннер,
+     прижатый к 24px, попадает в неё, и кнопка «принять»
+     ловит жест вместо нажатия. env() на устройствах без
+     выреза равен нулю, поэтому строка безопасна везде. */
+  bottom:calc(24px + env(safe-area-inset-bottom, 0px));
   max-width:640px;margin:0 auto;
   background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
   border-radius:2px;padding:22px 26px;display:none;
@@ -503,13 +540,14 @@ footer .foot-bottom a:hover{color:var(--accent);}
 }
 #cookie-banner button:hover{opacity:.85;}
 @media(max-width:640px){
-  #cookie-banner{left:12px;right:12px;bottom:12px;padding:20px;}
+  #cookie-banner{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom, 0px));padding:20px;}
   #cookie-banner .cb-mark{display:none;}
 }
 
 /* ---------- floating telegram bot widget ---------- */
 .tg-widget{
-  position:fixed;bottom:28px;left:24px;z-index:45;
+  position:fixed;left:24px;z-index:45;
+  bottom:calc(28px + env(safe-area-inset-bottom, 0px));
   display:flex;flex-direction:column;align-items:flex-start;gap:10px;
   opacity:0;transform:translateY(10px);pointer-events:none;
   transition:opacity .4s,transform .4s;
@@ -537,7 +575,7 @@ footer .foot-bottom a:hover{color:var(--accent);}
 .tg-btn:hover{border-color:var(--accent);color:var(--accent);}
 .tg-btn svg{width:17px;height:17px;flex-shrink:0;opacity:.8;}
 .tg-btn:hover svg{opacity:1;}
-@media(max-width:760px){ .tg-widget{bottom:80px;} }
+@media(max-width:760px){ .tg-widget{bottom:calc(80px + env(safe-area-inset-bottom, 0px));} }
 @media(max-width:430px){ .tg-widget{left:16px;} .tg-bubble{max-width:180px;font-size:12.5px;} }
 
 /* ---------- tag filter ---------- */
@@ -566,4 +604,14 @@ footer .foot-bottom a:hover{color:var(--accent);}
 .visually-hidden{
   position:absolute;width:1px;height:1px;margin:-1px;padding:0;
   overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+@media(max-width:760px){
+  /* Область нажатия ссылок подвала — 44px по высоте. Было: кегль 14px
+     при padding 4px — около 29px, и ссылки шли стопкой вплотную: на
+     телефоне это гарантированные промахи по соседней. Увеличен только
+     padding, кегль и вид строк те же; на десктопе правило не
+     применяется, чтобы подвал не растягивался там, где курсор точный.
+     Найдено 30.09.2026 при разборе вёрстки. */
+  footer .foot-col a{padding:11px 0;}
 }
