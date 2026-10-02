@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html lang="ru">
+<!-- Страница двуязычная, и это не прихоть: хостинг отдаёт ОДИН файл
+     404 на весь сайт, включая /en/. Отдельной en/404.html просто
+     некуда подключиться. До v85 англоязычный посетитель, попавший на
+     битую ссылку, видел страницу целиком по-русски.
+     lang="ru" у документа оставлен (русский блок идёт первым), у
+     английского блока свой lang="en" — чтобы скринридер читал его с
+     правильным произношением. -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Страница не найдена — Организованная Культурность</title>
+<title>Страница не найдена · Page not found — Организованная Культурность</title>
 <meta name="theme-color" content="#0A0A0A">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
     background:#0A0A0A;color:#F5F2ED;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
-    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:100vh;min-height:100svh;  /* 100svh — высота БЕЗ панели
+    адреса браузера. На телефоне 100vh считается по развёрнутому
+    экрану, поэтому часть содержимого уезжает под панель и доскроллить
+    до неё на короткой странице нельзя. Строка с 100vh оставлена выше
+    как запасная для браузеров, которые svh не знают. */display:flex;flex-direction:column;align-items:center;justify-content:center;
     text-align:center;padding:24px;
   }
   svg{width:140px;height:auto;margin-bottom:32px;}
-  h1{font-weight:300;font-size:22px;margin-bottom:12px;}
-  p{color:#9A968E;font-size:15px;margin-bottom:28px;}
-  a{color:#D97757;text-decoration:none;border:1px solid rgba(217,119,87,.4);border-radius:999px;padding:10px 20px;font-size:14px;}
+  h1{font-weight:300;font-size:1.375rem;margin-bottom:12px;}
+  p{color:#9A968E;font-size:0.9375rem;margin-bottom:28px;}
+  a{color:#D97757;text-decoration:none;border:1px solid rgba(217,119,87,.4);border-radius:999px;padding:10px 20px;font-size:0.875rem;}
   a:hover{background:rgba(217,119,87,.12);}
   .links{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+  /* Английский блок отделён линией, а не спрятан за определением языка
+     браузера: угадывать язык на странице-ошибке нечем (адрес, по
+     которому человек не попал, ничего не говорит о его языке), а
+     скрытый блок не нашёл бы тот, кому он нужен. */
+  .en{margin-top:36px;padding-top:28px;border-top:1px solid #262523;width:100%;max-width:420px;}
+  .en h1{font-size:1.1875rem;}
+  .en p{font-size:0.875rem;margin-bottom:22px;}
 </style>
 </head>
 <body>
@@ -54,7 +72,10 @@
     ym(111176053, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
     try {
       var payload = JSON.stringify({
-        path: '/404', requested: location.pathname, lang: 'ru',
+        path: '/404', requested: location.pathname,
+        // Язык — по адресу, по которому человек не попал: так видно,
+        // битые ссылки ведут на русскую часть сайта или на английскую.
+        lang: (location.pathname.indexOf('/en/') === 0 || location.pathname === '/en') ? 'en' : 'ru',
         ref: document.referrer || ''
       });
       navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track',

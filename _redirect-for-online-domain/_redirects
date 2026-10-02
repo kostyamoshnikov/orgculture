@@ -1,2 +1,0 @@
-# Netlify-style redirect rule: orgculture.online/* -> orgculture.ru/* (301, preserves path)
-/*  https://orgculture.ru/:splat  301!
