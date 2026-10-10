@@ -70,6 +70,12 @@
         k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
     })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111176053', 'ym');
     ym(111176053, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    // Цель page_not_found (с v87): без неё 404 видна только как
+    // просмотр страницы, и в отчётах не отделить «человек зашёл
+    // посмотреть» от «человек не попал». Адрес, по которому не
+    // попали, идёт параметром визита — иначе цель говорит, что
+    // промахи есть, но не говорит куда.
+    ym(111176053, 'reachGoal', 'page_not_found', { requested: location.pathname });
     try {
       var payload = JSON.stringify({
         path: '/404', requested: location.pathname,

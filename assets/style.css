@@ -107,12 +107,10 @@ nav.mainnav a{
   font-size:0.875rem;color:var(--dim);letter-spacing:.02em;white-space:nowrap;
   transition:color .2s;
 }
-nav.mainnav a:hover,nav.mainnav a.active{color:var(--ink);}
 .lang-switch{
   border:1px solid var(--line);border-radius:999px;padding:5px 12px !important;
   font-size:0.75rem !important;color:var(--dim2) !important;
 }
-.lang-switch:hover{border-color:var(--accent);color:var(--accent) !important;}
 nav.mobile-nav .lang-switch{
   display:inline-block !important;margin-top:16px;border-top:none !important;padding:6px 14px !important;
 }
@@ -138,7 +136,17 @@ nav.mobile-nav{
   max-width:var(--wide);margin:0 auto;
   padding:0 24px;
   overflow:hidden;max-height:0;
-  transition:max-height .3s ease;
+  /* ⚠️ visibility — не украшение, а доступность (с v87). max-height:0
+     и overflow:hidden только ОБРЕЗАЮТ меню: ссылки внутри остаются в
+     порядке обхода, и человек, листающий страницу клавишей Tab или
+     свайпом VoiceOver, после логотипа проваливается в семь невидимых
+     пунктов — фокус есть, а на экране ничего не происходит.
+     visibility:hidden убирает их из обхода, а задержка .3s держит её
+     до конца анимации закрытия, иначе меню пропадает рывком.
+     Найдено 10.10.2026 при сверке с паком AELITA v634 (у них то же
+     чинилось в pack-v540, пришло из пака «Короче»). */
+  visibility:hidden;
+  transition:max-height .3s ease, visibility 0s linear .3s;
 }
 nav.mobile-nav a{
   display:block;padding:16px 0;font-size:1.0625rem;color:var(--ink);
@@ -150,7 +158,8 @@ nav.mobile-nav a.active{color:var(--accent);}
   .headbar .mainnav{display:none;}
   .burger{display:flex;}
   nav.mobile-nav{display:flex;}
-  .nav-toggle:checked ~ nav.mobile-nav{max-height:400px;padding-bottom:8px;}
+  .nav-toggle:checked ~ nav.mobile-nav{max-height:400px;padding-bottom:8px;
+    visibility:visible;transition:max-height .3s ease, visibility 0s;}
   .nav-toggle:checked ~ .headbar .burger span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
   .nav-toggle:checked ~ .headbar .burger span:nth-child(2){opacity:0;}
   .nav-toggle:checked ~ .headbar .burger span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
@@ -195,7 +204,6 @@ section.tight{padding:48px 0;}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:12px;}
 .sec-head h2{font-size:1.625rem;font-weight:300;}
 .sec-head a.more{font-size:0.8125rem;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:2px;}
-.sec-head a.more:hover{color:var(--accent);border-color:var(--accent);}
 
 /* ---------- search ---------- */
 .search-row{margin-bottom:20px;}
@@ -224,13 +232,11 @@ section.tight{padding:48px 0;}
   display:block;background:var(--panel);border:1px solid var(--line);border-radius:2px;
   overflow:hidden;transition:border-color .25s, transform .25s;
 }
-.card:hover{border-color:rgba(217,119,87,.5);}
 .card .thumb{
   aspect-ratio:4/3;overflow:hidden;background:#1a1917;
   display:flex;align-items:center;justify-content:center;
 }
 .card .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
-.card:hover .thumb img{transform:scale(1.035);}
 .card .thumb.noimg{
   background:
     repeating-linear-gradient(135deg, transparent 0 18px, rgba(217,119,87,.06) 18px 19px);
@@ -258,7 +264,6 @@ section.tight{padding:48px 0;}
   font-size:0.8125rem;color:var(--accent);white-space:nowrap;border:1px solid rgba(217,119,87,.4);
   border-radius:999px;padding:8px 16px;transition:background .2s;
 }
-.recrow .go:hover{background:rgba(217,119,87,.12);}
 @media(max-width:640px){
   .recrow{grid-template-columns:64px 1fr;}
   .recrow .go{grid-column:2/3;justify-self:start;margin-top:4px;}
@@ -307,7 +312,6 @@ section.tight{padding:48px 0;}
   display:inline-block;margin-top:16px;font-size:0.84375rem;color:var(--accent);
   border:1px solid rgba(217,119,87,.45);border-radius:999px;padding:9px 18px;
 }
-.text-meta .btn:hover{background:rgba(217,119,87,.12);}
 
 /* ---------- фактический контекст (context.json) ---------- */
 .text-context{
@@ -320,11 +324,9 @@ section.tight{padding:48px 0;}
 .ctx-value{color:var(--ink);}
 .ctx-fact{color:var(--dim);font-size:0.84375rem;line-height:1.7;margin-top:10px;}
 .ctx-source{display:inline-block;margin-top:10px;font-size:0.78125rem;color:var(--accent);}
-.ctx-source:hover{text-decoration:underline;}
 
 .text-nav{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:36px 0 0;border-top:1px solid var(--line);margin-top:44px;}
 .text-nav a{font-size:0.875rem;color:var(--dim);}
-.text-nav a:hover{color:var(--ink);}
 
 /* ---------- about ---------- */
 .about-grid{display:grid;grid-template-columns:280px 1fr;gap:56px;align-items:start;}
@@ -371,18 +373,15 @@ footer .foot-tag{color:var(--dim);font-size:0.8125rem;margin-top:16px;}
 footer .foot-slogan{color:var(--accent);font-size:0.8125rem;font-style:italic;margin-top:6px;}
 footer .foot-social{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;font-size:0.875rem;}
 footer .foot-social a{color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:2px;}
-footer .foot-social a:hover{color:var(--accent);border-color:var(--accent);}
 footer .foot-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
 footer .foot-h{font-size:0.6875rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim2);margin-bottom:12px;}
 footer .foot-col a{display:block;color:var(--dim);font-size:0.875rem;line-height:1.5;padding:4px 0;}
-footer .foot-col a:hover{color:var(--accent);}
 footer .foot-bottom{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px 32px;
   margin-top:40px;padding-top:22px;border-top:1px solid var(--line);font-size:0.75rem;color:var(--dim2);line-height:1.6;}
 footer .foot-req{display:flex;flex-direction:column;gap:2px;}
 footer .foot-req a{color:var(--dim);}
 footer .foot-legal{display:flex;flex-wrap:wrap;gap:4px 18px;}
 footer .foot-legal a{color:var(--dim2);}
-footer .foot-bottom a:hover{color:var(--accent);}
 @media(max-width:760px){
   /* ⚠️ Нижний отступ 140px, а не 32px — это запас под плавающую кнопку
      бота, а не «воздух». На телефоне .tg-widget стоит bottom:80px, сама
@@ -406,9 +405,7 @@ footer .foot-bottom a:hover{color:var(--accent);}
   border-radius:999px;padding:11px 22px;transition:border-color .2s,color .2s;
   background:none;-webkit-appearance:none;appearance:none;cursor:pointer;font-family:inherit;
 }
-.btn-line:hover{border-color:var(--accent);color:var(--accent);}
 .btn-line-ghost{border-color:rgba(217,119,87,.45);color:var(--accent);}
-.btn-line-ghost:hover{background:rgba(217,119,87,.12);}
 .meta-note{display:block;margin-top:6px;font-size:0.6875rem;color:var(--dim2);line-height:1.5;}
 
 /* ---------- marquee (poster-strip, inspired by koroche.ru) ---------- */
@@ -431,7 +428,6 @@ footer .foot-bottom a:hover{color:var(--accent);}
   display:block;background:var(--panel);border:1px solid var(--line);border-radius:2px;
   padding:28px;transition:border-color .25s;
 }
-.proj-card:hover{border-color:rgba(217,119,87,.5);}
 .proj-card .proj-period{font-size:0.8125rem;color:var(--dim2);margin-top:6px;}
 .proj-card h3{font-size:1.25rem;font-weight:400;margin:14px 0 10px;}
 .proj-card p{font-size:0.90625rem;color:var(--dim);line-height:1.7;}
@@ -460,7 +456,6 @@ footer .foot-bottom a:hover{color:var(--accent);}
 .home-prod-lede{color:var(--dim);font-size:1rem;line-height:1.8;max-width:680px;margin-bottom:34px;}
 .home-prod-projects{margin-top:32px;font-size:0.875rem;line-height:2;color:var(--dim2);}
 .home-prod-projects a{color:var(--dim);margin-right:14px;white-space:nowrap;border-bottom:1px solid var(--line);}
-.home-prod-projects a:hover{color:var(--accent);border-color:var(--accent);}
 .home-prod-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:14px 16px;margin-top:30px;}
 .home-prod-faq{color:var(--accent);font-size:0.90625rem;margin-left:6px;}
 @media(max-width:760px){
@@ -561,7 +556,6 @@ footer .foot-bottom a:hover{color:var(--accent);}
 #cookie-banner button.cb-decline{
   background:transparent;color:var(--dim);border:1px solid var(--line);
 }
-#cookie-banner button:hover{opacity:.85;}
 @media(max-width:640px){
   #cookie-banner{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom, 0px));padding:20px;}
   #cookie-banner .cb-mark{display:none;}
@@ -576,6 +570,19 @@ footer .foot-bottom a:hover{color:var(--accent);}
   transition:opacity .4s,transform .4s;
 }
 .tg-widget.visible{opacity:1;transform:translateY(0);pointer-events:all;}
+/* Без JavaScript кнопка бота не появлялась никогда: класс .visible
+   навешивает скрипт, а до него у виджета opacity:0 и
+   pointer-events:none. При отключённом JS (а это и режим экономии
+   трафика, и часть корпоративных сетей, и просто сбой загрузки) с
+   сайта пропадал один из двух способов написать — второй, ссылка в
+   подвале, оставался, но плавающей кнопки не было вовсе.
+   scripting:none включает её сразу, без анимации появления: анимация
+   тут и была способом дождаться скрипта.
+   Найдено 10.10.2026 при сверке с паком AELITA v634 (у них тем же
+   приёмом показываются блоки .reveal, pack-v540). */
+@media(scripting:none){
+  .tg-widget{opacity:1;transform:none;pointer-events:all;}
+}
 .tg-bubble{
   background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
   border-radius:2px;padding:12px 16px;max-width:220px;
@@ -595,9 +602,7 @@ footer .foot-bottom a:hover{color:var(--accent);}
   transition:border-color .25s,color .25s;
   backdrop-filter:blur(6px);
 }
-.tg-btn:hover{border-color:var(--accent);color:var(--accent);}
 .tg-btn svg{width:17px;height:17px;flex-shrink:0;opacity:.8;}
-.tg-btn:hover svg{opacity:1;}
 @media(max-width:760px){ .tg-widget{bottom:calc(80px + env(safe-area-inset-bottom, 0px));} }
 @media(max-width:430px){ .tg-widget{left:16px;} .tg-bubble{max-width:180px;font-size:0.78125rem;} }
 
@@ -608,7 +613,6 @@ footer .foot-bottom a:hover{color:var(--accent);}
   color:var(--dim);background:transparent;border:1px solid var(--line);border-radius:999px;
   padding:8px 16px;cursor:pointer;transition:border-color .2s,color .2s;
 }
-.filter-pill:hover{border-color:var(--dim);color:var(--ink);}
 .filter-pill.active{color:#141414;background:var(--accent);border-color:var(--accent);}
 
 /* ---------- accessibility: skip link ---------- */
@@ -637,4 +641,46 @@ footer .foot-bottom a:hover{color:var(--accent);}
      применяется, чтобы подвал не растягивался там, где курсор точный.
      Найдено 30.09.2026 при разборе вёрстки. */
   footer .foot-col a{padding:11px 0;}
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   :hover — только там, где есть настоящий курсор (с v87)
+
+   На телефоне нет наведения, но браузер всё равно применяет :hover
+   после касания — и подсветка «залипает» на кнопке или ссылке до
+   следующего тапа в стороне. Выглядит это как будто элемент остался
+   нажатым: человек вернулся со страницы назад, а кнопка всё ещё
+   подсвечена.
+
+   @media(hover:hover) отдаёт эти правила только устройствам с
+   указателем. Сами правила не менялись — перенесены как есть.
+
+   ⚠️ Новое правило с :hover писать СЮДА, внутрь блока, а не рядом с
+   остальными стилями элемента. Проверка 4.24 в check_archive.py
+   ругается на :hover снаружи.
+
+   Найдено 10.10.2026 при сверке с паком AELITA v634 (pack-v540,
+   пришло из пака «Короче»).
+   ───────────────────────────────────────────────────────────────── */
+@media(hover:hover){
+  nav.mainnav a:hover,nav.mainnav a.active{color:var(--ink);}
+  .lang-switch:hover{border-color:var(--accent);color:var(--accent) !important;}
+  .sec-head a.more:hover{color:var(--accent);border-color:var(--accent);}
+  .card:hover{border-color:rgba(217,119,87,.5);}
+  .card:hover .thumb img{transform:scale(1.035);}
+  .recrow .go:hover{background:rgba(217,119,87,.12);}
+  .text-meta .btn:hover{background:rgba(217,119,87,.12);}
+  .ctx-source:hover{text-decoration:underline;}
+  .text-nav a:hover{color:var(--ink);}
+  footer .foot-social a:hover{color:var(--accent);border-color:var(--accent);}
+  footer .foot-col a:hover{color:var(--accent);}
+  footer .foot-bottom a:hover{color:var(--accent);}
+  .btn-line:hover{border-color:var(--accent);color:var(--accent);}
+  .btn-line-ghost:hover{background:rgba(217,119,87,.12);}
+  .proj-card:hover{border-color:rgba(217,119,87,.5);}
+  .home-prod-projects a:hover{color:var(--accent);border-color:var(--accent);}
+  #cookie-banner button:hover{opacity:.85;}
+  .tg-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .tg-btn:hover svg{opacity:1;}
+  .filter-pill:hover{border-color:var(--dim);color:var(--ink);}
 }

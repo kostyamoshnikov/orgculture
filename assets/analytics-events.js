@@ -3,7 +3,7 @@
 (function () {
   var YM_ID = 111176053;
   var ENDPOINT = 'https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track';
-  var GOALS = ['brief_start', 'brief_submit', 'offer_download', 'cv_download', 'press_kit_download', 'telegram_channel_click', 'telegram_bot_click', 'vk_click', 'email_click', 'review_submit', 'rss_click'];
+  var GOALS = ['page_not_found', 'brief_start', 'brief_submit', 'offer_download', 'cv_download', 'press_kit_download', 'telegram_channel_click', 'telegram_bot_click', 'vk_click', 'email_click', 'review_submit', 'rss_click'];
 
   function consented() {
     try { return localStorage.getItem('ok_cookie_consent') === '1'; } catch (e) { return false; }
