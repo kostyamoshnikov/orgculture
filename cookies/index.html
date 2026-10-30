@@ -24,8 +24,8 @@
 <meta property="og:locale" content="ru_RU">
 <meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../assets/fonts.css?v=68">
-<link rel="stylesheet" href="../assets/style.css?v=68">
+<link rel="stylesheet" href="../assets/fonts.css?v=72">
+<link rel="stylesheet" href="../assets/style.css?v=72">
 <link rel="manifest" href="../manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -45,32 +45,40 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
-<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
-<script type="text/javascript">
-  window.__loadOwnStats = function() {
-    if (window.__statsLoaded) return;
-    window.__statsLoaded = true;
-    try {
-      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
-      var qs = new URLSearchParams(location.search);
-      var payload = JSON.stringify({
-        path: location.pathname,
-        lang: isEn ? 'en' : 'ru',
-        ref: document.referrer || '',
-        utm_source: qs.get('utm_source') || '',
-        utm_medium: qs.get('utm_medium') || '',
-        utm_campaign: qs.get('utm_campaign') || '',
-        utm_content: qs.get('utm_content') || ''
-      });
-      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
-    } catch (e) {}
+<!-- Own stats: обезличенный счётчик, без cookie и согласия (см. own_stats_snippet в gen.py) -->
+<script>
+(function () {
+  var API = "";
+  if (!API || !navigator.sendBeacon) return;
+  window.okStats = function (data) {
+    try { navigator.sendBeacon(API + '?r=stats.hit', new Blob([JSON.stringify(data)], { type: 'text/plain' })); } catch (e) {}
   };
-  if (localStorage.getItem('ok_cookie_consent') === '1') {
-    window.__loadOwnStats();
-  }
+  try {
+    var now = Date.now(), last = 0;
+    try { last = parseInt(localStorage.getItem('ok_seen'), 10) || 0; localStorage.setItem('ok_seen', String(now)); } catch (e) { last = -1; }
+    var ref = '';
+    try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+    var inside = ref === location.hostname;
+    var known = last > 0, a = new Date(now), b = new Date(known ? last : 0);
+    var visit = known ? now - last > 30 * 60 * 1000 : (last === 0 || !inside);
+    var mon = function (d) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x.getTime(); };
+    var q = new URLSearchParams(location.search), vw = window.innerWidth || 0;
+    window.okStats({
+      p: location.pathname, r: inside ? '' : ref,
+      s: q.get('utm_source') || '', m: q.get('utm_medium') || '', c: q.get('utm_campaign') || '',
+      d: vw < 768 ? 'm' : vw < 1100 ? 't' : 'd',
+      v: visit ? 1 : 0,
+      n: known ? +(a.toDateString() !== b.toDateString()) : +visit,
+      w: known ? +(mon(a) !== mon(b)) : +visit,
+      mo: known ? +(a.getFullYear() !== b.getFullYear() || a.getMonth() !== b.getMonth()) : +visit
+    });
+  } catch (e) {}
+})();
 </script>
-<!-- /Own stats beacon -->
-<script src="../assets/analytics-events.js?v=68" defer></script>
+<!-- /Own stats -->
+<script src="../assets/analytics-events.js?v=72" defer></script>
+<script>window.OK_ACCOUNT={"api": "", "lang": "ru", "root": "../"};</script>
+<script src="../assets/account.js?v=72" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Перейти к содержимому</a>
@@ -92,6 +100,7 @@
       <a href="../about/">Автор</a>
       <a href="../contacts/">Контакты</a>
       <a href="../en/cookies/" class="lang-switch" aria-label="Switch to English">EN</a>
+      <a href="../account/" class="acct-link" aria-label="Личный кабинет" title="Личный кабинет"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6"/></svg></a>
     </nav>
     <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
@@ -104,6 +113,7 @@
       <a href="../recommendations/">Рекомендации</a>
       <a href="../about/">Автор</a>
       <a href="../contacts/">Контакты</a>
+    <a href="../account/" class="acct-mobile">Личный кабинет</a>
     <a href="../en/cookies/" class="lang-switch" aria-label="Switch to English">EN</a>
   </nav>
 </header>
@@ -124,20 +134,24 @@
   <div class="wrap">
     <div class="eyebrow">Документ</div>
     <h1 style="font-size:1.875rem;font-weight:300;margin:14px 0 4px;">Соглашение об использовании cookie</h1>
-    <div class="doc-meta">orgculture.ru · редакция от 30.09.2026</div>
+    <div class="doc-meta">orgculture.ru · редакция от 27.10.2026</div>
     <div class="doc-body" style="margin-top:36px;">
-      <h2>1. Что такое файлы cookie</h2>
-<p>Cookie — небольшие текстовые файлы, которые сайт сохраняет в браузере пользователя для распознавания при повторных посещениях и сбора статистики использования сайта.</p>
-<h2>2. Какие cookie используются</h2>
-<p>Сайт orgculture.ru использует сервис веб-аналитики Яндекс.Метрика, который устанавливает собственные cookie для сбора обезличенной статистики посещаемости (просмотры страниц, переходы, время на сайте) и, при включённой функции Вебвизор, записи действий пользователя на странице (клики, движения курсора, скролл, ввод в поля форм) в обезличенном виде.</p>
-<p>Содержимое полей форм (бриф, отзыв) в записи Вебвизора не попадает: все поля ввода помечены на стороне сайта классом ym-disable-keys, который заменяет их содержимое звёздочками до отправки данных.</p>
-<p>Оператор сайта не устанавливает собственных cookie сверх тех, что необходимы для базовой работы сайта.</p>
-<p>Яндекс.Метрика запускается только после согласия, данного через баннер на сайте — до этого момента счётчик не активен и cookie не устанавливаются.</p>
-<h2>3. Управление cookie</h2>
-<p>Пользователь может отключить cookie в настройках своего браузера. Это может ограничить работу отдельных функций сайта, но не запрещает доступ к его основному содержимому.</p>
-<h2>4. Передача данных третьим лицам</h2>
-<p>Статистика, собираемая Яндекс.Метрикой, обрабатывается ООО «Яндекс» в соответствии с его собственной политикой конфиденциальности: yandex.ru/legal/confidential</p>
-<h2>5. Изменения</h2>
+      <h2>1. Что такое файлы cookie и хранилище браузера</h2>
+<p>Cookie — небольшие текстовые файлы, которые сайт сохраняет в браузере пользователя для распознавания при повторных посещениях и сбора статистики. Хранилище браузера (localStorage, sessionStorage) — похожий механизм: сайт записывает в браузер небольшие значения, которые не отправляются на сервер сами по себе.</p>
+<h2>2. Статистика</h2>
+<p>2.1. Сайт использует сервис веб-аналитики Яндекс Метрика, который устанавливает собственные cookie для сбора обезличенной статистики посещаемости (просмотры страниц, переходы, время на сайте) и, при включённой функции Вебвизор, записи действий пользователя на странице (клики, движения курсора, прокрутка, ввод в поля форм) в обезличенном виде.</p>
+<p>2.2. Содержимое полей форм в запись Вебвизора не попадает: все поля ввода помечены на стороне сайта классом ym-disable-keys, который заменяет их содержимое звёздочками до отправки данных.</p>
+<p>2.3. На страницах личного кабинета, оплаты, заказа и в служебной части сайта Яндекс Метрики и собственной статистики нет вовсе: там на экране почта, имя и заказы человека.</p>
+<p>2.4. Собственный обезличенный подсчёт посещений — у всех посетителей, без согласия: браузер сообщает серверу сайта в России адрес открытой страницы (без параметров), домен сайта, с которого пришёл посетитель, UTM-метки ссылки, тип устройства по ширине экрана (телефон, планшет, компьютер), действие из списка целей сайта (например, «отправлен бриф») и отметки «новый визит», «первый раз сегодня, на этой неделе, в этом месяце». Сервер прибавляет их к суммам за день и ничего не хранит о самом посещении: ни IP-адреса, ни cookie, ни идентификатора, ни времени. По таким суммам нельзя выделить конкретного человека, поэтому это не персональные данные. Отметки браузер вычисляет сам по времени прошлого захода, которое хранит у себя (ok_seen) и на сервер не отправляет.</p>
+<p>2.5. Яндекс Метрика включается только после нажатия «Хорошо» в баннере на сайте. До этого её счётчик не активен и её cookie не устанавливаются.</p>
+<h2>3. Хранилище браузера, без которого функции сайта не работают</h2>
+<p>Эти значения нужны, чтобы работала функция, о которой пользователь попросил сам, и согласия на cookie не требуют: ok_cookie_consent — выбор в баннере cookie; ok_token — вход в личный кабинет (удаляется при выходе); ok_favs — какие материалы сохранены, чтобы отметки на страницах появлялись сразу; ok_pending — «код отправлен на такой-то адрес», на 10 минут (пароль и сам код не сохраняются); ok_fav_queue (sessionStorage) — что пользователь отметил до входа в кабинет; ok_admin (sessionStorage) — вход в служебную часть сайта.</p>
+<p>Только с согласия на cookie: ok_brief_name, ok_brief_contact — имя и контакт из формы брифа, чтобы не вводить их повторно; удаляются при отзыве согласия.</p>
+<h2>4. Управление</h2>
+<p>Согласие на Яндекс Метрику можно отозвать в любой момент — ссылка «Настройки cookie» в подвале сайта. Обезличенный подсчёт (п. 2.4) от согласия не зависит: он не собирает персональных данных. Cookie и хранилище браузера можно очистить в настройках браузера (вместе с ними удаляется и ok_seen); при этом потребуется заново войти в личный кабинет.</p>
+<h2>5. Передача данных третьим лицам</h2>
+<p>Статистика, собираемая Яндекс Метрикой, обрабатывается ООО «Яндекс» в соответствии с его собственной политикой конфиденциальности: yandex.ru/legal/confidential</p>
+<h2>6. Изменения</h2>
 <p>Оператор вправе вносить изменения в настоящее Соглашение. Новая редакция вступает в силу с момента размещения на сайте.</p>
 
       <div class="doc-requisites">
@@ -171,7 +185,7 @@
     </div>
     <nav class="foot-cols" aria-label="Разделы сайта">
       <div class="foot-col"><div class="foot-h">Читать</div><a href="../texts/">Тексты</a><a href="../recommendations/">Рекомендации</a><a href="../manifesto/">Манифест</a></div>
-      <div class="foot-col"><div class="foot-h">Работа</div><a href="../production/">Продюсирование</a><a href="../projects/">Проекты</a><a href="../faq/">Частые вопросы</a><a href="../contacts/">Контакты</a></div>
+      <div class="foot-col"><div class="foot-h">Работа</div><a href="../production/">Продюсирование</a><a href="../projects/">Проекты</a><a href="../pay/">Оплата услуг</a><a href="../faq/">Частые вопросы</a><a href="../contacts/">Контакты</a></div>
       <div class="foot-col"><div class="foot-h">Автор</div><a href="../about/">Об авторе</a><a href="../press/">Для прессы</a><a href="../mentions/">Упоминания</a></div>
     </nav>
   </div>
@@ -182,8 +196,10 @@
     </div>
     <div class="foot-legal">
       <a href="../privacy/">Политика конфиденциальности</a>
+      <a href="../consent/">Согласия</a>
       <a href="../cookies/">Cookie</a>
       <a href="../bot-rules/">Правила использования бота</a>
+      <a href="../offer/">Оферта</a>
       <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Настройки cookie</a>
     </div>
   </div>
@@ -251,7 +267,7 @@ function okForgetBrief(){
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Отклонить</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Хорошо</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
   </div>
 </div>
 <script>

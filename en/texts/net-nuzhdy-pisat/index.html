@@ -23,8 +23,8 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://orgculture.ru/images/kurentzis-poster.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../../../assets/fonts.css?v=68">
-<link rel="stylesheet" href="../../../assets/style.css?v=68">
+<link rel="stylesheet" href="../../../assets/fonts.css?v=72">
+<link rel="stylesheet" href="../../../assets/style.css?v=72">
 <link rel="manifest" href="../../../en/manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -44,32 +44,40 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
-<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
-<script type="text/javascript">
-  window.__loadOwnStats = function() {
-    if (window.__statsLoaded) return;
-    window.__statsLoaded = true;
-    try {
-      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
-      var qs = new URLSearchParams(location.search);
-      var payload = JSON.stringify({
-        path: location.pathname,
-        lang: isEn ? 'en' : 'ru',
-        ref: document.referrer || '',
-        utm_source: qs.get('utm_source') || '',
-        utm_medium: qs.get('utm_medium') || '',
-        utm_campaign: qs.get('utm_campaign') || '',
-        utm_content: qs.get('utm_content') || ''
-      });
-      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
-    } catch (e) {}
+<!-- Own stats: обезличенный счётчик, без cookie и согласия (см. own_stats_snippet в gen.py) -->
+<script>
+(function () {
+  var API = "";
+  if (!API || !navigator.sendBeacon) return;
+  window.okStats = function (data) {
+    try { navigator.sendBeacon(API + '?r=stats.hit', new Blob([JSON.stringify(data)], { type: 'text/plain' })); } catch (e) {}
   };
-  if (localStorage.getItem('ok_cookie_consent') === '1') {
-    window.__loadOwnStats();
-  }
+  try {
+    var now = Date.now(), last = 0;
+    try { last = parseInt(localStorage.getItem('ok_seen'), 10) || 0; localStorage.setItem('ok_seen', String(now)); } catch (e) { last = -1; }
+    var ref = '';
+    try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+    var inside = ref === location.hostname;
+    var known = last > 0, a = new Date(now), b = new Date(known ? last : 0);
+    var visit = known ? now - last > 30 * 60 * 1000 : (last === 0 || !inside);
+    var mon = function (d) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x.getTime(); };
+    var q = new URLSearchParams(location.search), vw = window.innerWidth || 0;
+    window.okStats({
+      p: location.pathname, r: inside ? '' : ref,
+      s: q.get('utm_source') || '', m: q.get('utm_medium') || '', c: q.get('utm_campaign') || '',
+      d: vw < 768 ? 'm' : vw < 1100 ? 't' : 'd',
+      v: visit ? 1 : 0,
+      n: known ? +(a.toDateString() !== b.toDateString()) : +visit,
+      w: known ? +(mon(a) !== mon(b)) : +visit,
+      mo: known ? +(a.getFullYear() !== b.getFullYear() || a.getMonth() !== b.getMonth()) : +visit
+    });
+  } catch (e) {}
+})();
 </script>
-<!-- /Own stats beacon -->
-<script src="../../../assets/analytics-events.js?v=68" defer></script>
+<!-- /Own stats -->
+<script src="../../../assets/analytics-events.js?v=72" defer></script>
+<script>window.OK_ACCOUNT={"api": "", "lang": "en", "root": "../../../"};</script>
+<script src="../../../assets/account.js?v=72" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -92,6 +100,7 @@
       <a href="../../../en/about/">Author</a>
       <a href="../../../en/contacts/">Contacts</a>
       <a href="../../../texts/net-nuzhdy-pisat/" class="lang-switch" aria-label="Switch to Russian">RU</a>
+      <a href="../../../en/account/" class="acct-link" aria-label="Account" title="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6"/></svg></a>
     </nav>
     <label for="nav-toggle" class="burger" aria-label="Open menu" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
@@ -104,6 +113,7 @@
       <a href="../../../en/recommendations/">Recommendations</a>
       <a href="../../../en/about/">Author</a>
       <a href="../../../en/contacts/">Contacts</a>
+    <a href="../../../en/account/" class="acct-mobile">Account</a>
     <a href="../../../texts/net-nuzhdy-pisat/" class="lang-switch" aria-label="Switch to Russian">RU</a>
   </nav>
 </header>
@@ -124,6 +134,7 @@
   <span class="tag">Essay</span>
   <h1 style="margin-top:16px;">No Need to Write</h1>
   <p class="kicker">On art not always saving you — and on trying to simply carry on living.</p>
+  <button type="button" class="fav-btn" data-fav="text:net-nuzhdy-pisat" aria-pressed="false" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Save</span></button>
 </div>
 <div class="wrap-wide"><div class="text-heroimg"><img src="../../../images/kurentzis-poster.jpg" alt="No Need to Write" width="600" height="480"></div></div>
 <div class="text-body wrap">
@@ -180,15 +191,17 @@
         <p style="color:var(--dim);font-size:0.84375rem;margin-top:10px;">The on-site review form needs JavaScript — but the “on Telegram” button next to it works without it.</p>
       </noscript>
       <div class="review-form" id="review-form" hidden>
+        <label class="visually-hidden" for="review-name">Name (optional)</label>
         <input type="text" id="review-name" class="ym-disable-keys review-form-input" placeholder="Name (optional)">
+        <label class="visually-hidden" for="review-text">Your review</label>
         <textarea id="review-text" class="ym-disable-keys review-form-textarea" placeholder="Your review…" rows="4"></textarea>
         <input type="text" id="review-website" class="ym-disable-keys review-form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
         <label class="review-form-consent" for="review-consent">
           <input class="ym-disable-keys" type="checkbox" id="review-consent">
-          <span>I consent to this review being published on the site and to the data above being processed per the <a href="../../../en/privacy/" target="_blank" rel="noopener">Privacy Policy</a></span>
+          <span>I consent to the <a href="../../../en/consent/#obrabotka" target="_blank" rel="noopener">processing of the data above</a> and to <a href="../../../en/consent/#rasprostranenie" target="_blank" rel="noopener">this review being published on the site</a> (dissemination of personal data)</span>
         </label>
         <button type="button" class="btn-line" id="review-submit" disabled>Send</button>
-        <p class="review-form-status" id="review-form-status"></p>
+        <p class="review-form-status" id="review-form-status" role="status" aria-live="polite"></p>
       </div>
     </div>
   </div>
@@ -292,7 +305,7 @@
     </div>
     <nav class="foot-cols" aria-label="Site sections">
       <div class="foot-col"><div class="foot-h">Read</div><a href="../../../en/texts/">Texts</a><a href="../../../en/recommendations/">Recommendations</a><a href="../../../en/manifesto/">Manifesto</a></div>
-      <div class="foot-col"><div class="foot-h">Work</div><a href="../../../en/production/">Production</a><a href="../../../en/projects/">Projects</a><a href="../../../en/faq/">FAQ</a><a href="../../../en/contacts/">Contacts</a></div>
+      <div class="foot-col"><div class="foot-h">Work</div><a href="../../../en/production/">Production</a><a href="../../../en/projects/">Projects</a><a href="../../../en/pay/">Payment</a><a href="../../../en/faq/">FAQ</a><a href="../../../en/contacts/">Contacts</a></div>
       <div class="foot-col"><div class="foot-h">Author</div><a href="../../../en/about/">About</a><a href="../../../en/press/">Press</a><a href="../../../en/mentions/">Mentions</a></div>
     </nav>
   </div>
@@ -303,8 +316,10 @@
     </div>
     <div class="foot-legal">
       <a href="../../../en/privacy/">Privacy Policy</a>
+      <a href="../../../en/consent/">Consents</a>
       <a href="../../../en/cookies/">Cookies</a>
       <a href="../../../en/bot-rules/">Bot Usage Rules</a>
+      <a href="../../../en/offer/">Public offer</a>
       <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Cookie settings</a>
     </div>
   </div>
@@ -372,7 +387,7 @@ function okForgetBrief(){
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Decline</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Accept</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Accept</button>
   </div>
 </div>
 <script>

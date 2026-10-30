@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tochka Cuire — Organized Culturality</title>
-<meta name="description" content="AELITA PRODUCTION’s contemporary arts festival — 22–25 October 2026, Stary Oskol, CSI “Byl”.">
+<meta name="description" content="AELITA PRODUCTION’s first contemporary arts festival — held on 22–25 October 2026 in Stary Oskol, at CSI “Byl”.">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -16,15 +16,15 @@
 <link rel="alternate" hreflang="en" href="https://orgculture.ru/en/projects/tochka-kyuri/">
 <link rel="alternate" hreflang="x-default" href="https://orgculture.ru/projects/tochka-kyuri/">
 <meta property="og:title" content="Tochka Cuire — Organized Culturality">
-<meta property="og:description" content="AELITA PRODUCTION’s contemporary arts festival — 22–25 October 2026, Stary Oskol, CSI “Byl”.">
+<meta property="og:description" content="AELITA PRODUCTION’s first contemporary arts festival — held on 22–25 October 2026 in Stary Oskol, at CSI “Byl”.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://orgculture.ru/en/projects/tochka-kyuri/">
 <meta property="og:site_name" content="Organized Culturality">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../../../assets/fonts.css?v=68">
-<link rel="stylesheet" href="../../../assets/style.css?v=68">
+<link rel="stylesheet" href="../../../assets/fonts.css?v=72">
+<link rel="stylesheet" href="../../../assets/style.css?v=72">
 <link rel="manifest" href="../../../en/manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -44,32 +44,40 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
-<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
-<script type="text/javascript">
-  window.__loadOwnStats = function() {
-    if (window.__statsLoaded) return;
-    window.__statsLoaded = true;
-    try {
-      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
-      var qs = new URLSearchParams(location.search);
-      var payload = JSON.stringify({
-        path: location.pathname,
-        lang: isEn ? 'en' : 'ru',
-        ref: document.referrer || '',
-        utm_source: qs.get('utm_source') || '',
-        utm_medium: qs.get('utm_medium') || '',
-        utm_campaign: qs.get('utm_campaign') || '',
-        utm_content: qs.get('utm_content') || ''
-      });
-      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
-    } catch (e) {}
+<!-- Own stats: обезличенный счётчик, без cookie и согласия (см. own_stats_snippet в gen.py) -->
+<script>
+(function () {
+  var API = "";
+  if (!API || !navigator.sendBeacon) return;
+  window.okStats = function (data) {
+    try { navigator.sendBeacon(API + '?r=stats.hit', new Blob([JSON.stringify(data)], { type: 'text/plain' })); } catch (e) {}
   };
-  if (localStorage.getItem('ok_cookie_consent') === '1') {
-    window.__loadOwnStats();
-  }
+  try {
+    var now = Date.now(), last = 0;
+    try { last = parseInt(localStorage.getItem('ok_seen'), 10) || 0; localStorage.setItem('ok_seen', String(now)); } catch (e) { last = -1; }
+    var ref = '';
+    try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+    var inside = ref === location.hostname;
+    var known = last > 0, a = new Date(now), b = new Date(known ? last : 0);
+    var visit = known ? now - last > 30 * 60 * 1000 : (last === 0 || !inside);
+    var mon = function (d) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x.getTime(); };
+    var q = new URLSearchParams(location.search), vw = window.innerWidth || 0;
+    window.okStats({
+      p: location.pathname, r: inside ? '' : ref,
+      s: q.get('utm_source') || '', m: q.get('utm_medium') || '', c: q.get('utm_campaign') || '',
+      d: vw < 768 ? 'm' : vw < 1100 ? 't' : 'd',
+      v: visit ? 1 : 0,
+      n: known ? +(a.toDateString() !== b.toDateString()) : +visit,
+      w: known ? +(mon(a) !== mon(b)) : +visit,
+      mo: known ? +(a.getFullYear() !== b.getFullYear() || a.getMonth() !== b.getMonth()) : +visit
+    });
+  } catch (e) {}
+})();
 </script>
-<!-- /Own stats beacon -->
-<script src="../../../assets/analytics-events.js?v=68" defer></script>
+<!-- /Own stats -->
+<script src="../../../assets/analytics-events.js?v=72" defer></script>
+<script>window.OK_ACCOUNT={"api": "", "lang": "en", "root": "../../../"};</script>
+<script src="../../../assets/account.js?v=72" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -91,6 +99,7 @@
       <a href="../../../en/about/">Author</a>
       <a href="../../../en/contacts/">Contacts</a>
       <a href="../../../projects/tochka-kyuri/" class="lang-switch" aria-label="Switch to Russian">RU</a>
+      <a href="../../../en/account/" class="acct-link" aria-label="Account" title="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6"/></svg></a>
     </nav>
     <label for="nav-toggle" class="burger" aria-label="Open menu" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
@@ -103,6 +112,7 @@
       <a href="../../../en/recommendations/">Recommendations</a>
       <a href="../../../en/about/">Author</a>
       <a href="../../../en/contacts/">Contacts</a>
+    <a href="../../../en/account/" class="acct-mobile">Account</a>
     <a href="../../../projects/tochka-kyuri/" class="lang-switch" aria-label="Switch to Russian">RU</a>
   </nav>
 </header>
@@ -122,16 +132,17 @@
 <div class="text-hero wrap-wide">
   <span class="tag">Festival Producer</span>
   <h1 style="margin-top:16px;">Tochka Cuire</h1>
-  <p class="kicker">AELITA PRODUCTION’s contemporary arts festival — 22–25 October 2026, Stary Oskol, CSI “Byl”.</p>
+  <p class="kicker">AELITA PRODUCTION’s first contemporary arts festival — held on 22–25 October 2026 in Stary Oskol, at CSI “Byl”.</p>
+  <button type="button" class="fav-btn" data-fav="project:tochka-kyuri" aria-pressed="false" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Save</span></button>
 </div>
 <div class="wrap">
-  <div class="proj-fact-row"><div class="proj-fact"><div class="n">Stary Oskol</div><div class="l">city</div></div><div class="proj-fact"><div class="n">22–25.10.2026</div><div class="l">dates</div></div><div class="proj-fact"><div class="n">CSI “Byl”</div><div class="l">venue</div></div></div>
+  <div class="proj-fact-row"><div class="proj-fact"><div class="n">8</div><div class="l">productions</div></div><div class="proj-fact"><div class="n">12</div><div class="l">performances</div></div><div class="proj-fact"><div class="n">22–25.10.2026</div><div class="l">Stary Oskol</div></div></div>
 </div>
 <div class="text-body wrap">
-  <p>Tochka Cuire is an annual contemporary arts festival produced by AELITA PRODUCTION. The first edition takes place on 22–25 October 2026 in Stary Oskol, at CSI “Byl”.</p>
-      <p>Four days of performances, physical theatre and dance, exhibitions, a children’s programme, markets and a talks programme — lectures and a workshop.</p>
-      <p>I am the festival’s producer. The full programme, schedule and tickets are on the AELITA PRODUCTION website.</p>
-  <div style="margin-top:36px;"><a class="btn-line" href="https://aelita-production.ru/en/tochkacuire/" target="_blank" rel="noopener">Programme and tickets — aelita-production.ru →</a></div>
+  <p>“Tochka Cuire” is an annual contemporary arts festival produced by AELITA PRODUCTION. The first edition was held on 22–25 October 2026 in Stary Oskol, at CSI “Byl”; the theme of the season was “Transition”.</p>
+      <p>Over four days: 8 productions and 12 performances — from the mystery play “IOV: Material” to physical theatre and stand-up — two exhibitions, a business programme of seven talks, a children’s programme, a fashion show and a market. The festival was supported by the Department of Culture of the Stary Oskol City District Administration and the Metalloinvest company.</p>
+      <p>I produced the festival together with Katya Abdulova. The programme, the team and audience reviews are on the festival page of the AELITA PRODUCTION website.</p>
+  <div style="margin-top:36px;"><a class="btn-line" href="https://aelita-production.ru/en/tochkacuire/" target="_blank" rel="noopener">The festival on the AELITA PRODUCTION website →</a></div>
 </div>
 <div class="wrap"><div class="text-nav">
       <a href="../../../en/projects/bufest/">← BuFest</a>
@@ -142,7 +153,7 @@
     <p>I produce, promote and build websites for theatre and arts projects. If you have an idea, a festival or a production that wants this kind of attention to detail, get in touch.</p>
     <div class="collab-buttons">
       <a class="btn-line" href="mailto:kostyamoshnikov@gmail.com">Email me</a>
-      <a class="btn-line" href="https://t.me/orgculture" target="_blank" rel="noopener">Message on Telegram</a>
+      <a class="btn-line" href="https://t.me/orgculture_bot?start=contact" target="_blank" rel="noopener">Message on Telegram</a>
     </div>
   </div></div>
 <footer>
@@ -162,7 +173,7 @@
     </div>
     <nav class="foot-cols" aria-label="Site sections">
       <div class="foot-col"><div class="foot-h">Read</div><a href="../../../en/texts/">Texts</a><a href="../../../en/recommendations/">Recommendations</a><a href="../../../en/manifesto/">Manifesto</a></div>
-      <div class="foot-col"><div class="foot-h">Work</div><a href="../../../en/production/">Production</a><a href="../../../en/projects/">Projects</a><a href="../../../en/faq/">FAQ</a><a href="../../../en/contacts/">Contacts</a></div>
+      <div class="foot-col"><div class="foot-h">Work</div><a href="../../../en/production/">Production</a><a href="../../../en/projects/">Projects</a><a href="../../../en/pay/">Payment</a><a href="../../../en/faq/">FAQ</a><a href="../../../en/contacts/">Contacts</a></div>
       <div class="foot-col"><div class="foot-h">Author</div><a href="../../../en/about/">About</a><a href="../../../en/press/">Press</a><a href="../../../en/mentions/">Mentions</a></div>
     </nav>
   </div>
@@ -173,8 +184,10 @@
     </div>
     <div class="foot-legal">
       <a href="../../../en/privacy/">Privacy Policy</a>
+      <a href="../../../en/consent/">Consents</a>
       <a href="../../../en/cookies/">Cookies</a>
       <a href="../../../en/bot-rules/">Bot Usage Rules</a>
+      <a href="../../../en/offer/">Public offer</a>
       <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Cookie settings</a>
     </div>
   </div>
@@ -242,7 +255,7 @@ function okForgetBrief(){
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Decline</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Accept</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Accept</button>
   </div>
 </div>
 <script>

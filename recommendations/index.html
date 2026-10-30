@@ -23,8 +23,8 @@
 <meta property="og:locale" content="ru_RU">
 <meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../assets/fonts.css?v=68">
-<link rel="stylesheet" href="../assets/style.css?v=68">
+<link rel="stylesheet" href="../assets/fonts.css?v=72">
+<link rel="stylesheet" href="../assets/style.css?v=72">
 <link rel="manifest" href="../manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -44,32 +44,40 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
-<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
-<script type="text/javascript">
-  window.__loadOwnStats = function() {
-    if (window.__statsLoaded) return;
-    window.__statsLoaded = true;
-    try {
-      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
-      var qs = new URLSearchParams(location.search);
-      var payload = JSON.stringify({
-        path: location.pathname,
-        lang: isEn ? 'en' : 'ru',
-        ref: document.referrer || '',
-        utm_source: qs.get('utm_source') || '',
-        utm_medium: qs.get('utm_medium') || '',
-        utm_campaign: qs.get('utm_campaign') || '',
-        utm_content: qs.get('utm_content') || ''
-      });
-      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
-    } catch (e) {}
+<!-- Own stats: обезличенный счётчик, без cookie и согласия (см. own_stats_snippet в gen.py) -->
+<script>
+(function () {
+  var API = "";
+  if (!API || !navigator.sendBeacon) return;
+  window.okStats = function (data) {
+    try { navigator.sendBeacon(API + '?r=stats.hit', new Blob([JSON.stringify(data)], { type: 'text/plain' })); } catch (e) {}
   };
-  if (localStorage.getItem('ok_cookie_consent') === '1') {
-    window.__loadOwnStats();
-  }
+  try {
+    var now = Date.now(), last = 0;
+    try { last = parseInt(localStorage.getItem('ok_seen'), 10) || 0; localStorage.setItem('ok_seen', String(now)); } catch (e) { last = -1; }
+    var ref = '';
+    try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+    var inside = ref === location.hostname;
+    var known = last > 0, a = new Date(now), b = new Date(known ? last : 0);
+    var visit = known ? now - last > 30 * 60 * 1000 : (last === 0 || !inside);
+    var mon = function (d) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x.getTime(); };
+    var q = new URLSearchParams(location.search), vw = window.innerWidth || 0;
+    window.okStats({
+      p: location.pathname, r: inside ? '' : ref,
+      s: q.get('utm_source') || '', m: q.get('utm_medium') || '', c: q.get('utm_campaign') || '',
+      d: vw < 768 ? 'm' : vw < 1100 ? 't' : 'd',
+      v: visit ? 1 : 0,
+      n: known ? +(a.toDateString() !== b.toDateString()) : +visit,
+      w: known ? +(mon(a) !== mon(b)) : +visit,
+      mo: known ? +(a.getFullYear() !== b.getFullYear() || a.getMonth() !== b.getMonth()) : +visit
+    });
+  } catch (e) {}
+})();
 </script>
-<!-- /Own stats beacon -->
-<script src="../assets/analytics-events.js?v=68" defer></script>
+<!-- /Own stats -->
+<script src="../assets/analytics-events.js?v=72" defer></script>
+<script>window.OK_ACCOUNT={"api": "", "lang": "ru", "root": "../"};</script>
+<script src="../assets/account.js?v=72" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Перейти к содержимому</a>
@@ -91,6 +99,7 @@
       <a href="../about/">Автор</a>
       <a href="../contacts/">Контакты</a>
       <a href="../en/recommendations/" class="lang-switch" aria-label="Switch to English">EN</a>
+      <a href="../account/" class="acct-link" aria-label="Личный кабинет" title="Личный кабинет"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6"/></svg></a>
     </nav>
     <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
@@ -103,6 +112,7 @@
       <a href="../recommendations/" class="active">Рекомендации</a>
       <a href="../about/">Автор</a>
       <a href="../contacts/">Контакты</a>
+    <a href="../account/" class="acct-mobile">Личный кабинет</a>
     <a href="../en/recommendations/" class="lang-switch" aria-label="Switch to English">EN</a>
   </nav>
 </header>
@@ -136,6 +146,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Культурные исследования Европы в пользу славного народа Палестины, или «Должно быть, это рай»</h3>
         <p>Элиа Сулейман снял фильм, в котором герой почти ни на что не влияет — и именно поэтому зритель остаётся наедине с собственными выводами.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:dolzhno-byt-eto-rai" aria-pressed="false" aria-label="Сохранить: Культурные исследования Европы в пользу славного народа Палестины, или «Должно быть, это рай»" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="https://vk.cc/bWvaOl" target="_blank" rel="noopener">смотреть на Beat Film Festival →</a>
     </div>
@@ -145,6 +156,7 @@
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">Двое на качелях. Где здесь я и нужен ли я</h3>
         <p>Отзыв, написанный не для того, чтобы порекомендовать, а чтобы отрефлексировать увиденное — по горячим следам премьеры в театре им. Ленсовета.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:dvoe-na-kachelyah" aria-pressed="false" aria-label="Сохранить: Двое на качелях. Где здесь я и нужен ли я" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="https://lensov-theatre.spb.ru/repertoire" target="_blank" rel="noopener">билеты и репертуар театра →</a>
     </div>
@@ -154,6 +166,7 @@
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">В поисках вдохновения, или Как жить среди роботов и не сойти с ума</h3>
         <p>О рождении спектакля «Робот Костя» — первого в России роботического театра, где Чеховские страсти оказались подвластны и роботам.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:robot-kostya" aria-pressed="false" aria-label="Сохранить: В поисках вдохновения, или Как жить среди роботов и не сойти с ума" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="https://www.instagram.com/robot.kostya/" target="_blank" rel="noopener">аккаунт «Робота Кости»* →</a> <span class="meta-note">* Meta признана экстремистской организацией, деятельность запрещена в РФ.</span>
     </div>
@@ -166,6 +179,7 @@
         <span class="tag">альбом</span>
         <h3 style="margin-top:8px;">Вера Полозкова — «Высокое разрешение»</h3>
         <p>Стихи, которые с каждым разом находят всё большее дыхание в музыке — и слушать их становится интереснее, чем многие песни.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:vysokoe-razreshenie" aria-pressed="false" aria-label="Сохранить: Вера Полозкова — «Высокое разрешение»" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/vysokoe-razreshenie/">читать →</a>
     </div>
@@ -178,6 +192,7 @@
         <span class="tag">сериал</span>
         <h3 style="margin-top:8px;">Как не сойти с ума в этом мире, и ход королевы по правилам и без</h3>
         <p>«Ход королевы» сделал шахматы доступными даже для тех, кто брал в руки ферзя пару раз в жизни.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:hod-korolevy" aria-pressed="false" aria-label="Сохранить: Как не сойти с ума в этом мире, и ход королевы по правилам и без" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/hod-korolevy/">читать →</a>
     </div>
@@ -190,6 +205,7 @@
         <span class="tag">пространство</span>
         <h3 style="margin-top:8px;">Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный</h3>
         <p>С приездом Теодора Курентзиса абсолютом города стал Дом Радио. Текст о пространстве, в которое приходишь, чтобы измениться.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:dom-radio" aria-pressed="false" aria-label="Сохранить: Красота в глазах смотрящего, или Дом Радио — иррациональный и величественный" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="https://musicaeterna.org/ru/" target="_blank" rel="noopener">афиша musicAeterna →</a>
     </div>
@@ -199,6 +215,7 @@
         <span class="tag">концерт</span>
         <h3 style="margin-top:8px;">Курентзис. Знал, видел, чувствовал</h3>
         <p>Дебюсси, Равель, Стравинский и Эрик Сати в один вечер в Петербургской филармонии — и зал, переродившийся вместе с музыкой.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:kurentzis-znal-videl-chuvstvoval" aria-pressed="false" aria-label="Сохранить: Курентзис. Знал, видел, чувствовал" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="https://musicaeterna.org/ru/visit/" target="_blank" rel="noopener">афиша ближайших концертов →</a>
     </div>
@@ -208,6 +225,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Смотрящий из бездны, или «Аннетт» — серьёзный разговор, который состоялся вовремя</h3>
         <p>Фильм Леоса Каракса, в котором конец истории не становится её пределом — предел каждый устанавливает сам.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:annette" aria-pressed="false" aria-label="Сохранить: Смотрящий из бездны, или «Аннетт» — серьёзный разговор, который состоялся вовремя" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/annette/">читать →</a>
     </div>
@@ -220,6 +238,7 @@
         <span class="tag">балет</span>
         <h3 style="margin-top:8px;">Сила, которой завидуешь и преклоняешься — Майя Плисецкая</h3>
         <p>Момент, когда проблема эйджизма теряет смысл: ей 50, и она вневременная.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:maya-plisetskaya" aria-pressed="false" aria-label="Сохранить: Сила, которой завидуешь и преклоняешься — Майя Плисецкая" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/maya-plisetskaya/">читать →</a>
     </div>
@@ -232,6 +251,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Герда, или Глоток воздуха, который замёрзнет на подлёте — но долетит ли?</h3>
         <p>Фильм Натальи Кудряшовой — стихами, о городе, сжатом снегом, и о том, готов ли ты взлететь.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:gerda" aria-pressed="false" aria-label="Сохранить: Герда, или Глоток воздуха, который замёрзнет на подлёте — но долетит ли?" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/gerda/">читать →</a>
     </div>
@@ -241,6 +261,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Вообще всех жалко, а по отдельности никого, или «Медея» — за нас, про нас, против нас?</h3>
         <p>Фильм Александра Зельдовича, где слова не конкурируют с музыкой — а вопрос остаётся один: ты меня понимаешь?</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:medeya" aria-pressed="false" aria-label="Сохранить: Вообще всех жалко, а по отдельности никого, или «Медея» — за нас, про нас, против нас?" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/medeya/">читать →</a>
     </div>
@@ -250,6 +271,7 @@
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">Интервью В, или Времена не выбирают — в них живут</h3>
         <p>Вертинский во плоти на «7-м ярусе» Александринского театра — и вопрос о том, насколько человек беззащитен и ограничен своим телом.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:intervyu-v" aria-pressed="false" aria-label="Сохранить: Интервью В, или Времена не выбирают — в них живут" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/intervyu-v/">читать →</a>
     </div>
@@ -259,6 +281,7 @@
         <span class="tag">эссе</span>
         <h3 style="margin-top:8px;">Нет нужды писать</h3>
         <p>О том, что искусство не всегда спасает — и о попытке просто «дальше жить».</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:net-nuzhdy-pisat" aria-pressed="false" aria-label="Сохранить: Нет нужды писать" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/net-nuzhdy-pisat/">читать →</a>
     </div>
@@ -271,6 +294,7 @@
         <span class="tag">заметки</span>
         <h3 style="margin-top:8px;">Дневник кинозала: люминальные пространства и фестивальный забег</h3>
         <p>Шесть коротких впечатлений подряд — от «Прыгунов» до бэкрумсов: чем зацепил и почему тренд на люминальные пространства так хорош, пока разгадка не наступила.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:dnevnik-kinozala-liminalnye-prostranstva" aria-pressed="false" aria-label="Сохранить: Дневник кинозала: люминальные пространства и фестивальный забег" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="https://boxd.it/mUm6" target="_blank" rel="noopener">Letterboxd: «Платформа» →</a>
     </div>
@@ -283,6 +307,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Майкл» — впечатляюще, но похоже на агитку</h3>
         <p>Посмотрел бесплатно — и это, конечно, впечатляет: огромный бюджет, ремесленно выстроенный конфликт. Но контекст всех обвинений будто вычищен подчистую.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:michael" aria-pressed="false" aria-label="Сохранить: «Майкл» — впечатляюще, но похоже на агитку" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/michael/">читать →</a>
     </div>
@@ -295,6 +320,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Шурале» — надежда, которая рассыпалась</h3>
         <p>Хороший состав, красивая картинка — и всё равно фильм рассыпается. О том, когда актрисе рано быть режиссёром.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:shurale" aria-pressed="false" aria-label="Сохранить: «Шурале» — надежда, которая рассыпалась" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/shurale/">читать →</a>
     </div>
@@ -307,6 +333,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Фильм с крутым твистом, увиденный в Доме Радио</h3>
         <p>Титры идут почти в середине картины — и это оказывается ровно тем самым приёмом. Про пожилую пару, цветы и премиум-версию вознесения.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:nash-gorodok" aria-pressed="false" aria-label="Сохранить: Фильм с крутым твистом, увиденный в Доме Радио" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/nash-gorodok/">читать →</a>
     </div>
@@ -319,6 +346,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Красная пустыня» Антониони — кино, которое чувствуешь</h3>
         <p>Первый цветной фильм режиссёра, где не хватало даже имеющегося цвета — а тема оказалась про кризис всего.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:krasnaya-pustynya" aria-pressed="false" aria-label="Сохранить: «Красная пустыня» Антониони — кино, которое чувствуешь" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/krasnaya-pustynya/">читать →</a>
     </div>
@@ -331,6 +359,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Новый Озон — снят красиво, как всегда</h3>
         <p>Чёрно-белая картина, в финале которой герою рубят голову, но не смыслы. Один из немногих поводов пойти в Дом Радио на такое.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:novyy-ozon" aria-pressed="false" aria-label="Сохранить: Новый Озон — снят красиво, как всегда" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/novyy-ozon/">читать →</a>
     </div>
@@ -343,6 +372,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Новый Джармуш — возможно, просто не мой фильм</h3>
         <p>Всё прекрасно выверено и хорошие ходы — но ощущение, будто режиссёр совсем постарел.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:novyy-dzharmush" aria-pressed="false" aria-label="Сохранить: Новый Джармуш — возможно, просто не мой фильм" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/novyy-dzharmush/">читать →</a>
     </div>
@@ -355,6 +385,7 @@
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">«Гамлет» Николая Коляды — физически грязный театр на грани китча</h3>
         <p>Мир на грани исчезновения, превращённый в большую помойку. Спектакль не для случайных зрителей — и почти манифест театрального зрителя внутри рецензии.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:gamlet-kolyada-teatr" aria-pressed="false" aria-label="Сохранить: «Гамлет» Николая Коляды — физически грязный театр на грани китча" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/gamlet-kolyada-teatr/">читать →</a>
     </div>
@@ -367,6 +398,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Поклонница» — когда классик советского кино перегорает</h3>
         <p>Актёрский состав нешуточный, оператор снимал Балабанова — и всё равно фильм пытается выдавить слёзы пошло построенным романом.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:poklonnitsa" aria-pressed="false" aria-label="Сохранить: «Поклонница» — когда классик советского кино перегорает" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/poklonnitsa/">читать →</a>
     </div>
@@ -379,6 +411,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Небесный тапёр» — документальное признание в любви Каравайчуку</h3>
         <p>Гениальный советский пианист и композитор, которого министерство культуры не спешит показывать миру, хотя само же его и профинансировало.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:nebesnyy-taper" aria-pressed="false" aria-label="Сохранить: «Небесный тапёр» — документальное признание в любви Каравайчуку" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/nebesnyy-taper/">читать →</a>
     </div>
@@ -391,6 +424,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Верность» Нигины Сайфуллаевой — больше плохо, чем хорошо</h3>
         <p>Свободный каст готов на всё ради искусства — но фильм тонет в претензии на смыслы, которых там, кажется, и не было.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:vernost" aria-pressed="false" aria-label="Сохранить: «Верность» Нигины Сайфуллаевой — больше плохо, чем хорошо" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/vernost/">читать →</a>
     </div>
@@ -403,6 +437,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Ирландец» — три с половиной часа классики, которую будут пересматривать</h3>
         <p>Скорсезе, омоложенные Де Ниро и Пачино, 309 сцен на 117 локациях — и герой, который просто плывёт по течению, потому что душа ему не нужна.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:irlandets" aria-pressed="false" aria-label="Сохранить: «Ирландец» — три с половиной часа классики, которую будут пересматривать" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/irlandets/">читать →</a>
     </div>
@@ -415,6 +450,7 @@
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">«Опасная жалость» и «Близкие люди» — когда режиссёр берёт верх над текстом, и когда нет</h3>
         <p>Макбёрни справился с романом Цвейга, не разгадав до конца, как это сделано. Бондарь не справилась с прозой Водолазкина — и с пространством малой сцены заодно.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:opasnaya-zhalost-blizkie-lyudi" aria-pressed="false" aria-label="Сохранить: «Опасная жалость» и «Близкие люди» — когда режиссёр берёт верх над текстом, и когда нет" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/opasnaya-zhalost-blizkie-lyudi/">читать →</a>
     </div>
@@ -427,6 +463,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">Новый Лопушанский — почти чистая экранизация «Кроткой»</h3>
         <p>Ждал очередную русскую депрессуху, получил литературно-религиозную историю, достойную Достоевского. Максим Суханов — лучшая роль в российском кино за год.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:gadkie-lebedi" aria-pressed="false" aria-label="Сохранить: Новый Лопушанский — почти чистая экранизация «Кроткой»" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/gadkie-lebedi/">читать →</a>
     </div>
@@ -439,6 +476,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Тот самый Мюнхгаузен» и «Брачная история» — про то, что никто не хочет слушать другого</h3>
         <p>Проблема толерантности стоит во главе всех наших проблем. Захаров кричал об этом ещё при советской цензуре — сейчас это звучит только громче.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:myunhgauzen-brachnaya-istoriya" aria-pressed="false" aria-label="Сохранить: «Тот самый Мюнхгаузен» и «Брачная история» — про то, что никто не хочет слушать другого" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/myunhgauzen-brachnaya-istoriya/">читать →</a>
     </div>
@@ -451,6 +489,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Любовь» Гаспара Ноэ — искусство приходит вовремя, или не приходит вовсе</h3>
         <p>Диванные критики назвали его порно для интеллектуалов, а прокат в нашей стране запретили. О том, что бывает, если попал не в свой мир — или не в своё время.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:lyubov-noe" aria-pressed="false" aria-label="Сохранить: «Любовь» Гаспара Ноэ — искусство приходит вовремя, или не приходит вовсе" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/lyubov-noe/">читать →</a>
     </div>
@@ -460,6 +499,7 @@
         <span class="tag">сериал</span>
         <h3 style="margin-top:8px;">«Эйфория» — сериал про наркотики, который на самом деле про непонимание</h3>
         <p>Портрет современного человека, предпочитающего электронное общение живому — и цена, которую за это платят.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:eyforiya" aria-pressed="false" aria-label="Сохранить: «Эйфория» — сериал про наркотики, который на самом деле про непонимание" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/eyforiya/">читать →</a>
     </div>
@@ -469,6 +509,7 @@
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">«За белым кроликом» — терапевтический эффект второго текста об одном спектакле</h3>
         <p>Пишу уже второй пост про один и тот же спектакль Ромы Кагановича — потому что проговаривать однотипные фразы про качество произведения искусства слишком пошло.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:za-belym-krolikom" aria-pressed="false" aria-label="Сохранить: «За белым кроликом» — терапевтический эффект второго текста об одном спектакле" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/za-belym-krolikom/">читать →</a>
     </div>
@@ -478,6 +519,7 @@
         <span class="tag">читка</span>
         <h3 style="margin-top:8px;">«Философы» на «Любимовке» — читка, которая не дошла до постановки</h3>
         <p>В дни фестиваля молодой драматургии Театр.doc рвётся от напряжения и счастья — а лучшее из читок можно смотреть, не выезжая из своего города.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:lyubimovka-pechenkin" aria-pressed="false" aria-label="Сохранить: «Философы» на «Любимовке» — читка, которая не дошла до постановки" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/lyubimovka-pechenkin/">читать →</a>
     </div>
@@ -490,6 +532,7 @@
         <span class="tag">пространство</span>
         <h3 style="margin-top:8px;">Теодор Иоаннович и Мастерская Современного Зрителя</h3>
         <p>Курентзис превратил Пермь из захолустной провинции в культурный центр — а потом его «изгнали» на родину ученических лет, в Петербург.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:teodor-ioannovich-masterskaya" aria-pressed="false" aria-label="Сохранить: Теодор Иоаннович и Мастерская Современного Зрителя" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="https://musicaeterna.org/ru/" target="_blank" rel="noopener">программа musicAeterna →</a>
     </div>
@@ -499,6 +542,7 @@
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">«Старший сын» — спектакль, которого больше нет в записи</h3>
         <p>Театр Ленсовета так и не опубликовал запись легендарной постановки Юрия Бутусова. Приходится вспоминать по видео, выложенному добрыми людьми.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:starshiy-syn" aria-pressed="false" aria-label="Сохранить: «Старший сын» — спектакль, которого больше нет в записи" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/starshiy-syn/">читать →</a>
     </div>
@@ -508,6 +552,7 @@
         <span class="tag">фильм</span>
         <h3 style="margin-top:8px;">«Кролик Джоджо» — фильм про нацизм, который понравился неожиданно сильно</h3>
         <p>Тайка Вайтити сыграл Гитлера как воображаемого друга десятилетнего мальчика — и получилась редкая удачная форма, слитая с содержанием.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:krolik-dzhodzho" aria-pressed="false" aria-label="Сохранить: «Кролик Джоджо» — фильм про нацизм, который понравился неожиданно сильно" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/krolik-dzhodzho/">читать →</a>
     </div>
@@ -517,6 +562,7 @@
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">«Дядя Ваня» Римаса Туминаса — спектакль, который работает даже на видео</h3>
         <p>Десять лет прошло с премьеры, приёмы уже смотрятся архаично — а катарсис всё равно случается, даже через экран.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:dyadya-vanya-tuminas" aria-pressed="false" aria-label="Сохранить: «Дядя Ваня» Римаса Туминаса — спектакль, который работает даже на видео" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/dyadya-vanya-tuminas/">читать →</a>
     </div>
@@ -526,6 +572,7 @@
         <span class="tag">спектакль</span>
         <h3 style="margin-top:8px;">«Маузер» Теодороса Терзопулоса — театр тела в прямом эфире</h3>
         <p>Александринский показал премьеру онлайн — и это на 180 градусов повернуло представление о театре на видео. Понимания хватило процентов на двадцать, но и этого достаточно.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:mauzer-terzopulos" aria-pressed="false" aria-label="Сохранить: «Маузер» Теодороса Терзопулоса — театр тела в прямом эфире" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="../texts/mauzer-terzopulos/">читать →</a>
     </div>
@@ -535,6 +582,7 @@
         <span class="tag">лекция</span>
         <h3 style="margin-top:8px;">Шум и антишум — лекция Евгения Вороновского, которую понадобилось время осмыслить</h3>
         <p>О физике звука, ставшей формой искусства — и о пространстве, которое невозможно просто скачать: только впустить в себя и прочувствовать.</p>
+        <button type="button" class="fav-btn fav-compact" data-fav="text:shum-antishum-voronovskiy" aria-pressed="false" aria-label="Сохранить: Шум и антишум — лекция Евгения Вороновского, которую понадобилось время осмыслить" hidden><span class="fav-star" aria-hidden="true">☆</span><span class="fav-label">Сохранить</span></button>
       </div>
       <a class="go" href="https://musicaeterna.org/ru/" target="_blank" rel="noopener">программа musicAeterna →</a>
     </div>
@@ -559,7 +607,7 @@
     </div>
     <nav class="foot-cols" aria-label="Разделы сайта">
       <div class="foot-col"><div class="foot-h">Читать</div><a href="../texts/">Тексты</a><a href="../recommendations/">Рекомендации</a><a href="../manifesto/">Манифест</a></div>
-      <div class="foot-col"><div class="foot-h">Работа</div><a href="../production/">Продюсирование</a><a href="../projects/">Проекты</a><a href="../faq/">Частые вопросы</a><a href="../contacts/">Контакты</a></div>
+      <div class="foot-col"><div class="foot-h">Работа</div><a href="../production/">Продюсирование</a><a href="../projects/">Проекты</a><a href="../pay/">Оплата услуг</a><a href="../faq/">Частые вопросы</a><a href="../contacts/">Контакты</a></div>
       <div class="foot-col"><div class="foot-h">Автор</div><a href="../about/">Об авторе</a><a href="../press/">Для прессы</a><a href="../mentions/">Упоминания</a></div>
     </nav>
   </div>
@@ -570,8 +618,10 @@
     </div>
     <div class="foot-legal">
       <a href="../privacy/">Политика конфиденциальности</a>
+      <a href="../consent/">Согласия</a>
       <a href="../cookies/">Cookie</a>
       <a href="../bot-rules/">Правила использования бота</a>
+      <a href="../offer/">Оферта</a>
       <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Настройки cookie</a>
     </div>
   </div>
@@ -639,7 +689,7 @@ function okForgetBrief(){
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Отклонить</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Хорошо</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
   </div>
 </div>
 <script>

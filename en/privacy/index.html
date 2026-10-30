@@ -24,8 +24,8 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../../assets/fonts.css?v=68">
-<link rel="stylesheet" href="../../assets/style.css?v=68">
+<link rel="stylesheet" href="../../assets/fonts.css?v=72">
+<link rel="stylesheet" href="../../assets/style.css?v=72">
 <link rel="manifest" href="../../en/manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -45,32 +45,40 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
-<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
-<script type="text/javascript">
-  window.__loadOwnStats = function() {
-    if (window.__statsLoaded) return;
-    window.__statsLoaded = true;
-    try {
-      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
-      var qs = new URLSearchParams(location.search);
-      var payload = JSON.stringify({
-        path: location.pathname,
-        lang: isEn ? 'en' : 'ru',
-        ref: document.referrer || '',
-        utm_source: qs.get('utm_source') || '',
-        utm_medium: qs.get('utm_medium') || '',
-        utm_campaign: qs.get('utm_campaign') || '',
-        utm_content: qs.get('utm_content') || ''
-      });
-      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
-    } catch (e) {}
+<!-- Own stats: обезличенный счётчик, без cookie и согласия (см. own_stats_snippet в gen.py) -->
+<script>
+(function () {
+  var API = "";
+  if (!API || !navigator.sendBeacon) return;
+  window.okStats = function (data) {
+    try { navigator.sendBeacon(API + '?r=stats.hit', new Blob([JSON.stringify(data)], { type: 'text/plain' })); } catch (e) {}
   };
-  if (localStorage.getItem('ok_cookie_consent') === '1') {
-    window.__loadOwnStats();
-  }
+  try {
+    var now = Date.now(), last = 0;
+    try { last = parseInt(localStorage.getItem('ok_seen'), 10) || 0; localStorage.setItem('ok_seen', String(now)); } catch (e) { last = -1; }
+    var ref = '';
+    try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+    var inside = ref === location.hostname;
+    var known = last > 0, a = new Date(now), b = new Date(known ? last : 0);
+    var visit = known ? now - last > 30 * 60 * 1000 : (last === 0 || !inside);
+    var mon = function (d) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x.getTime(); };
+    var q = new URLSearchParams(location.search), vw = window.innerWidth || 0;
+    window.okStats({
+      p: location.pathname, r: inside ? '' : ref,
+      s: q.get('utm_source') || '', m: q.get('utm_medium') || '', c: q.get('utm_campaign') || '',
+      d: vw < 768 ? 'm' : vw < 1100 ? 't' : 'd',
+      v: visit ? 1 : 0,
+      n: known ? +(a.toDateString() !== b.toDateString()) : +visit,
+      w: known ? +(mon(a) !== mon(b)) : +visit,
+      mo: known ? +(a.getFullYear() !== b.getFullYear() || a.getMonth() !== b.getMonth()) : +visit
+    });
+  } catch (e) {}
+})();
 </script>
-<!-- /Own stats beacon -->
-<script src="../../assets/analytics-events.js?v=68" defer></script>
+<!-- /Own stats -->
+<script src="../../assets/analytics-events.js?v=72" defer></script>
+<script>window.OK_ACCOUNT={"api": "", "lang": "en", "root": "../../"};</script>
+<script src="../../assets/account.js?v=72" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -92,6 +100,7 @@
       <a href="../../en/about/">Author</a>
       <a href="../../en/contacts/">Contacts</a>
       <a href="../../privacy/" class="lang-switch" aria-label="Switch to Russian">RU</a>
+      <a href="../../en/account/" class="acct-link" aria-label="Account" title="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6"/></svg></a>
     </nav>
     <label for="nav-toggle" class="burger" aria-label="Open menu" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
@@ -104,6 +113,7 @@
       <a href="../../en/recommendations/">Recommendations</a>
       <a href="../../en/about/">Author</a>
       <a href="../../en/contacts/">Contacts</a>
+    <a href="../../en/account/" class="acct-mobile">Account</a>
     <a href="../../privacy/" class="lang-switch" aria-label="Switch to Russian">RU</a>
   </nav>
 </header>
@@ -124,31 +134,45 @@
   <div class="wrap">
     <div class="eyebrow">Document</div>
     <h1 style="font-size:1.875rem;font-weight:300;margin:14px 0 4px;">Privacy Policy</h1>
-    <div class="doc-meta">orgculture.ru · revised 10.10.2026</div>
+    <div class="doc-meta">orgculture.ru · revised 27.10.2026</div>
     <div class="doc-meta" style="margin-top:8px;">This is an English translation provided for convenience. The Russian version is the governing text and prevails in case of any discrepancy.</div>
     <div class="doc-body" style="margin-top:36px;">
       <h2>1. General Provisions</h2>
 <p>1.1. The personal data controller is Konstantin Alekseevich Moshnikov, self-employed (payer of professional income tax), INN 471508674254, St. Petersburg, Russia.</p>
-<p>1.2. This Policy is drafted in accordance with Federal Law No. 152-FZ “On Personal Data” of 27.07.2006 and sets out how personal data of orgculture.ru users and its related communication channels (Telegram, email) is processed.</p>
-<p>1.3. This Policy is informational and does not in itself constitute consent. Consent to the processing of personal data is given by a separate action: ticking the box in a form on the site before sending it, or pressing the corresponding button in the Telegram bot. Using the site or reading this Policy does not count as consent.</p>
+<p>1.2. This Policy is drafted in accordance with Federal Law No. 152-FZ “On Personal Data” of 27.07.2006 and sets out how personal data of users of orgculture.ru — including the account and online payment for services — of the @orgculture_bot Telegram bot and of the related communication channels (email, Telegram) is processed.</p>
+<p>1.3. This Policy is informational and does not in itself constitute consent. Consent to the processing of personal data is given by a separate action: ticking the box in a form on the site before sending it (brief, review, account sign-up, payment), or pressing the corresponding button in the Telegram bot. Using the site or reading this Policy does not count as consent.</p>
 <h2>2. Purposes of Processing</h2>
-<p>Responding to users, including replies to inquiries and collaboration requests; concluding and performing paid-service agreements (production, promotion, website development, and other services provided by the Controller outside the site, by direct arrangement); improving the site; complying with the requirements of Russian law.</p>
+<p>2.1. Responding to inquiries and collaboration requests (the brief on the site, email, the Telegram bot).</p>
+<p>2.2. Running the account: sign-up and sign-in, saving site materials chosen by the user, showing the order history.</p>
+<p>2.3. Concluding and performing paid-service agreements, including taking payment on the site, issuing a receipt in the “My Tax” app and handling contract-related requests (including refunds).</p>
+<p>2.4. Publishing reviews of texts — with separate consent given in the review form.</p>
+<p>2.5. Visit statistics to improve the site: anonymous visit counting — for all visitors, without cookies, IP addresses or identifiers (only daily totals are stored, which are not personal data; details — clause 2.4 of the Cookie Policy); Yandex Metrica — only with consent given in the cookie banner.</p>
+<p>2.6. Complying with the requirements of Russian law.</p>
 <h2>3. Categories of Data Processed</h2>
-<p>Name; phone number; email address; Telegram ID and username; message content — to the extent voluntarily provided by the user when making contact.</p>
-<p>Anonymized technical data about site visits (cookies, click and on-page activity statistics) is also processed automatically via Yandex Metrica — see the Cookie Policy for details.</p>
+<p>3.1. Inquiries: name, contact details (email, phone number or Telegram username), the content of the brief or message; for the bot — Telegram ID and username.</p>
+<p>3.2. Account: email address, name, password — only as an irreversible hash (the Controller does not know or store the password itself), the list of saved site materials, sign-up and last sign-in dates, records of consents given (date and document version).</p>
+<p>3.3. Orders and payment: email address, name, the service chosen, amount, payment date and status, the YooKassa payment ID and payment method type (no card details), the receipt link; if a sole trader or a company pays — its name and INN. Bank card details are entered on the YooKassa page and are not passed to the Controller.</p>
+<p>3.4. Technical data: the IP address at sign-up, sign-in, payment and form submission — only to limit the number of attempts (protection against password guessing and mass mailing), stored as a hash for no more than one day. Anonymized visit statistics — see the Cookie Policy.</p>
 <h2>4. Legal Grounds for Processing</h2>
-<p>Consent of the data subject; performance of a contract to which the data subject is a party or beneficiary; fulfillment of obligations under Russian law.</p>
+<p>Consent of the data subject; performance of a contract to which the data subject is a party, and concluding a contract at the data subject&#x27;s request; fulfillment of obligations under Russian law (including Federal Law 422-FZ on professional income tax).</p>
 <h2>5. Terms and Conditions of Processing</h2>
-<p>5.1. The Controller takes the necessary organizational and technical measures to protect personal data from unlawful or accidental access, destruction, alteration, blocking, copying, or dissemination.</p>
-<p>5.2. Data is not transferred to third parties, except where expressly required by Russian law, for anonymized statistics processed by Yandex Metrica (Yandex LLC), or with the data subject&#x27;s separate consent. Once the purpose of processing is achieved, or consent is withdrawn, data is destroyed or anonymized.</p>
+<p>5.1. The Controller takes the necessary organizational and technical measures to protect personal data from unlawful or accidental access, destruction, alteration, blocking, copying, or dissemination: transmission only over a secure connection (HTTPS), passwords stored as hashes, the service part of the site protected by a password, a limited number of sign-in attempts.</p>
+<p>5.2. Recording, systematization, accumulation, storage, clarification and retrieval of personal data of Russian citizens collected through the site (account, orders, brief) are carried out using databases located in Russia (Part 5 of Article 18 of 152-FZ) — in the cloud infrastructure of Yandex.Cloud LLC.</p>
+<p>5.3. The following take part in processing: Yandex.Cloud LLC — hosting of the site&#x27;s functions and data storage (on the Controller&#x27;s instructions, servers in Russia); YooMoney NCO LLC (YooKassa) — payment processing: data entered on the payment page is processed by YooKassa as an independent operator under its own rules; the Controller&#x27;s email service — sending emails (sign-in codes, invoices, confirmations, receipts); the Federal Tax Service of Russia (“My Tax” app) — data required for the receipt (422-FZ); Yandex LLC (Yandex Metrica) — anonymized statistics, only with cookie consent; the counter is not installed on the account, payment and order pages.</p>
+<p>5.4. The Telegram bot runs on the Telegram platform: by messaging the bot, the user passes the message to Telegram under Telegram&#x27;s rules. Bot messages and reviews of texts sent through the form on the site are technically processed by Cloudflare, Inc. (USA), which hosts the bot. Notifications to the Controller about orders and inquiries from the site that arrive in Telegram contain only the number, amount and service name — no names, addresses or message content.</p>
+<p>5.5. Retention: the account — until deleted by the user or consent is withdrawn; sign-in codes (valid for 10 minutes), unfinished sign-ups and password reset links (1 hour) — deleted after use or within an hour after they expire; paid order records — 3 years after the end of the year of payment (limitation period, Art. 196 of the Russian Civil Code); unpaid orders — deleted together with the account, and no later than after 1 year; inquiries from the site — until the purpose is achieved, but no more than 1 year from the date of the inquiry. After that the data is destroyed, and the destruction is recorded in a log.</p>
+<p>5.6. Data is not transferred to any other third parties, except where expressly required by Russian law or with the data subject&#x27;s separate consent.</p>
 <h2>6. Rights of Data Subjects</h2>
 <p>6.1. Users are entitled to: receive information regarding the processing of their personal data; request correction, blocking, or deletion of data that is incomplete, outdated, or inaccurate; withdraw consent to processing.</p>
-<p>6.2. Requests should be sent to kostyamoshnikov@gmail.com and must include the requester&#x27;s full name, the email address used when contacting the site or bot, and the substance of the request. The Controller may ask for additional information needed to verify the requester&#x27;s identity.</p>
-<p>6.3. The Controller reviews the request and responds within 10 working days of receipt; this period may be extended by no more than 5 working days if the Controller sends the requester a reasoned notice stating the grounds for the extension (Article 20 of Federal Law No. 152-FZ). If a request does not include the information specified in clause 6.2, the Controller may decline to process it, notifying the requester of the reason.</p>
-<h2>7. Liability</h2>
+<p>6.2. In the account, users can download all data stored about them (the “Download my data” button), change their name and password, and delete the account themselves.</p>
+<p>6.3. Requests should be sent to kostyamoshnikov@gmail.com and must include the requester&#x27;s full name, the email address used when contacting the site or bot, and the substance of the request. The Controller may ask for additional information needed to verify the requester&#x27;s identity.</p>
+<p>6.4. The Controller reviews the request and responds within 10 working days of receipt; this period may be extended by no more than 5 working days if the Controller sends the requester a reasoned notice stating the grounds for the extension (Article 20 of Federal Law No. 152-FZ). When consent is withdrawn, processing stops and the data is destroyed within 30 days unless a contract or the law provides otherwise (Article 21 of 152-FZ).</p>
+<h2>7. Minors</h2>
+<p>The account and payment for services are intended for persons aged 18 and over. The Controller does not knowingly collect personal data of persons under 14; if such data is received, it is destroyed at the request of a legal representative.</p>
+<h2>8. Liability</h2>
 <p>The Controller is liable for violations of personal data processing procedures in accordance with Russian law. Users are responsible for the accuracy of the data they provide.</p>
-<h2>8. Changes to This Policy</h2>
-<p>The Controller may amend this Policy. The new version takes effect once published on the site.</p>
+<h2>9. Changes to This Policy</h2>
+<p>The Controller may amend this Policy. The new version takes effect once published on the site; previous versions are kept by the Controller and provided on request.</p>
 
       <div class="doc-requisites">
         Konstantin Alekseevich Moshnikov<br>
@@ -179,7 +203,7 @@
     </div>
     <nav class="foot-cols" aria-label="Site sections">
       <div class="foot-col"><div class="foot-h">Read</div><a href="../../en/texts/">Texts</a><a href="../../en/recommendations/">Recommendations</a><a href="../../en/manifesto/">Manifesto</a></div>
-      <div class="foot-col"><div class="foot-h">Work</div><a href="../../en/production/">Production</a><a href="../../en/projects/">Projects</a><a href="../../en/faq/">FAQ</a><a href="../../en/contacts/">Contacts</a></div>
+      <div class="foot-col"><div class="foot-h">Work</div><a href="../../en/production/">Production</a><a href="../../en/projects/">Projects</a><a href="../../en/pay/">Payment</a><a href="../../en/faq/">FAQ</a><a href="../../en/contacts/">Contacts</a></div>
       <div class="foot-col"><div class="foot-h">Author</div><a href="../../en/about/">About</a><a href="../../en/press/">Press</a><a href="../../en/mentions/">Mentions</a></div>
     </nav>
   </div>
@@ -190,8 +214,10 @@
     </div>
     <div class="foot-legal">
       <a href="../../en/privacy/">Privacy Policy</a>
+      <a href="../../en/consent/">Consents</a>
       <a href="../../en/cookies/">Cookies</a>
       <a href="../../en/bot-rules/">Bot Usage Rules</a>
+      <a href="../../en/offer/">Public offer</a>
       <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Cookie settings</a>
     </div>
   </div>
@@ -259,7 +285,7 @@ function okForgetBrief(){
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Decline</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Accept</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Accept</button>
   </div>
 </div>
 <script>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payment for services — Organized Culturality</title>
+<meta name="description" content="Payment for services: websites, bots, auto-posting, analytics, management and promotion — at the base price, by card or SBP.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../assets/icons/favicon-180.png">
+<link rel="icon" href="../../assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="alternate" type="application/rss+xml" title="Organized Culturality — Texts" href="https://orgculture.ru/en/feed.xml">
+<link rel="canonical" href="https://orgculture.ru/en/pay/">
+<link rel="alternate" hreflang="ru" href="https://orgculture.ru/pay/">
+<link rel="alternate" hreflang="en" href="https://orgculture.ru/en/pay/">
+<link rel="alternate" hreflang="x-default" href="https://orgculture.ru/pay/">
+<meta property="og:title" content="Payment for services — Organized Culturality">
+<meta property="og:description" content="Payment for services: websites, bots, auto-posting, analytics, management and promotion — at the base price, by card or SBP.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://orgculture.ru/en/pay/">
+<meta property="og:site_name" content="Organized Culturality">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="../../assets/fonts.css?v=72">
+<link rel="stylesheet" href="../../assets/style.css?v=72">
+<link rel="manifest" href="../../en/manifest.json">
+<script>window.OK_ACCOUNT={"api": "", "lang": "en", "root": "../../"};</script>
+<script src="../../assets/account.js?v=72" defer></script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
+  <div class="headbar">
+    <a href="../../en/" class="brandmark" aria-label="Organized Culturality — home">
+      <svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="364" cy="540" rx="200" ry="110"/>
+  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
+</svg>
+    </a>
+    <nav class="mainnav">
+      <a href="../../en/manifesto/">Manifesto</a>
+      <a href="../../en/texts/">Texts</a>
+      <a href="../../en/projects/">Projects</a>
+      <a href="../../en/recommendations/">Recommendations</a>
+      <a href="../../en/about/">Author</a>
+      <a href="../../en/contacts/">Contacts</a>
+      <a href="../../pay/" class="lang-switch" aria-label="Switch to Russian">RU</a>
+      <a href="../../en/account/" class="acct-link" aria-label="Account" title="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6"/></svg></a>
+    </nav>
+    <label for="nav-toggle" class="burger" aria-label="Open menu" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
+      <span></span><span></span><span></span>
+    </label>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav-panel">
+    <a href="../../en/manifesto/">Manifesto</a>
+      <a href="../../en/texts/">Texts</a>
+      <a href="../../en/projects/">Projects</a>
+      <a href="../../en/recommendations/">Recommendations</a>
+      <a href="../../en/about/">Author</a>
+      <a href="../../en/contacts/">Contacts</a>
+    <a href="../../en/account/" class="acct-mobile">Account</a>
+    <a href="../../pay/" class="lang-switch" aria-label="Switch to Russian">RU</a>
+  </nav>
+</header>
+<div id="main"></div>
+<script>
+  (function(){
+    var cb = document.getElementById('nav-toggle');
+    var btn = document.querySelector('.burger');
+    if (cb && btn) {
+      cb.addEventListener('change', function(){
+        btn.setAttribute('aria-expanded', cb.checked ? 'true' : 'false');
+      });
+    }
+  })();
+</script>
+
+<section style="padding-top:56px;" data-ok-page="pay">
+  <div class="wrap">
+    <div class="eyebrow">Payment for services</div>
+    <h1 class="ok-h1">Payment for services</h1>
+    <p class="ok-lede">Services from the commercial offer can be paid for here at the base price. If the job is bigger than the base package, we agree on the scope and I send an invoice for the agreed amount — by email and in your account.</p>
+    <noscript><p class="ok-note">Payment needs JavaScript. Without it, write by email or Telegram and I will send a link.</p></noscript>
+    <p class="ok-note" id="ok-offline" hidden></p>
+    <div class="ok-services">
+      <article class="ok-service" id="svc-site" data-service="site">
+        <h2 class="ok-service-h">Website development — base package</h2>
+        <p class="ok-service-desc">A landing-style site built from your materials: about, services, gallery, booking, dedicated pages for key formats. Includes the full set of documents for the site and bot.</p>
+        <div class="ok-service-foot">
+          <span class="ok-price">₽30,000</span>
+          <button type="button" class="btn-line ok-pay-btn" data-pay="site" data-price="30000" aria-controls="checkout" hidden>Pay</button>
+        </div>
+      </article>
+      <article class="ok-service" id="svc-bots" data-service="bots">
+        <h2 class="ok-service-h">Bot (Telegram or VK) — base package</h2>
+        <p class="ok-service-desc">Requests and reviews in one place — instead of scattered messages in DMs.</p>
+        <div class="ok-service-foot">
+          <span class="ok-price">₽10,000</span>
+          <button type="button" class="btn-line ok-pay-btn" data-pay="bots" data-price="10000" aria-controls="checkout" hidden>Pay</button>
+        </div>
+      </article>
+      <article class="ok-service" id="svc-autopost" data-service="autopost">
+        <h2 class="ok-service-h">Auto-posting via a Telegram bot — base package</h2>
+        <p class="ok-service-desc">Your own scheduled publishing — no manual posting to each network separately.</p>
+        <div class="ok-service-foot">
+          <span class="ok-price">₽10,000</span>
+          <button type="button" class="btn-line ok-pay-btn" data-pay="autopost" data-price="10000" aria-controls="checkout" hidden>Pay</button>
+        </div>
+      </article>
+      <article class="ok-service" id="svc-analytics" data-service="analytics">
+        <h2 class="ok-service-h">Custom analytics system — base package</h2>
+        <p class="ok-service-desc">Your own statistics in the site admin + Yandex Metrika and VK Pixel.</p>
+        <div class="ok-service-foot">
+          <span class="ok-price">₽5,000</span>
+          <button type="button" class="btn-line ok-pay-btn" data-pay="analytics" data-price="5000" aria-controls="checkout" hidden>Pay</button>
+        </div>
+      </article>
+      <article class="ok-service" id="svc-smm" data-service="smm">
+        <h2 class="ok-service-h">Management &amp; promotion — 1 month</h2>
+        <p class="ok-service-desc">Publishing, content, ad accounts — by an agreed plan. Paid one month ahead, no automatic charges.</p>
+        <div class="ok-service-foot">
+          <span class="ok-price">₽30,000 <span class="ok-unit">per month</span></span>
+          <button type="button" class="btn-line ok-pay-btn" data-pay="smm" data-price="30000" aria-controls="checkout" hidden>Pay</button>
+        </div>
+      </article>
+      
+    </div>
+
+    <form class="brief-form ok-checkout" id="checkout" hidden novalidate aria-labelledby="checkout-h">
+      <h2 class="ok-h2" id="checkout-h"></h2>
+      <p class="ok-note" id="checkout-who"></p>
+      <fieldset class="ok-fieldset" id="co-payer">
+      <legend>Who is paying</legend>
+      <label class="ok-radio"><input class="ym-disable-keys" type="radio" name="co-payer-type" value="person" checked> Individual</label>
+      <label class="ok-radio"><input class="ym-disable-keys" type="radio" name="co-payer-type" value="business"> Sole trader or company</label>
+      <div class="ok-business" id="co-business" hidden>
+        <div class="brief-grid">
+          <div class="brief-field full">
+          <label for="co-company">Name of the sole trader or company <span class="req-mark">*</span></label>
+          <input class="ym-disable-keys" type="text" id="co-company" autocomplete="organization">
+          
+        </div>
+          <div class="brief-field full">
+          <label for="co-inn">INN (taxpayer number) <span class="req-mark">*</span></label>
+          <input class="ym-disable-keys" type="text" id="co-inn" aria-describedby="co-inn-hint" inputmode="numeric" maxlength="14">
+          <span class="field-hint" id="co-inn-hint">The INN is needed for the receipt: a self-employed person must state the buyer’s INN when a company or sole trader pays.</span>
+        </div>
+        </div>
+      </div>
+    </fieldset>
+      <label class="review-form-consent" for="co-offer">
+        <input class="ym-disable-keys" type="checkbox" id="co-offer">
+        <span>I accept the terms of the <a href="../../en/offer/" target="_blank" rel="noopener">public offer</a></span>
+      </label>
+      <label class="review-form-consent" for="co-pd">
+        <input class="ym-disable-keys" type="checkbox" id="co-pd">
+        <span>I consent to the <a href="../../en/consent/#obrabotka" target="_blank" rel="noopener">processing of the data provided</a> to perform the contract, under the <a href="../../en/privacy/" target="_blank" rel="noopener">Privacy Policy</a></span>
+      </label>
+      <button type="submit" class="btn-line" id="co-submit">Proceed to payment</button>
+      <p class="review-form-status ok-status" id="co-status" role="status" aria-live="polite"></p>
+    </form>
+
+    <div class="ok-block">
+      <h2 class="ok-h2">How it works</h2>
+      <ol class="ok-steps"><li>Choose a service and press “Pay”. You need to sign in: the order, its status and the receipt are kept in your account.</li><li>Pay by card or SBP on the YooKassa page. Card details do not pass through this site.</li><li>After payment you get a confirmation email, then a receipt from the “My Tax” service (I am self-employed; no VAT).</li><li>I will get in touch within two business days to agree on the brief. Terms are in the offer.</li></ol>
+      <p class="ok-note">Need a different scope or several services at once? <a href="../../en/contacts/">Write to me — I will send an invoice →</a></p>
+      <p class="ok-note">Documents: <a href="../../en/offer/">public offer</a> · <a href="../../en/privacy/">privacy policy</a>. Companies can get a contract, an act and an invoice on request.</p>
+      <p style="margin-top:18px;"><a class="btn-line btn-line-ghost" href="../../documents/orgculture-services-and-prices.pdf" download>Full offer (PDF) →</a></p>
+      <p class="ok-req">Konstantin Moshnikov · self-employed (NPD) · INN 471508674254 · St. Petersburg</p>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="wrap-wide foot-top">
+    <div class="foot-brand">
+      <a class="foot-mark" href="../../en/" aria-label="Organized Culturality — home"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="364" cy="540" rx="200" ry="110"/>
+  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
+</svg></a>
+      <div class="foot-tag">#OrganizedCulturality</div>
+      <div class="foot-slogan">* Without aggression, but with expression</div>
+      <div class="foot-social">
+        <a href="https://t.me/orgculture" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://vk.ru/orgculture" target="_blank" rel="noopener">VK</a>
+        <a href="https://t.me/orgculture_bot" target="_blank" rel="noopener">Bot</a>
+      </div>
+    </div>
+    <nav class="foot-cols" aria-label="Site sections">
+      <div class="foot-col"><div class="foot-h">Read</div><a href="../../en/texts/">Texts</a><a href="../../en/recommendations/">Recommendations</a><a href="../../en/manifesto/">Manifesto</a></div>
+      <div class="foot-col"><div class="foot-h">Work</div><a href="../../en/production/">Production</a><a href="../../en/projects/">Projects</a><a href="../../en/pay/">Payment</a><a href="../../en/faq/">FAQ</a><a href="../../en/contacts/">Contacts</a></div>
+      <div class="foot-col"><div class="foot-h">Author</div><a href="../../en/about/">About</a><a href="../../en/press/">Press</a><a href="../../en/mentions/">Mentions</a></div>
+    </nav>
+  </div>
+  <div class="wrap-wide foot-bottom">
+    <div class="foot-req">
+      <a href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
+      <span>Konstantin Moshnikov · self-employed (NPD) · INN 471508674254 · St. Petersburg</span>
+    </div>
+    <div class="foot-legal">
+      <a href="../../en/privacy/">Privacy Policy</a>
+      <a href="../../en/consent/">Consents</a>
+      <a href="../../en/cookies/">Cookies</a>
+      <a href="../../en/bot-rules/">Bot Usage Rules</a>
+      <a href="../../en/offer/">Public offer</a>
+      <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Cookie settings</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Отзыв согласия на cookie стирает и то, что форма брифа запомнила
+   (имя и контакт). Функция живёт на каждой странице, а не только на
+   /contacts/: отозвать согласие можно из подвала любой страницы, и
+   если чистить только там, где стоит форма, данные пережили бы отзыв
+   согласия — ровно то, что наша же политика запрещает. */
+function okForgetBrief(){
+  try { localStorage.removeItem('ok_brief_name'); localStorage.removeItem('ok_brief_contact'); }
+  catch (e) {}
+}
+</script>
+<div class="tg-widget" id="tg-widget">
+  <div class="tg-bubble" id="tg-bubble">Message us — the bot replies fast</div>
+  <a class="tg-btn" href="https://t.me/orgculture_bot" target="_blank" rel="noopener" aria-label="Message on Telegram">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.093 13.68l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.88h.219z"/></svg>
+    Message the bot
+  </a>
+</div>
+<script>
+  (function(){
+    var widget = document.getElementById('tg-widget');
+    var bubble = document.getElementById('tg-bubble');
+    function update(){
+      if (window.scrollY > 400 && !footerVisible) {
+        if (!widget.classList.contains('visible')) {
+          widget.classList.add('visible');
+          if (!bubble.dataset.shown) {
+            bubble.dataset.shown = '1';
+            setTimeout(function(){
+              bubble.classList.add('visible');
+              setTimeout(function(){ bubble.classList.remove('visible'); }, 4000);
+            }, 800);
+          }
+        }
+      } else {
+        widget.classList.remove('visible');
+      }
+    }
+    // Над футером кнопка не нужна: в футере есть ссылка «Бот», а на
+    // телефоне кнопка закрывала юр. ссылки (v62).
+    var footerEl = document.querySelector('footer');
+    var footerVisible = false;
+    if (footerEl && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function(entries){
+        footerVisible = entries[0].isIntersecting;
+        update();
+      }).observe(footerEl);
+    }
+    window.addEventListener('scroll', update);
+    update();
+  })();
+</script>
+<div id="cookie-banner">
+  <div class="cb-mark"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="364" cy="540" rx="200" ry="110"/>
+  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
+</svg></div>
+  <div class="cb-text">
+    <p>This site uses cookies for visit statistics. Details — <a href="../../en/cookies/">in the cookie policy</a>.</p>
+  </div>
+  <div class="cb-buttons">
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Decline</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Accept</button>
+  </div>
+</div>
+<script>
+  if (!localStorage.getItem('ok_cookie_consent')) {
+    document.getElementById('cookie-banner').classList.add('show');
+  }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('../../sw.js').catch(function(e) {
+        console.error('SW registration failed:', e);
+      });
+    });
+  }
+</script>
+</body>
+</html>

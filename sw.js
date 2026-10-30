@@ -5,7 +5,7 @@
 // ⚠️ Этот файл пересобирается в gen_en.py (после gen.py) — не правьте версию
 // в gen.py изолированно: список PRECACHE_URLS здесь включает оба языка.
 
-const SITE_VERSION = 68;
+const SITE_VERSION = 72;
 const CACHE_NAME = `orgculture-v${SITE_VERSION}`;
 const STATIC_CACHE = `orgculture-static-v${SITE_VERSION}`;
 
@@ -35,8 +35,8 @@ const PRECACHE_URLS = [
   '/assets/icons/favicon.svg',
   '/assets/icons/favicon-192.png',
   '/assets/icons/favicon-512.png',
-  '/assets/style.css?v=68',
-  '/assets/fonts.css?v=68',
+  '/assets/style.css?v=72',
+  '/assets/fonts.css?v=72',
   '/assets/fonts/unbounded-cyrillic-300-normal.woff2',
   '/assets/fonts/unbounded-cyrillic-500-normal.woff2',
   '/assets/fonts/manrope-cyrillic-300-normal.woff2',

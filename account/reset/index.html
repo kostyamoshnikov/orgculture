@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Новый пароль — Организованная Культурность</title>
+<meta name="description" content="Новый пароль">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="robots" content="noindex, follow">
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../assets/icons/favicon-180.png">
+<link rel="icon" href="../../assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="alternate" type="application/rss+xml" title="Организованная Культурность — Тексты" href="https://orgculture.ru/feed.xml">
+<link rel="canonical" href="https://orgculture.ru/account/reset/">
+<link rel="alternate" hreflang="ru" href="https://orgculture.ru/account/reset/">
+<link rel="alternate" hreflang="en" href="https://orgculture.ru/en/account/reset/">
+<link rel="alternate" hreflang="x-default" href="https://orgculture.ru/account/reset/">
+<meta property="og:title" content="Новый пароль — Организованная Культурность">
+<meta property="og:description" content="Новый пароль">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://orgculture.ru/account/reset/">
+<meta property="og:site_name" content="Организованная Культурность">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="../../assets/fonts.css?v=72">
+<link rel="stylesheet" href="../../assets/style.css?v=72">
+<link rel="manifest" href="../../manifest.json">
+<script>window.OK_ACCOUNT={"api": "", "lang": "ru", "root": "../../"};</script>
+<script src="../../assets/account.js?v=72" defer></script>
+</head>
+<body>
+<a href="#main" class="skip-link">Перейти к содержимому</a>
+
+<header>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
+  <div class="headbar">
+    <a href="../../" class="brandmark" aria-label="Организованная Культурность — на главную">
+      <svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="364" cy="540" rx="200" ry="110"/>
+  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
+</svg>
+    </a>
+    <nav class="mainnav">
+      <a href="../../manifesto/">Манифест</a>
+      <a href="../../texts/">Тексты</a>
+      <a href="../../projects/">Проекты</a>
+      <a href="../../recommendations/">Рекомендации</a>
+      <a href="../../about/">Автор</a>
+      <a href="../../contacts/">Контакты</a>
+      <a href="../../en/account/reset/" class="lang-switch" aria-label="Switch to English">EN</a>
+      <a href="../../account/" class="acct-link" aria-label="Личный кабинет" title="Личный кабинет"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6"/></svg></a>
+    </nav>
+    <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
+      <span></span><span></span><span></span>
+    </label>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav-panel">
+    <a href="../../manifesto/">Манифест</a>
+      <a href="../../texts/">Тексты</a>
+      <a href="../../projects/">Проекты</a>
+      <a href="../../recommendations/">Рекомендации</a>
+      <a href="../../about/">Автор</a>
+      <a href="../../contacts/">Контакты</a>
+    <a href="../../account/" class="acct-mobile">Личный кабинет</a>
+    <a href="../../en/account/reset/" class="lang-switch" aria-label="Switch to English">EN</a>
+  </nav>
+</header>
+<div id="main"></div>
+<script>
+  (function(){
+    var cb = document.getElementById('nav-toggle');
+    var btn = document.querySelector('.burger');
+    if (cb && btn) {
+      cb.addEventListener('change', function(){
+        btn.setAttribute('aria-expanded', cb.checked ? 'true' : 'false');
+      });
+    }
+  })();
+</script>
+
+<section style="padding-top:56px;" data-ok-page="account-reset">
+  <div class="wrap">
+    <div class="eyebrow">Личный кабинет</div>
+    <h1 class="ok-h1">Новый пароль</h1>
+    <noscript><p class="ok-note">Кабинет работает с включённым JavaScript. Без него можно написать на почту или в Telegram — ссылки в подвале.</p></noscript>
+    <form class="brief-form" id="reset-form" novalidate>
+      <div class="brief-field full">
+          <label for="rs-password">Новый пароль</label>
+          <input class="ym-disable-keys" type="password" id="rs-password" autocomplete="new-password" aria-describedby="rs-password-hint" minlength="8" required>
+          <span class="field-hint" id="rs-password-hint">Не меньше 8 знаков. Можно фразу из нескольких слов.</span>
+        </div>
+      <div class="brief-field full">
+          <label for="rs-password2">Пароль ещё раз</label>
+          <input class="ym-disable-keys" type="password" id="rs-password2" autocomplete="new-password" minlength="8" required>
+          
+        </div>
+      <button type="submit" class="btn-line">Сохранить пароль</button>
+      <p class="review-form-status ok-status" id="rs-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+<footer>
+  <div class="wrap-wide foot-top">
+    <div class="foot-brand">
+      <a class="foot-mark" href="../../" aria-label="Организованная Культурность — на главную"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="364" cy="540" rx="200" ry="110"/>
+  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
+</svg></a>
+      <div class="foot-tag">#ОрганизованнаяКультурность</div>
+      <div class="foot-slogan">* Без агрессии, но с экспрессией</div>
+      <div class="foot-social">
+        <a href="https://t.me/orgculture" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://vk.ru/orgculture" target="_blank" rel="noopener">VK</a>
+        <a href="https://t.me/orgculture_bot" target="_blank" rel="noopener">Бот</a>
+      </div>
+    </div>
+    <nav class="foot-cols" aria-label="Разделы сайта">
+      <div class="foot-col"><div class="foot-h">Читать</div><a href="../../texts/">Тексты</a><a href="../../recommendations/">Рекомендации</a><a href="../../manifesto/">Манифест</a></div>
+      <div class="foot-col"><div class="foot-h">Работа</div><a href="../../production/">Продюсирование</a><a href="../../projects/">Проекты</a><a href="../../pay/">Оплата услуг</a><a href="../../faq/">Частые вопросы</a><a href="../../contacts/">Контакты</a></div>
+      <div class="foot-col"><div class="foot-h">Автор</div><a href="../../about/">Об авторе</a><a href="../../press/">Для прессы</a><a href="../../mentions/">Упоминания</a></div>
+    </nav>
+  </div>
+  <div class="wrap-wide foot-bottom">
+    <div class="foot-req">
+      <a href="mailto:kostyamoshnikov@gmail.com">kostyamoshnikov@gmail.com</a>
+      <span>Мошников Константин Алексеевич · самозанятый (НПД) · ИНН 471508674254 · Санкт-Петербург</span>
+    </div>
+    <div class="foot-legal">
+      <a href="../../privacy/">Политика конфиденциальности</a>
+      <a href="../../consent/">Согласия</a>
+      <a href="../../cookies/">Cookie</a>
+      <a href="../../bot-rules/">Правила использования бота</a>
+      <a href="../../offer/">Оферта</a>
+      <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Настройки cookie</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Отзыв согласия на cookie стирает и то, что форма брифа запомнила
+   (имя и контакт). Функция живёт на каждой странице, а не только на
+   /contacts/: отозвать согласие можно из подвала любой страницы, и
+   если чистить только там, где стоит форма, данные пережили бы отзыв
+   согласия — ровно то, что наша же политика запрещает. */
+function okForgetBrief(){
+  try { localStorage.removeItem('ok_brief_name'); localStorage.removeItem('ok_brief_contact'); }
+  catch (e) {}
+}
+</script>
+<div class="tg-widget" id="tg-widget">
+  <div class="tg-bubble" id="tg-bubble">Напишите нам — бот ответит быстро</div>
+  <a class="tg-btn" href="https://t.me/orgculture_bot" target="_blank" rel="noopener" aria-label="Написать в Telegram">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.093 13.68l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.88h.219z"/></svg>
+    Написать боту
+  </a>
+</div>
+<script>
+  (function(){
+    var widget = document.getElementById('tg-widget');
+    var bubble = document.getElementById('tg-bubble');
+    function update(){
+      if (window.scrollY > 400 && !footerVisible) {
+        if (!widget.classList.contains('visible')) {
+          widget.classList.add('visible');
+          if (!bubble.dataset.shown) {
+            bubble.dataset.shown = '1';
+            setTimeout(function(){
+              bubble.classList.add('visible');
+              setTimeout(function(){ bubble.classList.remove('visible'); }, 4000);
+            }, 800);
+          }
+        }
+      } else {
+        widget.classList.remove('visible');
+      }
+    }
+    // Над футером кнопка не нужна: в футере есть ссылка «Бот», а на
+    // телефоне кнопка закрывала юр. ссылки (v62).
+    var footerEl = document.querySelector('footer');
+    var footerVisible = false;
+    if (footerEl && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function(entries){
+        footerVisible = entries[0].isIntersecting;
+        update();
+      }).observe(footerEl);
+    }
+    window.addEventListener('scroll', update);
+    update();
+  })();
+</script>
+<div id="cookie-banner">
+  <div class="cb-mark"><svg viewBox="140 240 800 600" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="364" cy="540" rx="200" ry="110"/>
+  <path d="M 764 264 L 764 816 M 764 540 L 916 264 M 764 540 L 916 816"/>
+</svg></div>
+  <div class="cb-text">
+    <p>Сайт использует файлы cookie для статистики посещений. Подробнее — <a href="../../cookies/">в соглашении об использовании cookie</a>.</p>
+  </div>
+  <div class="cb-buttons">
+    <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Отклонить</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
+  </div>
+</div>
+<script>
+  if (!localStorage.getItem('ok_cookie_consent')) {
+    document.getElementById('cookie-banner').classList.add('show');
+  }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('../../sw.js').catch(function(e) {
+        console.error('SW registration failed:', e);
+      });
+    });
+  }
+</script>
+</body>
+</html>

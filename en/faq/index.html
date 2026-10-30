@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FAQ — Organized Culturality</title>
-<meta name="description" content="How working with Konstantin Moshnikov is set up: services, prices, timelines, contract and payment, ownership of the site and code.">
+<meta name="description" content="How working with Konstantin Moshnikov is set up: services and prices, timelines, contract and payment, ownership of the site and code.">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -16,15 +16,15 @@
 <link rel="alternate" hreflang="en" href="https://orgculture.ru/en/faq/">
 <link rel="alternate" hreflang="x-default" href="https://orgculture.ru/faq/">
 <meta property="og:title" content="FAQ — Organized Culturality">
-<meta property="og:description" content="How working with Konstantin Moshnikov is set up: services, prices, timelines, contract and payment, ownership of the site and code.">
+<meta property="og:description" content="How working with Konstantin Moshnikov is set up: services and prices, timelines, contract and payment, ownership of the site and code.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://orgculture.ru/en/faq/">
 <meta property="og:site_name" content="Organized Culturality">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../../assets/fonts.css?v=68">
-<link rel="stylesheet" href="../../assets/style.css?v=68">
+<link rel="stylesheet" href="../../assets/fonts.css?v=72">
+<link rel="stylesheet" href="../../assets/style.css?v=72">
 <link rel="manifest" href="../../en/manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -44,37 +44,45 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
-<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
-<script type="text/javascript">
-  window.__loadOwnStats = function() {
-    if (window.__statsLoaded) return;
-    window.__statsLoaded = true;
-    try {
-      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
-      var qs = new URLSearchParams(location.search);
-      var payload = JSON.stringify({
-        path: location.pathname,
-        lang: isEn ? 'en' : 'ru',
-        ref: document.referrer || '',
-        utm_source: qs.get('utm_source') || '',
-        utm_medium: qs.get('utm_medium') || '',
-        utm_campaign: qs.get('utm_campaign') || '',
-        utm_content: qs.get('utm_content') || ''
-      });
-      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
-    } catch (e) {}
+<!-- Own stats: обезличенный счётчик, без cookie и согласия (см. own_stats_snippet в gen.py) -->
+<script>
+(function () {
+  var API = "";
+  if (!API || !navigator.sendBeacon) return;
+  window.okStats = function (data) {
+    try { navigator.sendBeacon(API + '?r=stats.hit', new Blob([JSON.stringify(data)], { type: 'text/plain' })); } catch (e) {}
   };
-  if (localStorage.getItem('ok_cookie_consent') === '1') {
-    window.__loadOwnStats();
-  }
+  try {
+    var now = Date.now(), last = 0;
+    try { last = parseInt(localStorage.getItem('ok_seen'), 10) || 0; localStorage.setItem('ok_seen', String(now)); } catch (e) { last = -1; }
+    var ref = '';
+    try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+    var inside = ref === location.hostname;
+    var known = last > 0, a = new Date(now), b = new Date(known ? last : 0);
+    var visit = known ? now - last > 30 * 60 * 1000 : (last === 0 || !inside);
+    var mon = function (d) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x.getTime(); };
+    var q = new URLSearchParams(location.search), vw = window.innerWidth || 0;
+    window.okStats({
+      p: location.pathname, r: inside ? '' : ref,
+      s: q.get('utm_source') || '', m: q.get('utm_medium') || '', c: q.get('utm_campaign') || '',
+      d: vw < 768 ? 'm' : vw < 1100 ? 't' : 'd',
+      v: visit ? 1 : 0,
+      n: known ? +(a.toDateString() !== b.toDateString()) : +visit,
+      w: known ? +(mon(a) !== mon(b)) : +visit,
+      mo: known ? +(a.getFullYear() !== b.getFullYear() || a.getMonth() !== b.getMonth()) : +visit
+    });
+  } catch (e) {}
+})();
 </script>
-<!-- /Own stats beacon -->
-<script src="../../assets/analytics-events.js?v=68" defer></script>
+<!-- /Own stats -->
+<script src="../../assets/analytics-events.js?v=72" defer></script>
+<script>window.OK_ACCOUNT={"api": "", "lang": "en", "root": "../../"};</script>
+<script src="../../assets/account.js?v=72" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
 
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": "en", "mainEntity": [{"@type": "Question", "name": "What exactly do you do?", "acceptedAnswer": {"@type": "Answer", "text": "Production, promotion and websites for theatre and arts projects. A website built from your materials, together with the documents the site and bot need: privacy policy, cookie policy, bot rules, public offer. Telegram and VK bots, so requests and reviews arrive in one place instead of scattered messages. Scheduled autoposting and your own analytics alongside Yandex Metrica. Monthly management and promotion: posts, content and ad accounts, following an agreed plan. More on the Production page"}}, {"@type": "Question", "name": "How much does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "Current prices and terms are in the commercial offer, valid through the end of December 2026. The final scope, price and timeline are fixed in the contract and statement of work after the brief. Separately from the fee: the services a project cannot run without, such as a domain, subscriptions and, for promotion, an ad budget. Each is agreed before payment. Download the offer (PDF)"}}, {"@type": "Question", "name": "How long does a website take?", "acceptedAnswer": {"@type": "Answer", "text": "Up to a month, by agreement and depending on how complex the brief is. Brief: what to show first, which materials already exist, budget and timeline. Structure and a first draft: one section is agreed as a sample. Build to the agreed structure, with interim reviews. Launch and handover: a working site, source files and a maintenance guide."}}, {"@type": "Question", "name": "Where do we start?", "acceptedAnswer": {"@type": "Answer", "text": "With the brief, on the Contacts page or in a chat with the Telegram bot. Only two fields are required: how to reach you and what the task is. Timeline, budget and who you are are optional: a project that is still at the idea stage, with no budget yet, is worth sending too. Fill in the brief"}}, {"@type": "Question", "name": "How are the paperwork and payment handled?", "acceptedAnswer": {"@type": "Answer", "text": "A contract with a statement of work for each order, an acceptance act per stage or month, and a self-employed tax receipt. I am self-employed under the professional income tax regime (NPD) and pay the tax myself: the client withholds no personal income tax and pays no social contributions. One-off services: 50% upfront and 50% on completion; monthly management: 50% at the start of the month and 50% at the end. Revisions are accepted within 14 days of presenting the result; after that, by separate arrangement."}}, {"@type": "Question", "name": "Do you work with private individuals and with state institutions?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The contract is built for the type of client: a private individual, a self-employed person, a sole trader, a company or a state (municipal) institution. With an institution, usually on its own contract form, with no advance payment and payment after acceptance. With a private individual, in line with consumer protection law."}}, {"@type": "Question", "name": "Who owns the website and the code?", "acceptedAnswer": {"@type": "Answer", "text": "You do: the rights to the code and design pass to the client on full payment. I keep the right to show the finished work in my portfolio and case studies. The project's working accounts (Google, Yandex, GitHub, the domain registrar, Bitwarden) are created for the project, and you hold the access."}}, {"@type": "Question", "name": "Do you only work in St. Petersburg?", "acceptedAnswer": {"@type": "Answer", "text": "I live and work in St. Petersburg, but my projects are not limited to it. For example, the Tochka Cuire festival in Stary Oskol, and Moscow venues for Robot Kostya. For ongoing work, at least one in-person meeting a month; for a one-off service, an in-person meeting about it. Every project gets a working Telegram chat."}}, {"@type": "Question", "name": "When are you available?", "acceptedAnswer": {"@type": "Answer", "text": "Working hours are flexible and agreed with the client; Saturday and Sunday are days off."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": "en", "mainEntity": [{"@type": "Question", "name": "What exactly do you do?", "acceptedAnswer": {"@type": "Answer", "text": "Production, promotion and websites for theatre and art projects. Production: from concept to opening night — budget, venue, team, logistics, deadlines. Promotion: monthly social media management — posts, content and ad accounts, following an agreed plan. A website for the project, together with the documents the site and bot need (privacy policy, cookie policy, bot rules, public offer); Telegram and VK bots, autoposting and your own analytics alongside Yandex Metrica. More on the Production page"}}, {"@type": "Question", "name": "How much does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "Base prices are below; the offer that lists them is valid until the end of December 2026. Website development — from ₽30,000. Bots (Telegram and VK) — from ₽10,000. Auto-posting via a Telegram bot — from ₽10,000. Building a custom analytics system — from ₽5,000. Ongoing management & promotion — from ₽30,000 a month. Production: by agreement, depending on the project. The exact scope, price and timeline are set after the brief. Services such as a domain, subscriptions and an ad budget are paid separately, each agreed in advance. Download the offer (PDF)"}}, {"@type": "Question", "name": "How long does a website take?", "acceptedAnswer": {"@type": "Answer", "text": "Up to a month, depending on the brief and on how quickly the materials arrive. Brief: what to show first, which materials already exist, budget and timeline. Structure and a first draft: one section is agreed as a sample. Build to the agreed structure, with interim reviews. Launch and handover: a working site, source files and a maintenance guide."}}, {"@type": "Question", "name": "Where do we start?", "acceptedAnswer": {"@type": "Answer", "text": "With the brief on the Contacts page: only two fields are required — how to reach you and what the task is. A project that is still at the idea stage, with no budget yet, is worth sending too. Prefer Telegram? Message the bot, and it will pass your message on to me. Fill in the brief"}}, {"@type": "Question", "name": "How is the work formalised?", "acceptedAnswer": {"@type": "Answer", "text": "A contract with a statement of work, acceptance acts per stage or month, and a self-employed tax receipt. I am self-employed under the professional income tax regime (NPD) and pay the tax myself: the client withholds no personal income tax and pays no social contributions. Under a contract: one-off services are paid 50% upfront and 50% on completion; monthly management 50% at the start of the month and 50% at the end. Revisions are accepted within 14 days of presenting the result; after that, by separate arrangement."}}, {"@type": "Question", "name": "Do you work with private individuals and with state institutions?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The contract is built for the type of client: a private individual, a self-employed person, a sole trader, a company, or a state or municipal institution. With an institution, usually on its own contract form, with no advance payment and payment after acceptance. With a private individual, in line with consumer protection law."}}, {"@type": "Question", "name": "Who owns the website and the code?", "acceptedAnswer": {"@type": "Answer", "text": "You do: the rights to the code and design pass to the client once paid in full. I keep the right to show the work in my portfolio and case studies. The project's accounts (Google, Yandex, GitHub, the domain registrar, the Bitwarden password manager) are created for the project, and you hold the access."}}, {"@type": "Question", "name": "Do you only work in St. Petersburg?", "acceptedAnswer": {"@type": "Answer", "text": "I live in St. Petersburg, but the projects are not only here. For example, the Tochka Cuire festival in Stary Oskol and Moscow venues for Robot Kostya. For ongoing work, at least one in-person meeting a month; for a one-off service, a meeting about it."}}, {"@type": "Question", "name": "When are you available?", "acceptedAnswer": {"@type": "Answer", "text": "Flexible hours, agreed with the client; Saturdays and Sundays are days off. Every project gets a working Telegram chat."}}]}</script>
 <header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
   <div class="headbar">
@@ -92,6 +100,7 @@
       <a href="../../en/about/">Author</a>
       <a href="../../en/contacts/">Contacts</a>
       <a href="../../faq/" class="lang-switch" aria-label="Switch to Russian">RU</a>
+      <a href="../../en/account/" class="acct-link" aria-label="Account" title="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6"/></svg></a>
     </nav>
     <label for="nav-toggle" class="burger" aria-label="Open menu" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
@@ -104,6 +113,7 @@
       <a href="../../en/recommendations/">Recommendations</a>
       <a href="../../en/about/">Author</a>
       <a href="../../en/contacts/">Contacts</a>
+    <a href="../../en/account/" class="acct-mobile">Account</a>
     <a href="../../faq/" class="lang-switch" aria-label="Switch to Russian">RU</a>
   </nav>
 </header>
@@ -121,19 +131,31 @@
 </script>
 
 <style>
+  .faq-toc{margin:28px 0 0;padding:18px 0 10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .faq-toc-h{font-size:0.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin:0 0 6px;}
+  .faq-toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:32px;}
+  .faq-toc li{break-inside:avoid;}
+  .faq-toc a{display:block;padding:11px 0;color:var(--dim);font-size:0.9375rem;line-height:1.45;text-decoration:none;}
   .faq-item{padding:26px 0;border-bottom:1px solid var(--line);}
   .faq-item h2{font-family:'Unbounded',sans-serif;font-weight:300;font-size:1.125rem;line-height:1.45;margin:0 0 12px;}
   .faq-lead{font-size:1rem;line-height:1.75;color:var(--ink);margin:0;}
   .faq-points{list-style:none;margin:12px 0 0;padding:0;}
   .faq-points li{border-left:1px solid var(--accent);padding:2px 0 2px 14px;margin:0 0 10px;color:var(--dim);font-size:0.9375rem;line-height:1.7;}
-  .faq-link{display:inline-block;margin-top:10px;font-size:0.90625rem;color:var(--accent);}
+  .faq-prices{margin:14px 0 4px;padding:0;max-width:560px;}
+  .faq-prices div{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:0.9375rem;}
+  .faq-prices dt{color:var(--ink);}
+  .faq-prices dd{margin:0;color:var(--ink);white-space:nowrap;text-align:right;}
+  .faq-links{display:flex;flex-wrap:wrap;gap:4px 22px;margin-top:6px;}
+  .faq-link{display:inline-block;padding:11px 0;font-size:0.90625rem;color:var(--accent);}
+  @media(max-width:640px){ .faq-toc ol{columns:1;} }
 </style>
 <section style="padding-top:64px;">
   <div class="wrap">
     <div class="eyebrow">Questions and answers</div>
     <h1 style="font-size:2rem;font-weight:300;margin:14px 0 20px;">FAQ</h1>
-    <p style="color:var(--dim);font-size:0.96875rem;line-height:1.8;max-width:620px;">A short guide to how the work is set up: what I do, what it costs and how long it takes, and how it is formalised. Didn't find your answer? Get in touch.</p>
-    <div class="faq-item"><h2>What exactly do you do?</h2><p class="faq-lead">Production, promotion and websites for theatre and arts projects.</p><ul class="faq-points"><li>A website built from your materials, together with the documents the site and bot need: privacy policy, cookie policy, bot rules, public offer.</li><li>Telegram and VK bots, so requests and reviews arrive in one place instead of scattered messages.</li><li>Scheduled autoposting and your own analytics alongside Yandex Metrica.</li><li>Monthly management and promotion: posts, content and ad accounts, following an agreed plan.</li></ul><a class="faq-link" href="../../en/production/">More on the Production page →</a></div><div class="faq-item"><h2>How much does it cost?</h2><p class="faq-lead">Current prices and terms are in the commercial offer, valid through the end of December 2026.</p><ul class="faq-points"><li>The final scope, price and timeline are fixed in the contract and statement of work after the brief.</li><li>Separately from the fee: the services a project cannot run without, such as a domain, subscriptions and, for promotion, an ad budget. Each is agreed before payment.</li></ul><a class="faq-link" href="../../documents/orgculture-services-and-prices.pdf" download>Download the offer (PDF) →</a></div><div class="faq-item"><h2>How long does a website take?</h2><p class="faq-lead">Up to a month, by agreement and depending on how complex the brief is.</p><ul class="faq-points"><li>Brief: what to show first, which materials already exist, budget and timeline.</li><li>Structure and a first draft: one section is agreed as a sample.</li><li>Build to the agreed structure, with interim reviews.</li><li>Launch and handover: a working site, source files and a maintenance guide.</li></ul></div><div class="faq-item"><h2>Where do we start?</h2><p class="faq-lead">With the brief, on the Contacts page or in a chat with the Telegram bot.</p><ul class="faq-points"><li>Only two fields are required: how to reach you and what the task is.</li><li>Timeline, budget and who you are are optional: a project that is still at the idea stage, with no budget yet, is worth sending too.</li></ul><a class="faq-link" href="../../en/contacts/">Fill in the brief →</a></div><div class="faq-item"><h2>How are the paperwork and payment handled?</h2><p class="faq-lead">A contract with a statement of work for each order, an acceptance act per stage or month, and a self-employed tax receipt.</p><ul class="faq-points"><li>I am self-employed under the professional income tax regime (NPD) and pay the tax myself: the client withholds no personal income tax and pays no social contributions.</li><li>One-off services: 50% upfront and 50% on completion; monthly management: 50% at the start of the month and 50% at the end.</li><li>Revisions are accepted within 14 days of presenting the result; after that, by separate arrangement.</li></ul></div><div class="faq-item"><h2>Do you work with private individuals and with state institutions?</h2><p class="faq-lead">Yes. The contract is built for the type of client: a private individual, a self-employed person, a sole trader, a company or a state (municipal) institution.</p><ul class="faq-points"><li>With an institution, usually on its own contract form, with no advance payment and payment after acceptance.</li><li>With a private individual, in line with consumer protection law.</li></ul></div><div class="faq-item"><h2>Who owns the website and the code?</h2><p class="faq-lead">You do: the rights to the code and design pass to the client on full payment.</p><ul class="faq-points"><li>I keep the right to show the finished work in my portfolio and case studies.</li><li>The project&#x27;s working accounts (Google, Yandex, GitHub, the domain registrar, Bitwarden) are created for the project, and you hold the access.</li></ul></div><div class="faq-item"><h2>Do you only work in St. Petersburg?</h2><p class="faq-lead">I live and work in St. Petersburg, but my projects are not limited to it.</p><ul class="faq-points"><li>For example, the Tochka Cuire festival in Stary Oskol, and Moscow venues for Robot Kostya.</li><li>For ongoing work, at least one in-person meeting a month; for a one-off service, an in-person meeting about it.</li><li>Every project gets a working Telegram chat.</li></ul></div><div class="faq-item"><h2>When are you available?</h2><p class="faq-lead">Working hours are flexible and agreed with the client; Saturday and Sunday are days off.</p></div>
+    <p style="color:var(--dim);font-size:0.96875rem;line-height:1.8;max-width:620px;">A short guide to how the work is set up. Didn't find your answer? Get in touch.</p>
+    <nav class="faq-toc" aria-labelledby="faq-toc-h"><p class="faq-toc-h" id="faq-toc-h">Questions on this page</p><ol><li><a href="#chto-delayu">What exactly do you do?</a></li><li><a href="#stoimost">How much does it cost?</a></li><li><a href="#sroki">How long does a website take?</a></li><li><a href="#s-chego-nachat">Where do we start?</a></li><li><a href="#oformlenie">How is the work formalised?</a></li><li><a href="#zakazchiki">Do you work with private individuals and with state institutions?</a></li><li><a href="#prava">Who owns the website and the code?</a></li><li><a href="#geografiya">Do you only work in St. Petersburg?</a></li><li><a href="#svyaz">When are you available?</a></li></ol></nav>
+    <div class="faq-item" id="chto-delayu"><h2>What exactly do you do?</h2><p class="faq-lead">Production, promotion and websites for theatre and art projects.</p><ul class="faq-points"><li>Production: from concept to opening night — budget, venue, team, logistics, deadlines.</li><li>Promotion: monthly social media management — posts, content and ad accounts, following an agreed plan.</li><li>A website for the project, together with the documents the site and bot need (privacy policy, cookie policy, bot rules, public offer); Telegram and VK bots, autoposting and your own analytics alongside Yandex Metrica.</li></ul><div class="faq-links"><a class="faq-link" href="../../en/production/">More on the Production page →</a></div></div><div class="faq-item" id="stoimost"><h2>How much does it cost?</h2><p class="faq-lead">Base prices are below; the offer that lists them is valid until the end of December 2026.</p><dl class="faq-prices"><div><dt>Website development</dt><dd>from ₽30,000</dd></div><div><dt>Bots (Telegram and VK)</dt><dd>from ₽10,000</dd></div><div><dt>Auto-posting via a Telegram bot</dt><dd>from ₽10,000</dd></div><div><dt>Building a custom analytics system</dt><dd>from ₽5,000</dd></div><div><dt>Ongoing management &amp; promotion</dt><dd>from ₽30,000 a month</dd></div></dl><ul class="faq-points"><li>Production: by agreement, depending on the project.</li><li>The exact scope, price and timeline are set after the brief. Services such as a domain, subscriptions and an ad budget are paid separately, each agreed in advance.</li></ul><div class="faq-links"><a class="faq-link" href="../../documents/orgculture-services-and-prices.pdf" download>Download the offer (PDF) →</a></div></div><div class="faq-item" id="sroki"><h2>How long does a website take?</h2><p class="faq-lead">Up to a month, depending on the brief and on how quickly the materials arrive.</p><ul class="faq-points"><li>Brief: what to show first, which materials already exist, budget and timeline.</li><li>Structure and a first draft: one section is agreed as a sample.</li><li>Build to the agreed structure, with interim reviews.</li><li>Launch and handover: a working site, source files and a maintenance guide.</li></ul></div><div class="faq-item" id="s-chego-nachat"><h2>Where do we start?</h2><p class="faq-lead">With the brief on the Contacts page: only two fields are required — how to reach you and what the task is.</p><ul class="faq-points"><li>A project that is still at the idea stage, with no budget yet, is worth sending too.</li><li>Prefer Telegram? Message the bot, and it will pass your message on to me.</li></ul><div class="faq-links"><a class="faq-link" href="../../en/contacts/#brief">Fill in the brief →</a></div></div><div class="faq-item" id="oformlenie"><h2>How is the work formalised?</h2><p class="faq-lead">A contract with a statement of work, acceptance acts per stage or month, and a self-employed tax receipt.</p><ul class="faq-points"><li>I am self-employed under the professional income tax regime (NPD) and pay the tax myself: the client withholds no personal income tax and pays no social contributions.</li><li>Under a contract: one-off services are paid 50% upfront and 50% on completion; monthly management 50% at the start of the month and 50% at the end.</li><li>Revisions are accepted within 14 days of presenting the result; after that, by separate arrangement.</li></ul></div><div class="faq-item" id="zakazchiki"><h2>Do you work with private individuals and with state institutions?</h2><p class="faq-lead">Yes. The contract is built for the type of client: a private individual, a self-employed person, a sole trader, a company, or a state or municipal institution.</p><ul class="faq-points"><li>With an institution, usually on its own contract form, with no advance payment and payment after acceptance.</li><li>With a private individual, in line with consumer protection law.</li></ul></div><div class="faq-item" id="prava"><h2>Who owns the website and the code?</h2><p class="faq-lead">You do: the rights to the code and design pass to the client once paid in full.</p><ul class="faq-points"><li>I keep the right to show the work in my portfolio and case studies.</li><li>The project&#x27;s accounts (Google, Yandex, GitHub, the domain registrar, the Bitwarden password manager) are created for the project, and you hold the access.</li></ul></div><div class="faq-item" id="geografiya"><h2>Do you only work in St. Petersburg?</h2><p class="faq-lead">I live in St. Petersburg, but the projects are not only here.</p><ul class="faq-points"><li>For example, the Tochka Cuire festival in Stary Oskol and Moscow venues for Robot Kostya.</li><li>For ongoing work, at least one in-person meeting a month; for a one-off service, a meeting about it.</li></ul></div><div class="faq-item" id="svyaz"><h2>When are you available?</h2><p class="faq-lead">Flexible hours, agreed with the client; Saturdays and Sundays are days off.</p><ul class="faq-points"><li>Every project gets a working Telegram chat.</li></ul></div>
     <div style="margin-top:36px;"><a class="btn-line" href="../../en/contacts/">Ask a question</a></div>
   </div>
 </section>
@@ -154,7 +176,7 @@
     </div>
     <nav class="foot-cols" aria-label="Site sections">
       <div class="foot-col"><div class="foot-h">Read</div><a href="../../en/texts/">Texts</a><a href="../../en/recommendations/">Recommendations</a><a href="../../en/manifesto/">Manifesto</a></div>
-      <div class="foot-col"><div class="foot-h">Work</div><a href="../../en/production/">Production</a><a href="../../en/projects/">Projects</a><a href="../../en/faq/">FAQ</a><a href="../../en/contacts/">Contacts</a></div>
+      <div class="foot-col"><div class="foot-h">Work</div><a href="../../en/production/">Production</a><a href="../../en/projects/">Projects</a><a href="../../en/pay/">Payment</a><a href="../../en/faq/">FAQ</a><a href="../../en/contacts/">Contacts</a></div>
       <div class="foot-col"><div class="foot-h">Author</div><a href="../../en/about/">About</a><a href="../../en/press/">Press</a><a href="../../en/mentions/">Mentions</a></div>
     </nav>
   </div>
@@ -165,8 +187,10 @@
     </div>
     <div class="foot-legal">
       <a href="../../en/privacy/">Privacy Policy</a>
+      <a href="../../en/consent/">Consents</a>
       <a href="../../en/cookies/">Cookies</a>
       <a href="../../en/bot-rules/">Bot Usage Rules</a>
+      <a href="../../en/offer/">Public offer</a>
       <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Cookie settings</a>
     </div>
   </div>
@@ -234,7 +258,7 @@ function okForgetBrief(){
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Decline</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Accept</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Accept</button>
   </div>
 </div>
 <script>

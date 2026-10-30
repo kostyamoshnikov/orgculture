@@ -56,12 +56,37 @@
      опечатки в напечатанных QR-кодах, старые пути после переименования
      страниц. Без него такие заходы не видно вообще: человек упёрся в
      «не найдено» и ушёл молча.
-     Как и везде, запускается только после согласия на cookie; своего
-     баннера здесь нет, поэтому если согласия ещё не было — счётчик
-     просто не грузится.
-     ⚠️ Номер счётчика и адрес маячка продублированы здесь из gen.py —
-     это зарегистрированные факты, см. registry/facts.json. Меняешь там —
-     меняй и тут. -->
+     Метрика, как и везде, — только после согласия на cookie (своего
+     баннера здесь нет: если согласия ещё не было, она не грузится).
+     Обезличенный счётчик (с v70, см. own_stats_snippet в gen.py) —
+     у всех: в суммы дня уходят «/404», адрес, по которому не попали
+     (без параметров), домен источника и тип устройства; без cookie, IP
+     и идентификатора. Время прошлого захода — ok_seen в браузере, на
+     сервер не уходит.
+     ⚠️ Номер счётчика Метрики и адрес функции (ACCOUNT_API) продублированы
+     здесь из gen.py — это зарегистрированные факты, см.
+     registry/facts.json. Меняешь там — меняй и тут. -->
+<script type="text/javascript">
+  (function () {
+    var API = 'https://functions.yandexcloud.net/ЗАМЕНИ-НА-ID-ФУНКЦИИ';
+    if (API.indexOf('ЗАМЕНИ') !== -1 || !navigator.sendBeacon) return;
+    try {
+      var now = Date.now(), last = 0;
+      try { last = parseInt(localStorage.getItem('ok_seen'), 10) || 0; localStorage.setItem('ok_seen', String(now)); } catch (e) { last = -1; }
+      var ref = '';
+      try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+      var inside = ref === location.hostname, known = last > 0, a = new Date(now), b = new Date(known ? last : 0);
+      var visit = known ? now - last > 30 * 60 * 1000 : (last === 0 || !inside);
+      var mon = function (d) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x.getTime(); };
+      var vw = window.innerWidth || 0;
+      var send = function (o) { navigator.sendBeacon(API + '?r=stats.hit', new Blob([JSON.stringify(o)], { type: 'text/plain' })); };
+      send({ p: '/404', x: location.pathname, r: inside ? '' : ref, d: vw < 768 ? 'm' : vw < 1100 ? 't' : 'd', v: +visit,
+        n: known ? +(a.toDateString() !== b.toDateString()) : +visit, w: known ? +(mon(a) !== mon(b)) : +visit,
+        mo: known ? +(a.getFullYear() !== b.getFullYear() || a.getMonth() !== b.getMonth()) : +visit });
+      send({ e: 'page_not_found', p: '/404' });
+    } catch (e) {}
+  })();
+</script>
 <script type="text/javascript">
   if (localStorage.getItem('ok_cookie_consent') === '1') {
     (function(m,e,t,r,i,k,a){
@@ -76,17 +101,6 @@
     // попали, идёт параметром визита — иначе цель говорит, что
     // промахи есть, но не говорит куда.
     ym(111176053, 'reachGoal', 'page_not_found', { requested: location.pathname });
-    try {
-      var payload = JSON.stringify({
-        path: '/404', requested: location.pathname,
-        // Язык — по адресу, по которому человек не попал: так видно,
-        // битые ссылки ведут на русскую часть сайта или на английскую.
-        lang: (location.pathname.indexOf('/en/') === 0 || location.pathname === '/en') ? 'en' : 'ru',
-        ref: document.referrer || ''
-      });
-      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track',
-                           new Blob([payload], {type: 'text/plain'}));
-    } catch (e) {}
   }
 </script>
 </body>

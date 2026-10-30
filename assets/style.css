@@ -158,7 +158,10 @@ nav.mobile-nav a.active{color:var(--accent);}
   .headbar .mainnav{display:none;}
   .burger{display:flex;}
   nav.mobile-nav{display:flex;}
-  .nav-toggle:checked ~ nav.mobile-nav{max-height:400px;padding-bottom:8px;
+  /* 560, а не 400 (с v69): в меню добавился «Личный кабинет», и восемь
+     пунктов с переключателем языка в 400px уже не помещались — нижний
+     обрезался overflow:hidden. */
+  .nav-toggle:checked ~ nav.mobile-nav{max-height:560px;padding-bottom:8px;
     visibility:visible;transition:max-height .3s ease, visibility 0s;}
   .nav-toggle:checked ~ .headbar .burger span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
   .nav-toggle:checked ~ .headbar .burger span:nth-child(2){opacity:0;}
@@ -567,9 +570,14 @@ footer .foot-legal a{color:var(--dim2);}
   bottom:calc(28px + env(safe-area-inset-bottom, 0px));
   display:flex;flex-direction:column;align-items:flex-start;gap:10px;
   opacity:0;transform:translateY(10px);pointer-events:none;
-  transition:opacity .4s,transform .4s;
+  /* visibility (с v88 архива): скрытая opacity кнопка оставалась в
+     порядке обхода Tab и читалась диктором поверх страницы — та же
+     ошибка, что AELITA нашла у себя в pack-v715 («скрытый виджет
+     Telegram ловил Tab»). Задержка держит видимость до конца анимации. */
+  visibility:hidden;
+  transition:opacity .4s,transform .4s,visibility 0s linear .4s;
 }
-.tg-widget.visible{opacity:1;transform:translateY(0);pointer-events:all;}
+.tg-widget.visible{opacity:1;transform:translateY(0);pointer-events:all;visibility:visible;transition:opacity .4s,transform .4s,visibility 0s;}
 /* Без JavaScript кнопка бота не появлялась никогда: класс .visible
    навешивает скрипт, а до него у виджета opacity:0 и
    pointer-events:none. При отключённом JS (а это и режим экономии
@@ -581,7 +589,7 @@ footer .foot-legal a{color:var(--dim2);}
    Найдено 10.10.2026 при сверке с паком AELITA v634 (у них тем же
    приёмом показываются блоки .reveal, pack-v540). */
 @media(scripting:none){
-  .tg-widget{opacity:1;transform:none;pointer-events:all;}
+  .tg-widget{opacity:1;transform:none;pointer-events:all;visibility:visible;}
 }
 .tg-bubble{
   background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
@@ -643,6 +651,135 @@ footer .foot-legal a{color:var(--dim2);}
   footer .foot-col a{padding:11px 0;}
 }
 
+
+/* ─────────────────────────────────────────────────────────────────
+   Кабинет, сохранённое, оплата, админка (с v69 сайта)
+   Поля — те же .brief-field (кегль 1.0625rem = 17px, правило iOS).
+   ───────────────────────────────────────────────────────────────── */
+/* Атрибут hidden должен прятать всегда. Без этой строки .btn-line
+   (display:inline-block) перебивал его, и кнопки «Оплатить» были видны,
+   пока кабинет не подключён и скрипт их не показывает. */
+[hidden]{display:none !important;}
+.acct-link{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-10px -8px -10px -6px;color:var(--dim);}
+.acct-link svg{width:21px;height:21px;}
+.acct-link.is-in,.acct-link.active{color:var(--accent);}
+nav.mobile-nav a.acct-mobile.is-in{color:var(--accent);}
+
+.fav-btn{display:inline-flex;align-items:center;gap:8px;margin-top:18px;min-height:44px;
+  font-family:inherit;font-size:0.84375rem;color:var(--dim);background:none;cursor:pointer;
+  border:1px solid var(--line);border-radius:999px;padding:9px 18px;transition:border-color .2s,color .2s;}
+.fav-btn[hidden]{display:none;}
+.fav-btn .fav-star{font-size:1rem;line-height:1;}
+.fav-btn[aria-pressed="true"]{color:var(--accent);border-color:rgba(217,119,87,.55);}
+.fav-btn[aria-pressed="true"] .fav-star{color:var(--accent);}
+.fav-btn.fav-compact{margin-top:10px;padding:6px 14px;min-height:36px;font-size:0.78125rem;}
+.fav-btn:disabled{opacity:.6;cursor:progress;}
+
+.ok-h1{font-size:2rem;font-weight:300;margin:14px 0 16px;}
+.ok-h2{font-size:1.25rem;font-weight:300;margin:0 0 18px;}
+.ok-h3{font-size:1rem;font-weight:400;margin:0 0 14px;}
+.ok-lede{color:var(--dim);font-size:1rem;line-height:1.8;max-width:640px;margin-bottom:28px;}
+.ok-note{color:var(--dim);font-size:0.90625rem;line-height:1.75;max-width:640px;margin:8px 0;}
+.ok-note a,.ok-lede a{color:var(--accent);}
+.ok-req{color:var(--dim2);font-size:0.8125rem;line-height:1.7;margin-top:36px;}
+.ok-narrow{max-width:520px;}
+.ok-block{margin-top:56px;padding-top:36px;border-top:1px solid var(--line);}
+.ok-status{text-align:left;min-height:1.2em;}
+.ok-status.is-error{color:#E8A08A;}
+.ok-status.is-ok{color:#A9C7A0;}
+.field-hint{display:block;color:var(--dim);font-size:0.8125rem;margin-top:6px;line-height:1.5;}
+.brief-form .brief-field+.brief-field{margin-top:16px;}
+.brief-form .brief-grid .brief-field+.brief-field{margin-top:0;}
+.ok-auth{max-width:520px;}
+.ok-tabs{display:flex;gap:8px;margin-bottom:24px;}
+.ok-tab{font-family:inherit;font-size:0.9375rem;color:var(--dim);background:none;cursor:pointer;
+  border:1px solid var(--line);border-radius:999px;padding:10px 20px;min-height:44px;}
+.ok-tab[aria-selected="true"]{color:#141414;background:var(--accent);border-color:var(--accent);}
+.ok-links{margin-top:16px;font-size:0.875rem;color:var(--dim);}
+.ok-linkbtn{font-family:inherit;font-size:inherit;color:var(--accent);background:none;border:none;cursor:pointer;
+  padding:10px 0;text-decoration:underline;text-underline-offset:3px;}
+.ok-fieldset{border:1px solid var(--line);border-radius:2px;padding:16px 18px 18px;margin:18px 0 6px;}
+.ok-fieldset legend{font-size:0.8125rem;color:var(--dim);padding:0 6px;}
+.ok-radio{display:flex;align-items:center;gap:10px;min-height:44px;font-size:0.9375rem;cursor:pointer;}
+.ok-radio input{width:18px;height:18px;accent-color:var(--accent);}
+.ok-business{margin-top:10px;}
+.review-form-consent input[type=checkbox]{accent-color:var(--accent);}
+.brief-form .review-form-consent{font-size:0.84375rem;margin-top:14px;}
+.ok-checkout{margin:28px 0;padding:24px;border:1px solid rgba(217,119,87,.45);border-radius:2px;background:var(--panel);}
+.ok-checkout .btn-line{margin-top:18px;}
+.ok-sections{display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 12px;font-size:0.875rem;}
+.ok-sections a,.ok-sections .ok-linkbtn{color:var(--dim);padding:10px 0;}
+.ok-actions{display:flex;flex-wrap:wrap;gap:12px;}
+.ok-danger{margin-top:40px;padding:22px;border:1px solid rgba(232,160,138,.35);border-radius:2px;}
+.btn-line.ok-btn-danger{color:#E8A08A;border-color:rgba(232,160,138,.5);}
+
+.ok-services{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:8px;}
+.ok-service{border:1px solid var(--line);border-radius:2px;padding:22px;display:flex;flex-direction:column;}
+.ok-service-h{font-size:1.0625rem;font-weight:400;line-height:1.4;margin-bottom:10px;}
+.ok-service-desc{color:var(--dim);font-size:0.90625rem;line-height:1.7;flex:1;}
+.ok-service-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px;}
+.ok-price{font-family:'Unbounded',sans-serif;font-weight:300;font-size:1.125rem;color:var(--ink);}
+.ok-unit{font-family:'Manrope',sans-serif;font-size:0.8125rem;color:var(--dim);}
+.ok-service.is-chosen{border-color:rgba(217,119,87,.7);}
+.ok-steps{color:var(--dim);font-size:0.9375rem;line-height:1.8;padding-left:22px;max-width:640px;}
+.ok-steps li{margin-bottom:8px;}
+
+.ok-saved{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.ok-saved-item{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:2px;overflow:hidden;}
+.ok-saved-item a.ok-saved-link{display:flex;flex-direction:column;flex:1;}
+.ok-saved-item .thumb{aspect-ratio:16/10;background:#1a1917;overflow:hidden;}
+.ok-saved-item .thumb img{width:100%;height:100%;object-fit:cover;}
+.ok-saved-item .thumb.noimg{display:flex;align-items:center;justify-content:center;}
+.ok-saved-item .thumb.noimg svg{width:30%;opacity:.4;}
+.ok-saved-item .body{padding:14px 16px 6px;}
+.ok-saved-item h3{font-size:0.9375rem;font-weight:400;line-height:1.45;margin-top:10px;}
+.ok-saved-item .fav-btn{margin:6px 16px 16px;align-self:flex-start;}
+.ok-order-row{border:1px solid var(--line);border-radius:2px;padding:18px 20px;margin-bottom:14px;}
+.ok-order-row .row1{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;}
+.ok-order-row h3{font-size:1rem;font-weight:400;}
+.ok-order-row .meta{color:var(--dim);font-size:0.84375rem;margin-top:6px;line-height:1.7;}
+.ok-order-row .ok-actions{margin-top:12px;}
+.ok-badge{display:inline-block;font-size:0.75rem;letter-spacing:.06em;border-radius:999px;padding:4px 10px;border:1px solid var(--line);color:var(--dim);white-space:nowrap;}
+.ok-badge.paid{color:#A9C7A0;border-color:rgba(169,199,160,.45);}
+.ok-badge.awaiting{color:var(--accent);border-color:rgba(217,119,87,.5);}
+.ok-badge.warn{color:#E8C38A;border-color:rgba(232,195,138,.5);}
+.ok-order{border:1px solid var(--line);border-radius:2px;padding:22px;margin:12px 0 8px;}
+.ok-order .ok-price{display:block;margin:10px 0;}
+.ok-kv{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;font-size:0.90625rem;color:var(--dim);}
+.ok-kv dt{color:var(--dim2);}
+.ok-kv dd{color:var(--ink);}
+.ok-attention{border-left:3px solid var(--accent);padding:10px 16px;margin-bottom:10px;background:var(--panel);font-size:0.9375rem;}
+.ok-meter{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin:10px 0 6px;max-width:520px;}
+.ok-meter span{display:block;height:100%;background:var(--accent);}
+.ok-table{width:100%;border-collapse:collapse;font-size:0.875rem;}
+.ok-table th,.ok-table td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top;}
+.ok-table th{color:var(--dim2);font-weight:500;}
+.ok-tablewrap{overflow-x:auto;}
+.ok-inline{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:10px;}
+.ok-stat-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:8px 0 28px;max-width:640px;}
+.ok-stat{border:1px solid var(--line);border-radius:2px;padding:14px 16px;}
+.ok-stat .n{font-family:'Unbounded',sans-serif;font-weight:300;font-size:1.375rem;color:var(--ink);}
+.ok-stat .l{color:var(--dim);font-size:0.8125rem;margin-top:4px;}
+.ok-barcell{display:flex;align-items:center;gap:10px;min-width:160px;}
+.ok-bar{display:block;height:8px;background:var(--accent);border-radius:999px;flex:0 0 auto;}
+#stats .ok-h3{margin-top:28px;}
+.ok-outage{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;width:calc(100% - 32px);max-width:var(--wide);
+  margin:16px auto 0;padding:12px 6px 12px 16px;border:1px solid rgba(232,195,138,.45);border-left:3px solid #E8C38A;
+  background:var(--panel);color:var(--ink);font-size:0.9375rem;line-height:1.65;}
+.ok-outage p{margin:0;padding-top:2px;}
+.ok-outage a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
+.ok-outage-x{flex:none;min-width:44px;min-height:44px;margin:-10px 0 -10px 0;background:none;border:none;color:var(--dim);
+  font-family:inherit;font-size:1.5rem;line-height:1;cursor:pointer;}
+.ok-inline input{background:var(--bg);border:1px solid var(--line);color:var(--ink);font-family:inherit;font-size:1.0625rem;padding:9px 12px;min-width:0;flex:1 1 220px;}
+@media(max-width:760px){
+  .ok-services{grid-template-columns:1fr;}
+  .ok-saved{grid-template-columns:1fr 1fr;}
+  .ok-checkout{padding:18px;}
+}
+@media(max-width:460px){
+  .ok-saved{grid-template-columns:1fr;}
+}
+
 /* ─────────────────────────────────────────────────────────────────
    :hover — только там, где есть настоящий курсор (с v87)
 
@@ -663,6 +800,7 @@ footer .foot-legal a{color:var(--dim2);}
    пришло из пака «Короче»).
    ───────────────────────────────────────────────────────────────── */
 @media(hover:hover){
+  .faq-toc a:hover{color:var(--ink);}
   nav.mainnav a:hover,nav.mainnav a.active{color:var(--ink);}
   .lang-switch:hover{border-color:var(--accent);color:var(--accent) !important;}
   .sec-head a.more:hover{color:var(--accent);border-color:var(--accent);}
@@ -683,4 +821,10 @@ footer .foot-legal a{color:var(--dim2);}
   .tg-btn:hover{border-color:var(--accent);color:var(--accent);}
   .tg-btn:hover svg{opacity:1;}
   .filter-pill:hover{border-color:var(--dim);color:var(--ink);}
+  .acct-link:hover{color:var(--accent);}
+  .fav-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .ok-tab:hover{border-color:var(--dim);color:var(--ink);}
+  .ok-tab[aria-selected="true"]:hover{color:#141414;}
+  .ok-service:hover{border-color:rgba(217,119,87,.45);}
+  .ok-saved-item:hover{border-color:rgba(217,119,87,.45);}
 }

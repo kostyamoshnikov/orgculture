@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Частые вопросы — Организованная Культурность</title>
-<meta name="description" content="Как устроена работа с Константином Мошниковым: услуги, цены, сроки, договор и оплата, права на сайт и код.">
+<meta name="description" content="Как устроена работа с Константином Мошниковым: услуги и цены, сроки, договор и оплата, права на сайт и код.">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -16,15 +16,15 @@
 <link rel="alternate" hreflang="en" href="https://orgculture.ru/en/faq/">
 <link rel="alternate" hreflang="x-default" href="https://orgculture.ru/faq/">
 <meta property="og:title" content="Частые вопросы — Организованная Культурность">
-<meta property="og:description" content="Как устроена работа с Константином Мошниковым: услуги, цены, сроки, договор и оплата, права на сайт и код.">
+<meta property="og:description" content="Как устроена работа с Константином Мошниковым: услуги и цены, сроки, договор и оплата, права на сайт и код.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://orgculture.ru/faq/">
 <meta property="og:site_name" content="Организованная Культурность">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:image" content="https://orgculture.ru/images/og-default.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../assets/fonts.css?v=68">
-<link rel="stylesheet" href="../assets/style.css?v=68">
+<link rel="stylesheet" href="../assets/fonts.css?v=72">
+<link rel="stylesheet" href="../assets/style.css?v=72">
 <link rel="manifest" href="../manifest.json">
 <!-- Yandex.Metrika counter (загружается только после согласия на cookie) -->
 <script type="text/javascript">
@@ -44,37 +44,45 @@
   }
 </script>
 <!-- /Yandex.Metrika counter -->
-<!-- Own stats beacon (грузится только после согласия на cookie, см. Yandex.Metrika выше) -->
-<script type="text/javascript">
-  window.__loadOwnStats = function() {
-    if (window.__statsLoaded) return;
-    window.__statsLoaded = true;
-    try {
-      var isEn = location.pathname.indexOf('/en/') === 0 || location.pathname === '/en';
-      var qs = new URLSearchParams(location.search);
-      var payload = JSON.stringify({
-        path: location.pathname,
-        lang: isEn ? 'en' : 'ru',
-        ref: document.referrer || '',
-        utm_source: qs.get('utm_source') || '',
-        utm_medium: qs.get('utm_medium') || '',
-        utm_campaign: qs.get('utm_campaign') || '',
-        utm_content: qs.get('utm_content') || ''
-      });
-      navigator.sendBeacon('https://orgculture-bot.ЗАМЕНИ-НА-СВОЙ-АККАУНТ.workers.dev/track', new Blob([payload], {type: 'text/plain'}));
-    } catch (e) {}
+<!-- Own stats: обезличенный счётчик, без cookie и согласия (см. own_stats_snippet в gen.py) -->
+<script>
+(function () {
+  var API = "";
+  if (!API || !navigator.sendBeacon) return;
+  window.okStats = function (data) {
+    try { navigator.sendBeacon(API + '?r=stats.hit', new Blob([JSON.stringify(data)], { type: 'text/plain' })); } catch (e) {}
   };
-  if (localStorage.getItem('ok_cookie_consent') === '1') {
-    window.__loadOwnStats();
-  }
+  try {
+    var now = Date.now(), last = 0;
+    try { last = parseInt(localStorage.getItem('ok_seen'), 10) || 0; localStorage.setItem('ok_seen', String(now)); } catch (e) { last = -1; }
+    var ref = '';
+    try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+    var inside = ref === location.hostname;
+    var known = last > 0, a = new Date(now), b = new Date(known ? last : 0);
+    var visit = known ? now - last > 30 * 60 * 1000 : (last === 0 || !inside);
+    var mon = function (d) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x.getTime(); };
+    var q = new URLSearchParams(location.search), vw = window.innerWidth || 0;
+    window.okStats({
+      p: location.pathname, r: inside ? '' : ref,
+      s: q.get('utm_source') || '', m: q.get('utm_medium') || '', c: q.get('utm_campaign') || '',
+      d: vw < 768 ? 'm' : vw < 1100 ? 't' : 'd',
+      v: visit ? 1 : 0,
+      n: known ? +(a.toDateString() !== b.toDateString()) : +visit,
+      w: known ? +(mon(a) !== mon(b)) : +visit,
+      mo: known ? +(a.getFullYear() !== b.getFullYear() || a.getMonth() !== b.getMonth()) : +visit
+    });
+  } catch (e) {}
+})();
 </script>
-<!-- /Own stats beacon -->
-<script src="../assets/analytics-events.js?v=68" defer></script>
+<!-- /Own stats -->
+<script src="../assets/analytics-events.js?v=72" defer></script>
+<script>window.OK_ACCOUNT={"api": "", "lang": "ru", "root": "../"};</script>
+<script src="../assets/account.js?v=72" defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Перейти к содержимому</a>
 
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": "ru", "mainEntity": [{"@type": "Question", "name": "Что именно вы делаете?", "acceptedAnswer": {"@type": "Answer", "text": "Продюсирование, продвижение и сайты для театральных и арт-проектов. Сайт на основе ваших материалов — вместе с документами для сайта и бота: политика конфиденциальности, cookie, правила бота, оферта. Боты в Telegram и VK — заявки и отзывы в одном месте, а не в разрозненных сообщениях. Автопостинг по расписанию и собственная аналитика рядом с Яндекс.Метрикой. Ведение и продвижение проекта помесячно — публикации, контент, рекламные кабинеты по согласованному плану. Подробнее — на странице «Продюсирование»"}}, {"@type": "Question", "name": "Сколько это стоит?", "acceptedAnswer": {"@type": "Answer", "text": "Актуальные цены и условия — в коммерческом предложении, оно действует до конца декабря 2026 года. Окончательные состав работ, стоимость и сроки фиксируются в договоре и задании — по итогам брифа. Отдельно от гонорара — сервисы, без которых проект не собрать: домен, подписки, при продвижении — рекламный бюджет. Каждый согласуется до оплаты. Скачать КП (PDF)"}}, {"@type": "Question", "name": "Сколько времени занимает сайт?", "acceptedAnswer": {"@type": "Answer", "text": "До месяца — по договорённости и в зависимости от сложности задания. Бриф: что показывать в первую очередь, какие материалы уже есть, бюджет и сроки. Структура и черновой дизайн — один раздел согласуется как образец. Сборка по согласованной структуре — с промежуточными показами. Запуск и передача: рабочий сайт, исходники и инструкция по поддержке."}}, {"@type": "Question", "name": "С чего начать?", "acceptedAnswer": {"@type": "Answer", "text": "С брифа — на странице «Контакты» или в разговоре с ботом в Telegram. Обязательны только два поля: как с вами связаться и что за задача. Сроки, бюджет и «кто вы» — по желанию: проект на стадии «есть идея, бюджета пока нет» тоже стоит прислать. Заполнить бриф"}}, {"@type": "Question", "name": "Как оформляется работа и оплата?", "acceptedAnswer": {"@type": "Answer", "text": "Договор с заданием по каждому заказу, акт по этапу или месяцу, чек по самозанятости. Я самозанятый (НПД) и плачу налог сам: заказчик не удерживает НДФЛ и не начисляет страховые взносы. Разовые услуги — 50% предоплата и 50% по факту; помесячное ведение — 50% в начале месяца и 50% в конце. Правки принимаются в течение 14 дней после показа результата, дальше — по отдельной договорённости."}}, {"@type": "Question", "name": "Вы работаете с частными лицами и с государственными учреждениями?", "acceptedAnswer": {"@type": "Answer", "text": "Да: договор собирается под тип заказчика — частное лицо, самозанятый, ИП, организация или государственное (муниципальное) учреждение. С учреждением — как правило, по его форме контракта; без аванса, оплата после приёмки. С частным лицом — с учётом закона о защите прав потребителей."}}, {"@type": "Question", "name": "Кому принадлежат сайт и код?", "acceptedAnswer": {"@type": "Answer", "text": "Вам — права на код и дизайн переходят заказчику после полной оплаты. За мной остаётся право показывать выполненную работу в портфолио и кейсах. Рабочие аккаунты проекта (Google, Яндекс, GitHub, регистратор домена, Bitwarden) заводятся на проект, доступы — у вас."}}, {"@type": "Question", "name": "Вы работаете только в Петербурге?", "acceptedAnswer": {"@type": "Answer", "text": "Живу и работаю в Петербурге, но проекты — не только здесь. Например, фестиваль «Точка Кюри» в Старом Осколе и площадки Москвы у «Робота Кости». При регулярной работе — минимум одна очная встреча в месяц; по отдельной услуге — очная встреча по ней. По каждому проекту заводится рабочий чат в Telegram."}}, {"@type": "Question", "name": "Когда вы на связи?", "acceptedAnswer": {"@type": "Answer", "text": "График свободный и согласуется с заказчиком; суббота и воскресенье — выходные."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": "ru", "mainEntity": [{"@type": "Question", "name": "Что именно вы делаете?", "acceptedAnswer": {"@type": "Answer", "text": "Продюсирование, продвижение и сайты для театральных и арт-проектов. Продюсирование — от концепции до выпуска: бюджет, площадка, команда, логистика, дедлайны. Продвижение — ведение соцсетей помесячно: публикации, контент, рекламные кабинеты по согласованному плану. Сайт под проект вместе с документами для сайта и бота (политика конфиденциальности, cookie, правила бота, оферта); боты в Telegram и VK, автопостинг и своя аналитика рядом с Яндекс Метрикой. Подробнее — на странице «Продюсирование»"}}, {"@type": "Question", "name": "Сколько это стоит?", "acceptedAnswer": {"@type": "Answer", "text": "Базовые цены — ниже; коммерческое предложение с ними действует до конца декабря 2026 года. Разработка сайта — от 30 000 ₽. Боты (Telegram и VK) — от 10 000 ₽. Автопостинг через Telegram-бота — от 10 000 ₽. Создание собственной системы аналитики — от 5 000 ₽. Ведение и продвижение — от 30 000 ₽ в месяц. Продюсирование — по договорённости, под задачи проекта. Точный состав работ, цена и сроки — по итогам брифа. Сервисы вроде домена, подписок и рекламного бюджета оплачиваются отдельно, каждый согласуется заранее. Скачать КП (PDF)"}}, {"@type": "Question", "name": "Сколько времени занимает сайт?", "acceptedAnswer": {"@type": "Answer", "text": "До месяца — зависит от задания и от того, как быстро приходят материалы. Бриф: что показывать в первую очередь, какие материалы уже есть, бюджет и сроки. Структура и черновой дизайн — один раздел согласуется как образец. Сборка по согласованной структуре — с промежуточными показами. Запуск и передача: рабочий сайт, исходники и инструкция по поддержке."}}, {"@type": "Question", "name": "С чего начать?", "acceptedAnswer": {"@type": "Answer", "text": "С брифа на странице «Контакты»: обязательны только два поля — как с вами связаться и что за задача. Проект на стадии «есть идея, бюджета пока нет» тоже стоит прислать. Удобнее в Telegram — напишите боту, он передаст сообщение мне. Заполнить бриф"}}, {"@type": "Question", "name": "Как оформляется работа?", "acceptedAnswer": {"@type": "Answer", "text": "Договор с заданием, акты по этапу или месяцу, чек по самозанятости. Я самозанятый (НПД) и плачу налог сам: заказчик не удерживает НДФЛ и не начисляет страховые взносы. По договору: разовые услуги — 50% предоплата и 50% по факту; ведение — 50% в начале месяца и 50% в конце. Правки — в течение 14 дней после показа результата, дальше — по отдельной договорённости."}}, {"@type": "Question", "name": "Вы работаете с частными лицами и с государственными учреждениями?", "acceptedAnswer": {"@type": "Answer", "text": "Да: договор собирается под тип заказчика — частное лицо, самозанятый, ИП, организация, государственное или муниципальное учреждение. С учреждением — как правило, по его форме контракта; без аванса, оплата после приёмки. С частным лицом — с учётом закона о защите прав потребителей."}}, {"@type": "Question", "name": "Кому принадлежат сайт и код?", "acceptedAnswer": {"@type": "Answer", "text": "Вам — права на код и дизайн переходят заказчику после полной оплаты. За мной остаётся право показывать работу в портфолио и кейсах. Аккаунты проекта (Google, Яндекс, GitHub, регистратор домена, менеджер паролей Bitwarden) заводятся на проект — доступы у вас."}}, {"@type": "Question", "name": "Вы работаете только в Петербурге?", "acceptedAnswer": {"@type": "Answer", "text": "Живу в Петербурге, но проекты — не только здесь. Например, фестиваль «Точка Кюри» в Старом Осколе и московские площадки «Робота Кости». При регулярной работе — минимум одна очная встреча в месяц; по отдельной услуге — встреча по ней."}}, {"@type": "Question", "name": "Когда вы на связи?", "acceptedAnswer": {"@type": "Answer", "text": "График свободный и согласуется с заказчиком; суббота и воскресенье — выходные. По каждому проекту заводится рабочий чат в Telegram."}}]}</script>
 <header>
   <input type="checkbox" id="nav-toggle" class="nav-toggle">
   <div class="headbar">
@@ -92,6 +100,7 @@
       <a href="../about/">Автор</a>
       <a href="../contacts/">Контакты</a>
       <a href="../en/faq/" class="lang-switch" aria-label="Switch to English">EN</a>
+      <a href="../account/" class="acct-link" aria-label="Личный кабинет" title="Личный кабинет"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6"/></svg></a>
     </nav>
     <label for="nav-toggle" class="burger" aria-label="Открыть меню" role="button" aria-expanded="false" aria-controls="mobile-nav-panel">
       <span></span><span></span><span></span>
@@ -104,6 +113,7 @@
       <a href="../recommendations/">Рекомендации</a>
       <a href="../about/">Автор</a>
       <a href="../contacts/">Контакты</a>
+    <a href="../account/" class="acct-mobile">Личный кабинет</a>
     <a href="../en/faq/" class="lang-switch" aria-label="Switch to English">EN</a>
   </nav>
 </header>
@@ -121,19 +131,31 @@
 </script>
 
 <style>
+  .faq-toc{margin:28px 0 0;padding:18px 0 10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .faq-toc-h{font-size:0.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin:0 0 6px;}
+  .faq-toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:32px;}
+  .faq-toc li{break-inside:avoid;}
+  .faq-toc a{display:block;padding:11px 0;color:var(--dim);font-size:0.9375rem;line-height:1.45;text-decoration:none;}
   .faq-item{padding:26px 0;border-bottom:1px solid var(--line);}
   .faq-item h2{font-family:'Unbounded',sans-serif;font-weight:300;font-size:1.125rem;line-height:1.45;margin:0 0 12px;}
   .faq-lead{font-size:1rem;line-height:1.75;color:var(--ink);margin:0;}
   .faq-points{list-style:none;margin:12px 0 0;padding:0;}
   .faq-points li{border-left:1px solid var(--accent);padding:2px 0 2px 14px;margin:0 0 10px;color:var(--dim);font-size:0.9375rem;line-height:1.7;}
-  .faq-link{display:inline-block;margin-top:10px;font-size:0.90625rem;color:var(--accent);}
+  .faq-prices{margin:14px 0 4px;padding:0;max-width:560px;}
+  .faq-prices div{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:0.9375rem;}
+  .faq-prices dt{color:var(--ink);}
+  .faq-prices dd{margin:0;color:var(--ink);white-space:nowrap;text-align:right;}
+  .faq-links{display:flex;flex-wrap:wrap;gap:4px 22px;margin-top:6px;}
+  .faq-link{display:inline-block;padding:11px 0;font-size:0.90625rem;color:var(--accent);}
+  @media(max-width:640px){ .faq-toc ol{columns:1;} }
 </style>
 <section style="padding-top:64px;">
   <div class="wrap">
     <div class="eyebrow">Вопросы и ответы</div>
     <h1 style="font-size:2rem;font-weight:300;margin:14px 0 20px;">Частые вопросы</h1>
-    <p style="color:var(--dim);font-size:0.96875rem;line-height:1.8;max-width:620px;">Коротко о том, как устроена работа: что я делаю, сколько это стоит и занимает, как оформляется. Не нашли ответа — напишите.</p>
-    <div class="faq-item"><h2>Что именно вы делаете?</h2><p class="faq-lead">Продюсирование, продвижение и сайты для театральных и арт-проектов.</p><ul class="faq-points"><li>Сайт на основе ваших материалов — вместе с документами для сайта и бота: политика конфиденциальности, cookie, правила бота, оферта.</li><li>Боты в Telegram и VK — заявки и отзывы в одном месте, а не в разрозненных сообщениях.</li><li>Автопостинг по расписанию и собственная аналитика рядом с Яндекс.Метрикой.</li><li>Ведение и продвижение проекта помесячно — публикации, контент, рекламные кабинеты по согласованному плану.</li></ul><a class="faq-link" href="../production/">Подробнее — на странице «Продюсирование» →</a></div><div class="faq-item"><h2>Сколько это стоит?</h2><p class="faq-lead">Актуальные цены и условия — в коммерческом предложении, оно действует до конца декабря 2026 года.</p><ul class="faq-points"><li>Окончательные состав работ, стоимость и сроки фиксируются в договоре и задании — по итогам брифа.</li><li>Отдельно от гонорара — сервисы, без которых проект не собрать: домен, подписки, при продвижении — рекламный бюджет. Каждый согласуется до оплаты.</li></ul><a class="faq-link" href="../documents/orgculture-uslugi-i-ceny.pdf" download>Скачать КП (PDF) →</a></div><div class="faq-item"><h2>Сколько времени занимает сайт?</h2><p class="faq-lead">До месяца — по договорённости и в зависимости от сложности задания.</p><ul class="faq-points"><li>Бриф: что показывать в первую очередь, какие материалы уже есть, бюджет и сроки.</li><li>Структура и черновой дизайн — один раздел согласуется как образец.</li><li>Сборка по согласованной структуре — с промежуточными показами.</li><li>Запуск и передача: рабочий сайт, исходники и инструкция по поддержке.</li></ul></div><div class="faq-item"><h2>С чего начать?</h2><p class="faq-lead">С брифа — на странице «Контакты» или в разговоре с ботом в Telegram.</p><ul class="faq-points"><li>Обязательны только два поля: как с вами связаться и что за задача.</li><li>Сроки, бюджет и «кто вы» — по желанию: проект на стадии «есть идея, бюджета пока нет» тоже стоит прислать.</li></ul><a class="faq-link" href="../contacts/">Заполнить бриф →</a></div><div class="faq-item"><h2>Как оформляется работа и оплата?</h2><p class="faq-lead">Договор с заданием по каждому заказу, акт по этапу или месяцу, чек по самозанятости.</p><ul class="faq-points"><li>Я самозанятый (НПД) и плачу налог сам: заказчик не удерживает НДФЛ и не начисляет страховые взносы.</li><li>Разовые услуги — 50% предоплата и 50% по факту; помесячное ведение — 50% в начале месяца и 50% в конце.</li><li>Правки принимаются в течение 14 дней после показа результата, дальше — по отдельной договорённости.</li></ul></div><div class="faq-item"><h2>Вы работаете с частными лицами и с государственными учреждениями?</h2><p class="faq-lead">Да: договор собирается под тип заказчика — частное лицо, самозанятый, ИП, организация или государственное (муниципальное) учреждение.</p><ul class="faq-points"><li>С учреждением — как правило, по его форме контракта; без аванса, оплата после приёмки.</li><li>С частным лицом — с учётом закона о защите прав потребителей.</li></ul></div><div class="faq-item"><h2>Кому принадлежат сайт и код?</h2><p class="faq-lead">Вам — права на код и дизайн переходят заказчику после полной оплаты.</p><ul class="faq-points"><li>За мной остаётся право показывать выполненную работу в портфолио и кейсах.</li><li>Рабочие аккаунты проекта (Google, Яндекс, GitHub, регистратор домена, Bitwarden) заводятся на проект, доступы — у вас.</li></ul></div><div class="faq-item"><h2>Вы работаете только в Петербурге?</h2><p class="faq-lead">Живу и работаю в Петербурге, но проекты — не только здесь.</p><ul class="faq-points"><li>Например, фестиваль «Точка Кюри» в Старом Осколе и площадки Москвы у «Робота Кости».</li><li>При регулярной работе — минимум одна очная встреча в месяц; по отдельной услуге — очная встреча по ней.</li><li>По каждому проекту заводится рабочий чат в Telegram.</li></ul></div><div class="faq-item"><h2>Когда вы на связи?</h2><p class="faq-lead">График свободный и согласуется с заказчиком; суббота и воскресенье — выходные.</p></div>
+    <p style="color:var(--dim);font-size:0.96875rem;line-height:1.8;max-width:620px;">Коротко о том, как устроена работа. Не нашли ответа — напишите.</p>
+    <nav class="faq-toc" aria-labelledby="faq-toc-h"><p class="faq-toc-h" id="faq-toc-h">Вопросы на странице</p><ol><li><a href="#chto-delayu">Что именно вы делаете?</a></li><li><a href="#stoimost">Сколько это стоит?</a></li><li><a href="#sroki">Сколько времени занимает сайт?</a></li><li><a href="#s-chego-nachat">С чего начать?</a></li><li><a href="#oformlenie">Как оформляется работа?</a></li><li><a href="#zakazchiki">Вы работаете с частными лицами и с государственными учреждениями?</a></li><li><a href="#prava">Кому принадлежат сайт и код?</a></li><li><a href="#geografiya">Вы работаете только в Петербурге?</a></li><li><a href="#svyaz">Когда вы на связи?</a></li></ol></nav>
+    <div class="faq-item" id="chto-delayu"><h2>Что именно вы делаете?</h2><p class="faq-lead">Продюсирование, продвижение и сайты для театральных и арт-проектов.</p><ul class="faq-points"><li>Продюсирование — от концепции до выпуска: бюджет, площадка, команда, логистика, дедлайны.</li><li>Продвижение — ведение соцсетей помесячно: публикации, контент, рекламные кабинеты по согласованному плану.</li><li>Сайт под проект вместе с документами для сайта и бота (политика конфиденциальности, cookie, правила бота, оферта); боты в Telegram и VK, автопостинг и своя аналитика рядом с Яндекс Метрикой.</li></ul><div class="faq-links"><a class="faq-link" href="../production/">Подробнее — на странице «Продюсирование» →</a></div></div><div class="faq-item" id="stoimost"><h2>Сколько это стоит?</h2><p class="faq-lead">Базовые цены — ниже; коммерческое предложение с ними действует до конца декабря 2026 года.</p><dl class="faq-prices"><div><dt>Разработка сайта</dt><dd>от 30 000 ₽</dd></div><div><dt>Боты (Telegram и VK)</dt><dd>от 10 000 ₽</dd></div><div><dt>Автопостинг через Telegram-бота</dt><dd>от 10 000 ₽</dd></div><div><dt>Создание собственной системы аналитики</dt><dd>от 5 000 ₽</dd></div><div><dt>Ведение и продвижение</dt><dd>от 30 000 ₽ в месяц</dd></div></dl><ul class="faq-points"><li>Продюсирование — по договорённости, под задачи проекта.</li><li>Точный состав работ, цена и сроки — по итогам брифа. Сервисы вроде домена, подписок и рекламного бюджета оплачиваются отдельно, каждый согласуется заранее.</li></ul><div class="faq-links"><a class="faq-link" href="../documents/orgculture-uslugi-i-ceny.pdf" download>Скачать КП (PDF) →</a></div></div><div class="faq-item" id="sroki"><h2>Сколько времени занимает сайт?</h2><p class="faq-lead">До месяца — зависит от задания и от того, как быстро приходят материалы.</p><ul class="faq-points"><li>Бриф: что показывать в первую очередь, какие материалы уже есть, бюджет и сроки.</li><li>Структура и черновой дизайн — один раздел согласуется как образец.</li><li>Сборка по согласованной структуре — с промежуточными показами.</li><li>Запуск и передача: рабочий сайт, исходники и инструкция по поддержке.</li></ul></div><div class="faq-item" id="s-chego-nachat"><h2>С чего начать?</h2><p class="faq-lead">С брифа на странице «Контакты»: обязательны только два поля — как с вами связаться и что за задача.</p><ul class="faq-points"><li>Проект на стадии «есть идея, бюджета пока нет» тоже стоит прислать.</li><li>Удобнее в Telegram — напишите боту, он передаст сообщение мне.</li></ul><div class="faq-links"><a class="faq-link" href="../contacts/#brief">Заполнить бриф →</a></div></div><div class="faq-item" id="oformlenie"><h2>Как оформляется работа?</h2><p class="faq-lead">Договор с заданием, акты по этапу или месяцу, чек по самозанятости.</p><ul class="faq-points"><li>Я самозанятый (НПД) и плачу налог сам: заказчик не удерживает НДФЛ и не начисляет страховые взносы.</li><li>По договору: разовые услуги — 50% предоплата и 50% по факту; ведение — 50% в начале месяца и 50% в конце.</li><li>Правки — в течение 14 дней после показа результата, дальше — по отдельной договорённости.</li></ul></div><div class="faq-item" id="zakazchiki"><h2>Вы работаете с частными лицами и с государственными учреждениями?</h2><p class="faq-lead">Да: договор собирается под тип заказчика — частное лицо, самозанятый, ИП, организация, государственное или муниципальное учреждение.</p><ul class="faq-points"><li>С учреждением — как правило, по его форме контракта; без аванса, оплата после приёмки.</li><li>С частным лицом — с учётом закона о защите прав потребителей.</li></ul></div><div class="faq-item" id="prava"><h2>Кому принадлежат сайт и код?</h2><p class="faq-lead">Вам — права на код и дизайн переходят заказчику после полной оплаты.</p><ul class="faq-points"><li>За мной остаётся право показывать работу в портфолио и кейсах.</li><li>Аккаунты проекта (Google, Яндекс, GitHub, регистратор домена, менеджер паролей Bitwarden) заводятся на проект — доступы у вас.</li></ul></div><div class="faq-item" id="geografiya"><h2>Вы работаете только в Петербурге?</h2><p class="faq-lead">Живу в Петербурге, но проекты — не только здесь.</p><ul class="faq-points"><li>Например, фестиваль «Точка Кюри» в Старом Осколе и московские площадки «Робота Кости».</li><li>При регулярной работе — минимум одна очная встреча в месяц; по отдельной услуге — встреча по ней.</li></ul></div><div class="faq-item" id="svyaz"><h2>Когда вы на связи?</h2><p class="faq-lead">График свободный и согласуется с заказчиком; суббота и воскресенье — выходные.</p><ul class="faq-points"><li>По каждому проекту заводится рабочий чат в Telegram.</li></ul></div>
     <div style="margin-top:36px;"><a class="btn-line" href="../contacts/">Задать вопрос</a></div>
   </div>
 </section>
@@ -154,7 +176,7 @@
     </div>
     <nav class="foot-cols" aria-label="Разделы сайта">
       <div class="foot-col"><div class="foot-h">Читать</div><a href="../texts/">Тексты</a><a href="../recommendations/">Рекомендации</a><a href="../manifesto/">Манифест</a></div>
-      <div class="foot-col"><div class="foot-h">Работа</div><a href="../production/">Продюсирование</a><a href="../projects/">Проекты</a><a href="../faq/">Частые вопросы</a><a href="../contacts/">Контакты</a></div>
+      <div class="foot-col"><div class="foot-h">Работа</div><a href="../production/">Продюсирование</a><a href="../projects/">Проекты</a><a href="../pay/">Оплата услуг</a><a href="../faq/">Частые вопросы</a><a href="../contacts/">Контакты</a></div>
       <div class="foot-col"><div class="foot-h">Автор</div><a href="../about/">Об авторе</a><a href="../press/">Для прессы</a><a href="../mentions/">Упоминания</a></div>
     </nav>
   </div>
@@ -165,8 +187,10 @@
     </div>
     <div class="foot-legal">
       <a href="../privacy/">Политика конфиденциальности</a>
+      <a href="../consent/">Согласия</a>
       <a href="../cookies/">Cookie</a>
       <a href="../bot-rules/">Правила использования бота</a>
+      <a href="../offer/">Оферта</a>
       <a href="#" onclick="okForgetBrief();localStorage.removeItem('ok_cookie_consent');document.getElementById('cookie-banner').classList.add('show');return false;">Настройки cookie</a>
     </div>
   </div>
@@ -234,7 +258,7 @@ function okForgetBrief(){
   </div>
   <div class="cb-buttons">
     <button class="cb-decline" onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','0');okForgetBrief();">Отклонить</button>
-    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();if(window.__loadOwnStats)window.__loadOwnStats();">Хорошо</button>
+    <button onclick="document.getElementById('cookie-banner').classList.remove('show');localStorage.setItem('ok_cookie_consent','1');if(window.__loadYandexMetrika)window.__loadYandexMetrika();">Хорошо</button>
   </div>
 </div>
 <script>
